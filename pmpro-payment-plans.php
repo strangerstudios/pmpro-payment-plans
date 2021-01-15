@@ -197,15 +197,9 @@ function pmproo_return_payment_plans( $level, $plan_id = '' ){
 					// } else {
 						// $ordered_plans[$plan->display_order] = $plan;
 					// }
+				
 					$ordered_plans[] = $plan;
-					// $cost = ( $currency_position == 'left' ) ? $pmpro_currency_symbol . $plan->initial_payment . ' '.__('now', 'pmpro-payment-plans') : $plan->initial_payment . $pmpro_currency_symbol  . ' '.__('now', 'pmpro-payment-plans');
-
-					// if( $plan->billing_amount !== '' ){
-					// 	//recurring
-					// 	// $cost = $cost .= ' '.$
-					// }
-
-					// // $plan->html = apply_filters( 'pmpropp_plan_html_template', "<input type='radio' name='pmpropp_chosen_plan' class='pmpropp_chosen_plan' value='".$plan->id."' id='".$plan->id."' /><label for='".$plan->id."'>".$plan->name." - ".$cost."</label>", $plan, $level );
+				
 
 					if( $plan->default == 'yes' ){ $selected = 'checked=true'; } else { $selected = ''; }
 					$plan->html = apply_filters( 'pmpropp_plan_html_template', "<input type='radio' name='pmpropp_chosen_plan' class='pmpropp_chosen_plan' value='".$plan->id."' id='".$plan->id."' ".$selected." /><label for='".$plan->id."'>".$plan->name." - ".pmpro_no_quotes(pmpro_getLevelCost( $plan, true, true ) )."</label>", $plan, $level );
@@ -258,7 +252,7 @@ function pmpropp_override_checkout_level( $level ) {
 
 	if( !empty( $_REQUEST['pmpropp_chosen_plan'] ) ){
 
-		$plan = pmproo_return_payment_plans( $level, $_REQUEST['pmpropp_chosen_plan'] );		
+		$plan = pmproo_return_payment_plans( intval( $level->id ), $_REQUEST['pmpropp_chosen_plan'] );		
 		
 		$level->name = $level->name . ' - '.$plan->name;
 
@@ -288,12 +282,12 @@ add_filter( 'pmpro_checkout_level', 'pmpropp_override_checkout_level' );
  * After checkout - Add note and meta of plan
  */
 function pmpropp_after_checkout( $user_id, $morder ){
-	
+
 	if( !empty( $_REQUEST['pmpropp_chosen_plan'] ) ){
 
-		$plan = pmproo_return_payment_plans( $_REQUEST['level'], $_REQUEST['pmpropp_chosen_plan'] );			
-
-		update_pmpro_membership_order_meta( $morder->id, 'payment_plan', $plan );
+		$plan = pmproo_return_payment_plans( $morder->membership_id, $_REQUEST['pmpropp_chosen_plan'] );		
+	
+		update_pmpro_membership_order_meta( intval( $morder->id ), 'payment_plan', $plan );
 
 	}
 
@@ -357,10 +351,11 @@ function pmpropp_render_plans( $template ){
 
 	if( !empty( $plans ) ){
 		foreach( $plans as $plan ){
-			
-			$template = pmpropp_replace_template_values( $template, $plan );
+			$temp = "";
 
-			$ret .= $template;
+			$temp = pmpropp_replace_template_values( $template, $plan );
+
+			$ret .= $temp;
 
 		}
 	}
