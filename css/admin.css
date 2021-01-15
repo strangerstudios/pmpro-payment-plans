@@ -1,0 +1,23 @@
+#accordion .acc-body{
+   display : none;
+}
+#accordion .active .acc-body {
+   display : block;
+}
+.panel {
+    width: 60%;
+    background-color: #FFF;
+    border: 1px solid #ccc;    
+}
+.acc-header {
+    padding: 15px;
+    cursor: pointer;
+    margin: 0;
+    border-bottom: 1px solid #CCC;
+}
+.pmpro_payment_plan_level_inner{
+	margin: 20px 0;
+}
+.acc-body{
+	padding: 0 15px;
+}
