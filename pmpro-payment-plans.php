@@ -98,10 +98,10 @@ add_action( 'pmpro_membership_level_after_other_settings', 'pmpropp_membership_l
 
 function pmpropp_membership_level_save(){
 
-	if( isset( $_REQUEST['pmpropp_plan_name'] ) ){
+	if( isset( $_REQUEST['saveid'] ) ){
 
 		$payment_plans = pmpropp_pair_plan_fields( $_REQUEST );
-		
+
 		update_pmpro_membership_level_meta( $_REQUEST['saveid'], 'payment_plans', $payment_plans );
 
 	}
@@ -111,46 +111,50 @@ add_action( 'admin_init', 'pmpropp_membership_level_save' );
 
 function pmpropp_pair_plan_fields( $request ){
 
-	$pmpropp_plan_name = $request['pmpropp_plan_name'];
-	$pmpropp_initial_amount = $request['pmpropp_initial_amount'];
-	$pmpropp_billing_amount = $request['pmpropp_billing_amount'];
-	$pmpropp_cycle_number = $request['pmpropp_cycle_number'];
-	$pmpropp_cycle_period = $request['pmpropp_cycle_period'];
-	$pmpropp_billing_limit = $request['pmpropp_billing_limit'];
-	$pmpropp_trial_amount = $request['pmpropp_trial_amount'];
-	$pmpropp_trial_limit = $request['pmpropp_trial_limit'];
-	$pmpropp_expiration_number = $request['pmpropp_expiration_number'];
-	$pmpropp_expiration_period = $request['pmpropp_expiration_period'];
-	$pmpropp_display_order = $request['pmpropp_display_order'];
-	$pmpropp_plan_status = $request['pmpropp_plan_status'];
-	$pmpropp_plan_default = $request['pmpropp_plan_default'];
-
-	$size = count( $pmpropp_plan_name );
-
 	$payment_plans = array();
-	
-	for( $i = 0; $i < $size; $i++ ){
 
-		$level = new stdClass();
-		$level->id = "L-".intval( $request['saveid'] )."-P-".$i;
-		$level->name = sanitize_text_field( $pmpropp_plan_name[$i] );
-		$level->description = sanitize_text_field( $request['description'] );
-		$level->confirmation = sanitize_text_field( $request['confirmation'] );
-		$level->billing_amount = floatval( $pmpropp_billing_amount[$i] );
-		$level->trial_amount = floatval( $pmpropp_trial_amount[$i] );
-		$level->initial_payment = floatval( $pmpropp_initial_amount[$i] );
-		$level->billing_limit = intval( $pmpropp_billing_limit[$i] );
-		$level->trial_limit = intval( $pmpropp_trial_limit[$i] );
-		$level->expiration_number = intval( $pmpropp_expiration_number[$i] );
-		$level->expiration_period = $pmpropp_expiration_period[$i];
-		$level->cycle_period = $pmpropp_cycle_period[$i];
-		$level->cycle_number = intval( $pmpropp_cycle_number[$i] );
-		$level->display_order = intval( $pmpropp_display_order[$i] );
-		$level->type = 'payment_plan';
-		$level->status = $pmpropp_plan_status[$i];
-		$level->default = $pmpropp_plan_default[$i];
+	if( !empty( $request['pmpropp_plan_name'] ) ){
 
-		$payment_plans[] = $level;
+		$pmpropp_plan_name = $request['pmpropp_plan_name'];
+		$pmpropp_initial_amount = $request['pmpropp_initial_amount'];
+		$pmpropp_billing_amount = $request['pmpropp_billing_amount'];
+		$pmpropp_cycle_number = $request['pmpropp_cycle_number'];
+		$pmpropp_cycle_period = $request['pmpropp_cycle_period'];
+		$pmpropp_billing_limit = $request['pmpropp_billing_limit'];
+		$pmpropp_trial_amount = $request['pmpropp_trial_amount'];
+		$pmpropp_trial_limit = $request['pmpropp_trial_limit'];
+		$pmpropp_expiration_number = $request['pmpropp_expiration_number'];
+		$pmpropp_expiration_period = $request['pmpropp_expiration_period'];
+		$pmpropp_display_order = $request['pmpropp_display_order'];
+		$pmpropp_plan_status = $request['pmpropp_plan_status'];
+		$pmpropp_plan_default = $request['pmpropp_plan_default'];
+
+		$size = count( $pmpropp_plan_name );		
+		
+		for( $i = 0; $i < $size; $i++ ){
+
+			$level = new stdClass();
+			$level->id = "L-".intval( $request['saveid'] )."-P-".$i;
+			$level->name = sanitize_text_field( $pmpropp_plan_name[$i] );
+			$level->description = sanitize_text_field( $request['description'] );
+			$level->confirmation = sanitize_text_field( $request['confirmation'] );
+			$level->billing_amount = floatval( $pmpropp_billing_amount[$i] );
+			$level->trial_amount = floatval( $pmpropp_trial_amount[$i] );
+			$level->initial_payment = floatval( $pmpropp_initial_amount[$i] );
+			$level->billing_limit = intval( $pmpropp_billing_limit[$i] );
+			$level->trial_limit = intval( $pmpropp_trial_limit[$i] );
+			$level->expiration_number = intval( $pmpropp_expiration_number[$i] );
+			$level->expiration_period = $pmpropp_expiration_period[$i];
+			$level->cycle_period = $pmpropp_cycle_period[$i];
+			$level->cycle_number = intval( $pmpropp_cycle_number[$i] );
+			$level->display_order = intval( $pmpropp_display_order[$i] );
+			$level->type = 'payment_plan';
+			$level->status = $pmpropp_plan_status[$i];
+			$level->default = $pmpropp_plan_default[$i];
+
+			$payment_plans[] = $level;
+
+		}
 
 	}
 
@@ -174,7 +178,7 @@ function pmproo_return_payment_plans( $level, $plan_id = '' ){
 		$ordered_plans = array();
 
 		$counter = 0;
-
+		
 		if( !empty( $payment_plans ) ){ 
 			foreach( $payment_plans as $plan ){
 
@@ -188,12 +192,12 @@ function pmproo_return_payment_plans( $level, $plan_id = '' ){
 				
 				if( $plan->status === 'active' ){
 
-					if( $plan->display_order === 0 || empty( $plan->display_order ) ){
-						$ordered_plans[$counter] = $plan;
-					} else {
-						$ordered_plans[$plan->display_order] = $plan;
-					}
-
+					// if( $plan->display_order === 0 || empty( $plan->display_order ) ){
+						// $ordered_plans[$counter] = $plan;
+					// } else {
+						// $ordered_plans[$plan->display_order] = $plan;
+					// }
+					$ordered_plans[] = $plan;
 					// $cost = ( $currency_position == 'left' ) ? $pmpro_currency_symbol . $plan->initial_payment . ' '.__('now', 'pmpro-payment-plans') : $plan->initial_payment . $pmpro_currency_symbol  . ' '.__('now', 'pmpro-payment-plans');
 
 					// if( $plan->billing_amount !== '' ){
@@ -232,13 +236,18 @@ function pmproo_return_payment_plans( $level, $plan_id = '' ){
  */
 function pmpropp_render_payment_plans_checkout(){
 
-	?>
+	if( !empty( $_REQUEST['level'] ) ){
 
-	<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-field' ); ?>" id="pmproo_select_payment_plan">
-	<h3><?php _e('Select a Payment Plan', 'pmpro-payment-plans'); ?></h3>	
-		
-	</div>
-	<?php
+		$plans = pmproo_return_payment_plans( $_REQUEST['level'] );
+
+		if( !empty( $plans ) ){
+			?>
+			<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-field' ); ?>" id="pmproo_select_payment_plan">
+			<h3><?php _e('Select a Payment Plan', 'pmpro-payment-plans'); ?></h3>	
+			</div>
+			<?php
+		}
+	}
 }
 add_action( 'pmpro_checkout_boxes', 'pmpropp_render_payment_plans_checkout', 10 );
 

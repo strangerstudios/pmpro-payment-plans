@@ -1,5 +1,5 @@
 <div class="panel panel_template s_panel"> <!-- first panel -->
-	<h3 class="acc-header">!!plan_name!!</h3>
+	<h3 class="acc-header">!!plan_name!! <span class="dashicons dashicons-remove pmpropp_remove_plan"></span></h3>
 	<div class="acc-body">		
 		<table class='form-table'>
 			<tr>

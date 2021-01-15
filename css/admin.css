@@ -21,3 +21,8 @@
 .acc-body{
 	padding: 0 15px;
 }
+.pmpropp_remove_plan {
+    float: right;
+    color: #797777;
+    cursor: pointer;
+}
