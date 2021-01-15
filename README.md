@@ -3,7 +3,7 @@
 
 ![WordPress Plugin Downloads](https://img.shields.io/wordpress/plugin/dy/paid-memberships-pro?style=flat-square) ![Travis (.org)](https://img.shields.io/travis/strangerstudios/paid-memberships-pro?style=flat-square) ![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg?style=flat-square)
 
-### Welcome to the Plugin Name GitHub Repository
+### Welcome to the Paid Memberships Pro - Payment Plans GitHub Repository
 Integrates with Paid Memberships Pro to provide payment plans for membership levels.
 
 For more information please visit [www.paidmembershipspro.com/add-ons/pmpro-payment-plans/](https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/)
