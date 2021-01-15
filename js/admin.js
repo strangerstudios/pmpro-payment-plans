@@ -5,6 +5,7 @@ jQuery(document).ready(function(){
         initializeAccordion();
     }
 
+    var payment_plan_added = 0;
 
     jQuery("body").on("click", "#pmpropp_add_payment_plan", function( e ){
 
@@ -12,7 +13,11 @@ jQuery(document).ready(function(){
 
         var plan = jQuery(".panel_template").html();
 
-        jQuery('#accordion').accordion('destroy');
+        if( pmpropp_plans.stored_plans !== "" || payment_plan_added !== 0){
+            jQuery('#accordion').accordion('destroy');
+        }
+
+        payment_plan_added++;
 
         jQuery("#accordion").append( pmpropp_plans.template ); 
         
@@ -59,6 +64,13 @@ jQuery(document).ready(function(){
             jQuery(".pmpropp_expirations_"+menu_order).hide();
         }        
         
+    });
+
+    jQuery("body").on("click",".pmpropp_remove_plan", function(){
+
+        var parent = jQuery(this).parent().parent().attr('id');
+        jQuery("#"+parent).remove();
+
     });
 
 });
