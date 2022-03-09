@@ -33,6 +33,7 @@ function pmpropp_load_admin_scripts() {
 		ob_end_clean();
 
 		$stored_plans = pmpropp_render_plans( $output );
+		$plan_data = pmproo_return_payment_plans( $_REQUEST['edit'] );
 
 		$template_plan       = new StdClass();
 		$template_plan->name = __( 'New Payment Plan', 'pmpro-payment-plans' );
@@ -45,6 +46,7 @@ function pmpropp_load_admin_scripts() {
 			array(
 				'stored_plans' => $stored_plans,
 				'template'     => $output,
+				'plan_data'    => $plan_data,
 			)
 		);
 
@@ -437,10 +439,6 @@ function pmpropp_replace_template_values( $template, $values ) {
 	$template = str_replace( '!!expiration_number!!', ( ! empty( $values->expiration_number ) ) ? $values->expiration_number : '', $template );
 	$template = str_replace( '!!expiration_period!!', ( ! empty( $values->expiration_period ) ) ? $values->expiration_period : '', $template );
 	$template = str_replace( '!!plan_default!!', ( ! empty( $values->default ) ) ? $values->default : '', $template );
-
-	$template = str_replace( '!!recurring_info_display!!', ( ! empty( $values->billing_amount ) ) ? 'display:block;' : 'display:none;', $template );
-
-	$template = str_replace( '!!expiration_info_display!!', ( ! empty( $values->expiration_number ) ) ? 'display:block;' : 'display:none;', $template );
 
 	return $template;
 

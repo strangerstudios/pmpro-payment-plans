@@ -37,11 +37,11 @@
 					<label><?php esc_html_e( 'Recurring Subscription', 'pmpro-payment-plans' ); ?>:</label>
 				</th>
 				<td>
-					<input id="pmpropp_recurring" name="pmpropp_recurring" type="checkbox" value="yes" /> 
+					<input id="pmpropp_recurring" name="pmpropp_recurring" type="checkbox" value="yes"/> 
 					<label for="pmpropp_recurring"><?php esc_html_e( 'Check if this level has a recurring subscription payment.', 'pmpro-payment-plans' ); ?></label>
 				</td>
 			</tr>
-			<tr class="pmpropp_plan_recurring" style="!!recurring_info_display!!">
+			<tr class="pmpropp_plan_recurring" style="display:none;">
 				<th scope="row" valign="top">
 					<label for="pmpropp_billing_amount"><?php esc_html_e( 'Billing Amount', 'pmpro-payment-plans' ); ?>:</label>
 				</th>
@@ -90,7 +90,7 @@
 					</p>
 				</td>
 			</tr>
-			<tr class="pmpropp_plan_recurring" style="!!recurring_info_display!!">
+			<tr class="pmpropp_plan_recurring" style="display:none;">
 				<th scope="row" valign="top">
 					<label for="pmpropp_billing_limit"><?php esc_html_e( 'Billing Cycle Limit', 'pmpro-payment-plans' ); ?>:</label>
 				</th>
@@ -109,10 +109,10 @@
 					</p>
 				</td>
 			</tr>
-			<tr class="pmpropp_plan_recurring" style="!!recurring_info_display!!">
+			<tr class="pmpropp_plan_recurring" style="display:none;">
 				<th scope="row" valign="top"><label><?php esc_html_e( 'Custom Trial', 'pmpro-payment-plans' ); ?>:</label></th>
 				<td>
-					<input id="custom_trial" name="custom_trial" type="checkbox" value="yes" onclick="jQuery('.trial_info').toggle();"/> <label for="custom_trial"><?php _e( 'Check to add a custom trial period.', 'pmpro-payment-plans' ); ?></label>
+					<input id="pmpropp_custom_trial" name="pmpropp_custom_trial" type="checkbox" value="yes" onclick="jQuery('.pmpropp_trial_info').toggle();"/> <label for="pmpropp_custom_trial"><?php _e( 'Check to add a custom trial period.', 'pmpro-payment-plans' ); ?></label>
 					<?php if ( $gateway == 'twocheckout' ) { ?>
 						<p class="description"><strong 
 						<?php
@@ -122,7 +122,7 @@
 					<?php } ?>
 				</td>
 			</tr>
-			<tr class="trial_info pmpropp_plan_recurring" style="!!recurring_info_display!!">
+			<tr class="pmpropp_trial_info" style="display:none;">
 				<th scope="row" valign="top"><label for="pmpropp_trial_amount"><?php esc_html_e( 'Trial Billing Amount', 'pmpro-payment-plans' ); ?>:</label></th>
 				<td>
 					<?php
@@ -164,7 +164,7 @@
 				<th scope="row" valign="top"><label><?php esc_html_e( 'Membership Expiration', 'pmpro-payment-plans' ); ?>:</label></th>
 				<td><input id="pmpropp_plan_expiration" name="expiration" type="checkbox" value="yes"> <label for="pmpropp_plan_expiration"><?php esc_html_e( 'Check this to set when membership access expires.', 'pmpro-payment-plans' ); ?></label></td>
 			</tr>
-			<tr class="expiration_info" style="!!expiration_info_display!!">					
+			<tr class="expiration_info" style="display:none;">					
 				<th scope="row" valign="top"><label for="expiration_number"><?php esc_html_e( 'Expires In:', 'pmpro-payment-plans' ); ?></label></th>
 				<td>
 					<input id="expiration_number" name="pmpropp_expiration_number[]" type="text" value="!!expiration_number!!" class="small-text">
