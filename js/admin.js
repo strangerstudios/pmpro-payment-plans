@@ -61,14 +61,21 @@ jQuery(document).ready(function () {
         jQuery('#' + id + ' .pmpropp_trial_info').addClass('pmpropp_trial_info_' + menu_order);
 
         // Show the pmpropp_recurring_x field if the checkbox is pre-selected previously.
-        if (jQuery("#pmpropp_plan_" + menu_order + " #pmpropp_recurring").prop('checked')) {
+        if (jQuery('#pmpropp_plan_' + menu_order + ' #pmpropp_recurring').prop('checked')) {
             jQuery('.pmpropp_plan_recurring.pmpropp_recurring_' + menu_order).show();
         }
 
         // Show the custom trial depending fields.
-        if (jQuery("#pmpropp_plan_" + menu_order + " #pmpropp_custom_trial").prop('checked')) {
+        if (jQuery('#pmpropp_plan_' + menu_order + ' #pmpropp_custom_trial').prop('checked')) {
             jQuery('.pmpropp_trial_info_' + menu_order).show();
         }
+
+        if (jQuery('#pmpropp_plan_' + menu_order + ' #pmpropp_plan_expiration').prop('checked')) {
+            jQuery('.pmpropp_expirations_' + menu_order).show();
+        }
+
+
+
 
     });
 
@@ -88,6 +95,7 @@ jQuery(document).ready(function () {
     });
 
     jQuery("body").on("click", "#pmpropp_plan_expiration", function () {
+        console.log('clicked');
 
         var menu_order = jQuery(this).attr('menu_order');
 
