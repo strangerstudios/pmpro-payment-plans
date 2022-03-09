@@ -224,7 +224,7 @@ function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
 		 * @param bool $include_level_price Should the levels default pricing be automatically included at checkout.
 		 * @param int $level_id The level ID value of current checkout/level in question.
 		 */
-		if ( apply_filters( 'pmpropp_include_level_pricing_option_at_checkout', true, $level_id ) && is_page( $pmpro_pages['checkout'] ) ) {
+		if ( apply_filters( 'pmpropp_include_level_pricing_option_at_checkout', true, $level_id ) && ( is_page( $pmpro_pages['checkout'] ) || wp_doing_ajax() ) ) {
 			$level = pmpro_getLevel( $level_id );
 			$level->status = 'active';
 			$level->default = 'yes'; //Default to yes, as it can be adjusted by "real" plans later on.
@@ -311,6 +311,10 @@ function pmpropp_override_checkout_level( $level ) {
 	if ( ! empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 
 		$plan = pmpropp_return_payment_plans( intval( $level->id ), $_REQUEST['pmpropp_chosen_plan'] );
+
+		if ( $plan->id === $level->id ) {
+			return $level;
+		}
 
 		$level->name = $level->name . ' - ' . $plan->name;
 
