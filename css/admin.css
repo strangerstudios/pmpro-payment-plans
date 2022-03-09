@@ -23,6 +23,16 @@
 }
 .pmpropp_remove_plan {
     float: right;
-    color: #797777;
+    color: red;
     cursor: pointer;
+    font-size:13px;
+    text-decoration: underline;
+}
+
+.pmpropp_remove_plan:hover {
+    color:darkred;
+}
+
+.pmpropp_small_text{
+    font-size:10px;
 }
