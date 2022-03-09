@@ -37,7 +37,7 @@
 					<label><?php esc_html_e( 'Recurring Subscription', 'pmpro-payment-plans' ); ?>:</label>
 				</th>
 				<td>
-					<input id="pmpropp_recurring" name="pmpropp_recurring" type="checkbox" value="yes"/> 
+					<input id="pmpropp_recurring" name="pmpropp_recurring[]" type="checkbox" value="yes"/> 
 					<label for="pmpropp_recurring"><?php esc_html_e( 'Check if this level has a recurring subscription payment.', 'pmpro-payment-plans' ); ?></label>
 				</td>
 			</tr>
@@ -162,9 +162,9 @@
 			</tr>
 			<tr>
 				<th scope="row" valign="top"><label><?php esc_html_e( 'Membership Expiration', 'pmpro-payment-plans' ); ?>:</label></th>
-				<td><input id="pmpropp_plan_expiration" name="expiration" type="checkbox" value="yes"> <label for="pmpropp_plan_expiration"><?php esc_html_e( 'Check this to set when membership access expires.', 'pmpro-payment-plans' ); ?></label></td>
+				<td><input id="pmpropp_plan_expiration" name="pmpropp_plan_expiration[]" type="checkbox" value="yes"> <label for="pmpropp_plan_expiration"><?php esc_html_e( 'Check this to set when membership access expires.', 'pmpro-payment-plans' ); ?></label></td>
 			</tr>
-			<tr class="expiration_info" style="display:none;">					
+			<tr class="pmpropp_plan_expiration_info" style="display:none;">					
 				<th scope="row" valign="top"><label for="expiration_number"><?php esc_html_e( 'Expires In:', 'pmpro-payment-plans' ); ?></label></th>
 				<td>
 					<input id="expiration_number" name="pmpropp_expiration_number[]" type="text" value="!!expiration_number!!" class="small-text">

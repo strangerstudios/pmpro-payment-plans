@@ -56,7 +56,7 @@ jQuery(document).ready(function () {
         jQuery('#' + id + ' #pmpropp_recurring').attr('menu_order', menu_order);
         jQuery('#' + id + ' #pmpropp_plan_expiration').attr('menu_order', menu_order);
 
-        jQuery('#' + id + ' tr.expiration_info').addClass('pmpropp_expirations_' + menu_order);
+        jQuery('#' + id + ' tr.pmpropp_plan_expiration_info').addClass('pmpropp_expirations_' + menu_order);
         jQuery('#' + id + ' tr.pmpropp_plan_recurring').addClass('pmpropp_recurring_' + menu_order);
         jQuery('#' + id + ' .pmpropp_trial_info').addClass('pmpropp_trial_info_' + menu_order);
 

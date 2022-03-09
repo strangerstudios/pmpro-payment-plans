@@ -170,6 +170,27 @@ function pmpropp_pair_plan_fields( $request ) {
 
 		for ( $i = 0; $i < $size; $i++ ) {
 
+			// Clear out all recurring information if checkbox isn't selected.
+			if ( empty( $request['pmpropp_recurring'][$i] ) ) {
+				$pmpropp_billing_amount[$i] = '';
+				$pmpropp_cycle_number[$i] = '';
+				$pmpropp_cycle_period[$i] = '';
+				$pmpropp_billing_limit[$i] = '';
+				$request['pmpropp_custom_trial'][$i] = ''; //Make sure we clear this out if recurring option is deselected.
+			}
+
+			// Clear out if trial checkbox isn't selected.
+			if ( empty( $request['pmpropp_custom_trial'][$i] ) ) {
+				$pmpropp_trial_amount[$i] = '';
+				$pmpropp_trial_limit[$i] = '';
+			}
+
+			// Clear out the expiration data if checkbox isn't selected.
+			if ( empty( $request['pmpropp_plan_expiration'][$i] ) ) {
+				$pmpropp_expiration_number[$i] = '';
+				$pmpropp_expiration_period[$i] = '';
+			}
+
 			$level                    = new stdClass();
 			$level->id                = 'L-' . intval( $request['saveid'] ) . '-P-' . $i;
 			$level->name              = sanitize_text_field( $pmpropp_plan_name[ $i ] );
