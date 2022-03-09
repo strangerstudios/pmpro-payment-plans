@@ -255,7 +255,7 @@ function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
 
 					$ordered_plans[] = $plan;
 
-					if ( $plan->default == 'yes' ) {
+					if ( $plan->default == 'yes') {
 						$selected = 'checked=true';
 					} else {
 						$selected = ''; 
@@ -312,6 +312,7 @@ function pmpropp_override_checkout_level( $level ) {
 
 		$plan = pmpropp_return_payment_plans( intval( $level->id ), $_REQUEST['pmpropp_chosen_plan'] );
 
+		// If the plan ID is exactly same as the level ID just bail and return the current level object.
 		if ( $plan->id === $level->id ) {
 			return $level;
 		}
