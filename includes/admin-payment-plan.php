@@ -165,9 +165,9 @@
 				<td><input id="pmpropp_plan_expiration" name="pmpropp_plan_expiration[]" type="checkbox" value="yes"> <label for="pmpropp_plan_expiration"><?php esc_html_e( 'Check this to set when membership access expires.', 'pmpro-payment-plans' ); ?></label></td>
 			</tr>
 			<tr class="pmpropp_plan_expiration_info" style="display:none;">					
-				<th scope="row" valign="top"><label for="expiration_number"><?php esc_html_e( 'Expires In:', 'pmpro-payment-plans' ); ?></label></th>
+				<th scope="row" valign="top"><label for="pmpropp_expiration_number"><?php esc_html_e( 'Expires In:', 'pmpro-payment-plans' ); ?></label></th>
 				<td>
-					<input id="expiration_number" name="pmpropp_expiration_number[]" type="text" value="!!expiration_number!!" class="small-text">
+					<input id="pmpropp_expiration_number" name="pmpropp_expiration_number[]" type="text" value="!!expiration_number!!" class="small-text">
 					<select id="expiration_period" name="pmpropp_expiration_period[]" selectval="!!expiration_number!!">
 						  <option value="Day"><?php esc_html_e( 'Day(s)', 'pmpro-payment-plans' ); ?></option>
 						  <option value="Week"><?php esc_html_e( 'Week(s)', 'pmpro-payment-plans' ); ?></option>
