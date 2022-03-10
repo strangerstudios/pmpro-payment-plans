@@ -33,6 +33,7 @@ function pmpropp_load_admin_scripts() {
 		ob_end_clean();
 
 		$stored_plans = pmpropp_render_plans( $output );
+		$plan_data = pmpropp_return_payment_plans( $_REQUEST['edit'] );
 
 		$template_plan       = new StdClass();
 		$template_plan->name = __( 'New Payment Plan', 'pmpro-payment-plans' );
@@ -45,6 +46,7 @@ function pmpropp_load_admin_scripts() {
 			array(
 				'stored_plans' => $stored_plans,
 				'template'     => $output,
+				'plan_data'    => $plan_data,
 			)
 		);
 
@@ -168,6 +170,27 @@ function pmpropp_pair_plan_fields( $request ) {
 
 		for ( $i = 0; $i < $size; $i++ ) {
 
+			// Clear out all recurring information if checkbox isn't selected.
+			if ( empty( $request['pmpropp_recurring'][$i] ) ) {
+				$pmpropp_billing_amount[$i] = '';
+				$pmpropp_cycle_number[$i] = '';
+				$pmpropp_cycle_period[$i] = '';
+				$pmpropp_billing_limit[$i] = '';
+				$request['pmpropp_custom_trial'][$i] = ''; //Make sure we clear this out if recurring option is deselected.
+			}
+
+			// Clear out if trial checkbox isn't selected.
+			if ( empty( $request['pmpropp_custom_trial'][$i] ) ) {
+				$pmpropp_trial_amount[$i] = '';
+				$pmpropp_trial_limit[$i] = '';
+			}
+
+			// Clear out the expiration data if checkbox isn't selected.
+			if ( empty( $request['pmpropp_plan_expiration'][$i] ) ) {
+				$pmpropp_expiration_number[$i] = '';
+				$pmpropp_expiration_period[$i] = '';
+			}
+
 			$level                    = new stdClass();
 			$level->id                = 'L-' . intval( $request['saveid'] ) . '-P-' . $i;
 			$level->name              = sanitize_text_field( $pmpropp_plan_name[ $i ] );
@@ -259,14 +282,14 @@ function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
 						'<input type="radio" name="pmpropp_chosen_plan" class="pmpropp_chosen_plan" value="%1$s" id="%2$s" %3$s /> <label for="%2$s">%4$s</label>',
 						esc_attr( $plan->id ),
 						esc_attr( 'pmpropp_chosen_plan_choice_' . $plan->id ),
-						checked( 'yes', $plan->default, true ),
+						checked( 'yes', $plan->default, false ),
 						esc_html( $plan->name ) . ' - ' . pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) )
 					);
 
 					/**
 					 * Allow filtering the plan HTML input.
 					 *
-					 * @since TBD
+					 * @since 0.1
 					 *
 					 * @param string $html     The plan HTML input.
 					 * @param object $plan     The plan object.
@@ -470,10 +493,6 @@ function pmpropp_replace_template_values( $template, $values ) {
 	$template = str_replace( '!!expiration_number!!', ( ! empty( $values->expiration_number ) ) ? $values->expiration_number : '', $template );
 	$template = str_replace( '!!expiration_period!!', ( ! empty( $values->expiration_period ) ) ? $values->expiration_period : '', $template );
 	$template = str_replace( '!!plan_default!!', ( ! empty( $values->default ) ) ? $values->default : '', $template );
-
-	$template = str_replace( '!!recurring_info_display!!', ( ! empty( $values->billing_amount ) ) ? 'display:block;' : 'display:none;', $template );
-
-	$template = str_replace( '!!expiration_info_display!!', ( ! empty( $values->expiration_number ) ) ? 'display:block;' : 'display:none;', $template );
 
 	return $template;
 

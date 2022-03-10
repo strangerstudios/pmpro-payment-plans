@@ -1,10 +1,10 @@
 jQuery(document).ready(function(){
 
-	if( jQuery("#pmproo_select_payment_plan").length > 0 ){
+	if( jQuery("#pmpropp_select_payment_plan").length > 0 ){
 
 		jQuery.each( payment_plans.plans, function( key, val ){
 			
-			jQuery("#pmproo_select_payment_plan").append("<div class='pmpro_payment_plan_row'>"+val.html+"</div>");
+			jQuery("#pmpropp_select_payment_plan").append("<div class='pmpro_payment_plan_row'>"+val.html+"</div>");
 
 		});
 
