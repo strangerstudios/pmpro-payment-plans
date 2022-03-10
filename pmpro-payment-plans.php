@@ -33,7 +33,7 @@ function pmpropp_load_admin_scripts() {
 		ob_end_clean();
 
 		$stored_plans = pmpropp_render_plans( $output );
-		$plan_data = pmproo_return_payment_plans( $_REQUEST['edit'] );
+		$plan_data = pmpropp_return_payment_plans( $_REQUEST['edit'] );
 
 		$template_plan       = new StdClass();
 		$template_plan->name = __( 'New Payment Plan', 'pmpro-payment-plans' );
@@ -282,14 +282,14 @@ function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
 						'<input type="radio" name="pmpropp_chosen_plan" class="pmpropp_chosen_plan" value="%1$s" id="%2$s" %3$s /> <label for="%2$s">%4$s</label>',
 						esc_attr( $plan->id ),
 						esc_attr( 'pmpropp_chosen_plan_choice_' . $plan->id ),
-						checked( 'yes', $plan->default, true ),
+						checked( 'yes', $plan->default, false ),
 						esc_html( $plan->name ) . ' - ' . pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) )
 					);
 
 					/**
 					 * Allow filtering the plan HTML input.
 					 *
-					 * @since TBD
+					 * @since 0.1
 					 *
 					 * @param string $html     The plan HTML input.
 					 * @param object $plan     The plan object.
