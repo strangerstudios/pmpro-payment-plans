@@ -74,7 +74,7 @@ function pmpropp_load_frontend_scripts() {
 				'pmpro-payment-plans-frontend-js',
 				'payment_plans',
 				array(
-					'plans'        => pmproo_return_payment_plans( $_REQUEST['level'] ),
+					'plans'        => pmpropp_return_payment_plans( $_REQUEST['level'] ),
 					'ajaxurl'      => admin_url( 'admin-ajax.php' ),
 					'parent_level' => ( ! empty( $_REQUEST['level'] ) ? $_REQUEST['level'] : 0 ),
 				)
@@ -223,22 +223,37 @@ function pmpropp_pair_plan_fields( $request ) {
  * Return payment plan array or single object if plan_id is specified
  *
  * @since 0.1.0
- * @param object $level The membership level object.
+ * @param object $level_id The membership level ID.
  * @param int    $plan_id The payment plan ID.
  *
  * @return array $plan An array of the plans.
  */
-function pmproo_return_payment_plans( $level, $plan_id = '' ) {
+function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
+	global $pmpro_pages;
 
-	if ( ! empty( $level ) ) {
+	if ( ! empty( $level_id ) ) {
 
 		global $pmpro_currency_symbol;
 
 		$currency_position = pmpro_getCurrencyPosition();
 
-		$payment_plans = get_pmpro_membership_level_meta( $level, 'payment_plans', true );
+		$payment_plans = get_pmpro_membership_level_meta( $level_id, 'payment_plans', true );
 
 		$ordered_plans = array();
+
+		/**
+		 * Include the default level billing price at checkout as a radio checkbox.
+		 * 
+		 * @param bool $include_level_price Should the levels default pricing be automatically included at checkout.
+		 * @param int $level_id The level ID value of current checkout/level in question.
+		 */
+		if ( apply_filters( 'pmpropp_include_level_pricing_option_at_checkout', true, $level_id ) && ( is_page( $pmpro_pages['checkout'] ) || wp_doing_ajax() ) ) {
+			$level = pmpro_getLevel( $level_id );
+			$level->status = 'active';
+			$level->default = 'yes'; //Default to yes, as it can be adjusted by "real" plans later on.
+			$level->display_order = 0;
+			array_unshift( $payment_plans, $level );
+		}
 
 		$counter = 0;
 
@@ -263,11 +278,24 @@ function pmproo_return_payment_plans( $level, $plan_id = '' ) {
 
 					$ordered_plans[] = $plan;
 
-					if ( $plan->default == 'yes' ) {
-						$selected = 'checked=true';
-					} else {
-						$selected = ''; }
-					$plan->html = apply_filters( 'pmpropp_plan_html_template', "<input type='radio' name='pmpropp_chosen_plan' class='pmpropp_chosen_plan' value='" . $plan->id . "' id='" . $plan->id . "' " . $selected . " /><label for='" . $plan->id . "'>" . $plan->name . ' - ' . pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) ) . '</label>', $plan, $level );
+					$plan->html = sprintf(
+						'<input type="radio" name="pmpropp_chosen_plan" class="pmpropp_chosen_plan" value="%1$s" id="%2$s" %3$s /> <label for="%2$s">%4$s</label>',
+						esc_attr( $plan->id ),
+						esc_attr( 'pmpropp_chosen_plan_choice_' . $plan->id ),
+						checked( 'yes', $plan->default, true ),
+						esc_html( $plan->name ) . ' - ' . pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) )
+					);
+
+					/**
+					 * Allow filtering the plan HTML input.
+					 *
+					 * @since TBD
+					 *
+					 * @param string $html     The plan HTML input.
+					 * @param object $plan     The plan object.
+					 * @param int    $level_id The level ID.
+					 */
+					$plan->html = apply_filters( 'pmpropp_plan_html_template', $plan->html, $plan, $level_id );
 
 				}
 			}
@@ -294,11 +322,11 @@ function pmpropp_render_payment_plans_checkout() {
 
 	if ( ! empty( $_REQUEST['level'] ) ) {
 
-		$plans = pmproo_return_payment_plans( $_REQUEST['level'] );
+		$plans = pmpropp_return_payment_plans( $_REQUEST['level'] );
 
 		if ( ! empty( $plans ) ) {
 			?>
-			<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-field' ); ?>" id="pmproo_select_payment_plan">
+			<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-field' ); ?>" id="pmpropp_select_payment_plan">
 			<h3><?php _e( 'Select a Payment Plan', 'pmpro-payment-plans' ); ?></h3>	
 			</div>
 			<?php
@@ -316,7 +344,12 @@ function pmpropp_override_checkout_level( $level ) {
 
 	if ( ! empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 
-		$plan = pmproo_return_payment_plans( intval( $level->id ), $_REQUEST['pmpropp_chosen_plan'] );
+		$plan = pmpropp_return_payment_plans( intval( $level->id ), $_REQUEST['pmpropp_chosen_plan'] );
+
+		// If the plan ID is exactly same as the level ID just bail and return the current level object.
+		if ( $plan->id === $level->id ) {
+			return $level;
+		}
 
 		$level->name = $level->name . ' - ' . $plan->name;
 
@@ -351,7 +384,7 @@ function pmpropp_after_checkout( $user_id, $morder ) {
 
 	if ( ! empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 
-		$plan = pmproo_return_payment_plans( $morder->membership_id, $_REQUEST['pmpropp_chosen_plan'] );
+		$plan = pmpropp_return_payment_plans( $morder->membership_id, $_REQUEST['pmpropp_chosen_plan'] );
 
 		update_pmpro_membership_order_meta( intval( $morder->id ), 'payment_plan', $plan );
 
@@ -399,7 +432,7 @@ function pmpropp_request_price_change() {
 
 	if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'pmpropp_request_price_change' ) {
 
-		$plan = pmproo_return_payment_plans( $_REQUEST['level'], $_REQUEST['plan'] );
+		$plan = pmpropp_return_payment_plans( $_REQUEST['level'], $_REQUEST['plan'] );
 
 		echo pmpro_no_quotes( pmpro_getLevelCost( $plan, array( '"', "'", "\n", "\r" ) ) );
 
@@ -421,7 +454,7 @@ function pmpropp_render_plans( $template ) {
 
 	global $pmpro_currency_symbol;
 
-	$plans = pmproo_return_payment_plans( $_REQUEST['edit'] );
+	$plans = pmpropp_return_payment_plans( $_REQUEST['edit'] );
 
 	if ( ! empty( $plans ) ) {
 		foreach ( $plans as $plan ) {
