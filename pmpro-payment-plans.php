@@ -255,18 +255,11 @@ function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
 
 					$ordered_plans[] = $plan;
 
-					if ( $plan->default == 'yes') {
-						$selected = 'checked=true';
-					} else {
-						$selected = ''; 
-					}
-
-
 					$plan->html = sprintf(
 						'<input type="radio" name="pmpropp_chosen_plan" class="pmpropp_chosen_plan" value="%1$s" id="%2$s" %3$s /> <label for="%2$s">%4$s</label>',
 						esc_attr( $plan->id ),
 						esc_attr( 'pmpropp_chosen_plan_choice_' . $plan->id ),
-						checked( $plan->default, 'yes', true ),
+						checked( 'yes', $plan->default, true ),
 						esc_html( $plan->name ) . ' - ' . pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) )
 					);
 
