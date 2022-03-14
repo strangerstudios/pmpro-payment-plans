@@ -423,7 +423,7 @@ function pmpropp_payment_plan_body( $morder ) {
 	if ( ! empty( $plan->name ) ) {
 		echo '<td>' . $plan->name . '</td>';
 	} else {
-		echo '<td>' . __( 'No Payment Plan Used', 'pmpro-payment-plans' ) . '</td>';
+		echo '<td>' . __( '&#8212;', 'paid-memberships-pro' ) . '</td>';
 	}
 
 }
