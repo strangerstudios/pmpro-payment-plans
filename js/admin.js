@@ -82,8 +82,8 @@ jQuery(document).ready(function () {
         }
 
         //Change the dropdown the selected expiration period        
-        var expiration_period_val = jQuery(".pmpropp_expirations_" + menu_order + " #expiration_period").attr("selectval");        
-        // console.log(expiration_period_val);
+        var expiration_period_val = jQuery(".pmpropp_expirations_" + menu_order + " #expiration_period").attr("selectval");
+
         if( expiration_period_val !== "" ){
             jQuery(".pmpropp_expirations_" + menu_order + " #expiration_period").val(expiration_period_val).change();
         }
