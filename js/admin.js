@@ -73,9 +73,10 @@ jQuery(document).ready(function () {
         if (jQuery('#pmpropp_plan_' + menu_order + ' #pmpropp_plan_expiration').prop('checked')) {
             jQuery('.pmpropp_expirations_' + menu_order).show();
         }
-
-
-
+    
+        //Change the dropdown the selected cycle period        
+        var cycle_period_val = jQuery(".pmpropp_recurring_" + menu_order + " #cycle_period").attr("selectval");
+        jQuery(".pmpropp_recurring_" + menu_order + " #cycle_period").val(cycle_period_val).change();
 
     });
 
