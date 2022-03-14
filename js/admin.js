@@ -10,17 +10,17 @@ jQuery(document).ready(function () {
 
         // Show recurring settings by default.
         if (val.cycle_number) {
-            jQuery("#pmpropp_plan_" + key + " #pmpropp_recurring").prop('checked', true); //set it to checked.
+            jQuery("#pmpropp_plan_" + key + " .pmpropp_recurring").prop('checked', true); //set it to checked.
         }
 
         // Show trial by default.
         if (val.trial_limit) {
-            jQuery("#pmpropp_plan_" + key + " #pmpropp_custom_trial").prop('checked', true); //set it to checked.
+            jQuery("#pmpropp_plan_" + key + " .pmpropp_custom_trial").prop('checked', true); //set it to checked.
         }
 
         // Set the expiration checkbox to set if data is found.
         if (val.expiration_number) {
-            jQuery("#pmpropp_plan_" + key + " #pmpropp_plan_expiration").prop('checked', true); //set it to checked.
+            jQuery("#pmpropp_plan_" + key + " .pmpropp_plan_expiration").prop('checked', true); //set it to checked.
         }
 
     });
@@ -54,41 +54,44 @@ jQuery(document).ready(function () {
         var menu_order = jQuery(this).attr('menu_order');
         jQuery('#' + id + ' #pmpropp_display_order').val(menu_order);
 
-        jQuery('#' + id + ' #pmpropp_recurring').attr('menu_order', menu_order);
-        jQuery('#' + id + ' #pmpropp_plan_expiration').attr('menu_order', menu_order);
+        jQuery('#' + id + ' .pmpropp_recurring').attr('menu_order', menu_order);
+        jQuery('#' + id + ' .pmpropp_plan_expiration').attr('menu_order', menu_order);
 
         jQuery('#' + id + ' tr.pmpropp_plan_expiration_info').addClass('pmpropp_expirations_' + menu_order);
         jQuery('#' + id + ' tr.pmpropp_plan_recurring').addClass('pmpropp_recurring_' + menu_order);
         jQuery('#' + id + ' .pmpropp_trial_info').addClass('pmpropp_trial_info_' + menu_order);
 
         // Show the pmpropp_recurring_x field if the checkbox is pre-selected previously.
-        if (jQuery('#pmpropp_plan_' + menu_order + ' #pmpropp_recurring').prop('checked')) {
+        if (jQuery('#pmpropp_plan_' + menu_order + ' .pmpropp_recurring').prop('checked')) {
             jQuery('.pmpropp_plan_recurring.pmpropp_recurring_' + menu_order).show();
         }
 
         // Show the custom trial depending fields.
-        if (jQuery('#pmpropp_plan_' + menu_order + ' #pmpropp_custom_trial').prop('checked')) {
+        if (jQuery('#pmpropp_plan_' + menu_order + ' .pmpropp_custom_trial').prop('checked')) {
             jQuery('.pmpropp_trial_info_' + menu_order).show();
         }
 
-        if (jQuery('#pmpropp_plan_' + menu_order + ' #pmpropp_plan_expiration').prop('checked')) {
+        if (jQuery('#pmpropp_plan_' + menu_order + ' .pmpropp_plan_expiration').prop('checked')) {
             jQuery('.pmpropp_expirations_' + menu_order).show();
         }
     
         //Change the dropdown the selected cycle period        
-        var cycle_period_val = jQuery(".pmpropp_recurring_" + menu_order + " #cycle_period").attr("selectval");
-        jQuery(".pmpropp_recurring_" + menu_order + " #cycle_period").val(cycle_period_val).change();
+        var cycle_period_val = jQuery("#pmpropp_recurring_" + menu_order + " #cycle_period").attr("selectval");
+        jQuery("#pmpropp_recurring_" + menu_order + " #cycle_period").val(cycle_period_val).change();
 
         //Change the dropdown the selected expiration period        
         var expiration_period_val = jQuery(".pmpropp_expirations_" + menu_order + " #expiration_period").attr("selectval");
-        jQuery(".pmpropp_expirations_" + menu_order + " #expiration_period").val(expiration_period_val).change();
+        
+        if( expiration_period_val !== "" ){
+            jQuery(".pmpropp_expirations_" + menu_order + " #expiration_period").val(expiration_period_val).change();
+        }
 
     });
 
     /**
      * Show the items that depend on recurring billing checkbox.
      */
-    jQuery("body").on("click", "#pmpropp_recurring", function () {
+    jQuery("body").on("click", ".pmpropp_recurring", function () {
 
         var menu_order = jQuery(this).attr('menu_order');
 
@@ -100,8 +103,7 @@ jQuery(document).ready(function () {
 
     });
 
-    jQuery("body").on("click", "#pmpropp_plan_expiration", function () {
-        console.log('clicked');
+    jQuery("body").on("click", ".pmpropp_plan_expiration", function () {
 
         var menu_order = jQuery(this).attr('menu_order');
 
