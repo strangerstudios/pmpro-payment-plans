@@ -48,10 +48,10 @@ jQuery(document).ready(function () {
     });
 
     // Order the accordion.
-    jQuery("body").on("click", ".s_panel", function () {
+    jQuery("body").on("click", ".s_panel h3", function () {
 
-        var id = jQuery(this).attr('id');
-        var menu_order = jQuery(this).attr('menu_order');
+        var id = jQuery(this).parent().attr('id');
+        var menu_order = jQuery(this).parent().attr('menu_order');
         jQuery('#' + id + ' #pmpropp_display_order').val(menu_order);
 
         jQuery('#' + id + ' .pmpropp_recurring').attr('menu_order', menu_order);
@@ -77,11 +77,13 @@ jQuery(document).ready(function () {
     
         //Change the dropdown the selected cycle period        
         var cycle_period_val = jQuery("#pmpropp_recurring_" + menu_order + " #cycle_period").attr("selectval");
-        jQuery("#pmpropp_recurring_" + menu_order + " #cycle_period").val(cycle_period_val).change();
+        if( cycle_period_val !== "" ) {
+            jQuery("#pmpropp_recurring_" + menu_order + " #cycle_period").val(cycle_period_val).change();
+        }
 
         //Change the dropdown the selected expiration period        
         var expiration_period_val = jQuery(".pmpropp_expirations_" + menu_order + " #expiration_period").attr("selectval");
-        
+
         if( expiration_period_val !== "" ){
             jQuery(".pmpropp_expirations_" + menu_order + " #expiration_period").val(expiration_period_val).change();
         }
