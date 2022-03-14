@@ -168,7 +168,7 @@
 				<th scope="row" valign="top"><label for="pmpropp_expiration_number"><?php esc_html_e( 'Expires In:', 'pmpro-payment-plans' ); ?></label></th>
 				<td>
 					<input id="pmpropp_expiration_number" name="pmpropp_expiration_number[]" type="text" value="!!expiration_number!!" class="small-text">
-					<select id="expiration_period" name="pmpropp_expiration_period[]" selectval="!!expiration_number!!">
+					<select id="expiration_period" name="pmpropp_expiration_period[]" selectval="!!expiration_period!!">
 						  <option value="Day"><?php esc_html_e( 'Day(s)', 'pmpro-payment-plans' ); ?></option>
 						  <option value="Week"><?php esc_html_e( 'Week(s)', 'pmpro-payment-plans' ); ?></option>
 						  <option value="Month"><?php esc_html_e( 'Month(s)', 'pmpro-payment-plans' ); ?></option>
