@@ -76,14 +76,13 @@ jQuery(document).ready(function () {
         }
     
         //Change the dropdown the selected cycle period        
-        var cycle_period_val = jQuery("#pmpropp_recurring_" + menu_order + " #cycle_period").attr("selectval");
+        var cycle_period_val = jQuery(".pmpropp_recurring_" + menu_order + " #cycle_period").attr("selectval");
         if( cycle_period_val !== "" ) {
-            jQuery("#pmpropp_recurring_" + menu_order + " #cycle_period").val(cycle_period_val).change();
+            jQuery(".pmpropp_recurring_" + menu_order + " #cycle_period").val(cycle_period_val).change();
         }
 
         //Change the dropdown the selected expiration period        
-        var expiration_period_val = jQuery(".pmpropp_expirations_" + menu_order + " #expiration_period").attr("selectval");        
-        // console.log(expiration_period_val);
+        var expiration_period_val = jQuery(".pmpropp_expirations_" + menu_order + " #expiration_period").attr("selectval");                
         if( expiration_period_val !== "" ){
             jQuery(".pmpropp_expirations_" + menu_order + " #expiration_period").val(expiration_period_val).change();
         }
