@@ -23,6 +23,18 @@ jQuery(document).ready(function () {
             jQuery("#pmpropp_plan_" + key + " .pmpropp_plan_expiration").prop('checked', true); //set it to checked.
         }
 
+        //Change the dropdown the selected cycle period        
+        var cycle_period_val = jQuery("#pmpropp_plan_" + key + " #cycle_period").attr("selectval");
+        if( cycle_period_val !== "" ) {
+            jQuery("#pmpropp_plan_" + key + " #cycle_period").val(cycle_period_val).change();
+        }
+
+        //Change the dropdown the selected expiration period        
+        var expiration_period_val = jQuery("#pmpropp_plan_" + key + " #expiration_period").attr("selectval");                
+        if( expiration_period_val !== "" ){
+            jQuery("#pmpropp_plan_" + key + " #expiration_period").val(expiration_period_val).change();
+        }
+
     });
 
 
@@ -73,18 +85,6 @@ jQuery(document).ready(function () {
 
         if (jQuery('#pmpropp_plan_' + menu_order + ' .pmpropp_plan_expiration').prop('checked')) {
             jQuery('.pmpropp_expirations_' + menu_order).show();
-        }
-    
-        //Change the dropdown the selected cycle period        
-        var cycle_period_val = jQuery(".pmpropp_recurring_" + menu_order + " #cycle_period").attr("selectval");
-        if( cycle_period_val !== "" ) {
-            jQuery(".pmpropp_recurring_" + menu_order + " #cycle_period").val(cycle_period_val).change();
-        }
-
-        //Change the dropdown the selected expiration period        
-        var expiration_period_val = jQuery(".pmpropp_expirations_" + menu_order + " #expiration_period").attr("selectval");                
-        if( expiration_period_val !== "" ){
-            jQuery(".pmpropp_expirations_" + menu_order + " #expiration_period").val(expiration_period_val).change();
         }
 
     });
