@@ -1,0 +1,223 @@
+# Copyright (C) 2022 Paid Memberships Pro
+# This file is distributed under the same license as the Paid Memberships Pro - Payment Plans Add On plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Paid Memberships Pro - Payment Plans Add On 0.1.0\n"
+"Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
+"Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
+"Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2022-03-15T13:03:11+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.6.0\n"
+"X-Domain: pmpro-payment-plans\n"
+
+#. Plugin Name of the plugin
+msgid "Paid Memberships Pro - Payment Plans Add On"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Integrates with Paid Memberships Pro to provide payment plans for membership levels."
+msgstr ""
+
+#. Author of the plugin
+msgid "Paid Memberships Pro"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://www.paidmembershipspro.com"
+msgstr ""
+
+#: includes/admin-payment-plan.php:2
+msgid "Click to view"
+msgstr ""
+
+#: includes/admin-payment-plan.php:2
+msgid "delete"
+msgstr ""
+
+#: includes/admin-payment-plan.php:6
+msgid "Payment Plan Name"
+msgstr ""
+
+#: includes/admin-payment-plan.php:10
+msgid "Display Order"
+msgstr ""
+
+#: includes/admin-payment-plan.php:14
+msgid "Is Default Payment Plan"
+msgstr ""
+
+#: includes/admin-payment-plan.php:17
+msgid "No"
+msgstr ""
+
+#: includes/admin-payment-plan.php:18
+msgid "Yes"
+msgstr ""
+
+#: includes/admin-payment-plan.php:23
+msgid "Payment Plan Status"
+msgstr ""
+
+#: includes/admin-payment-plan.php:26
+msgid "Active"
+msgstr ""
+
+#: includes/admin-payment-plan.php:27
+msgid "Inactive"
+msgstr ""
+
+#: includes/admin-payment-plan.php:32
+msgid "Initial Amount"
+msgstr ""
+
+#: includes/admin-payment-plan.php:37
+msgid "Recurring Subscription"
+msgstr ""
+
+#: includes/admin-payment-plan.php:41
+msgid "Check if this level has a recurring subscription payment."
+msgstr ""
+
+#: includes/admin-payment-plan.php:46
+msgid "Billing Amount"
+msgstr ""
+
+#: includes/admin-payment-plan.php:60
+msgid "per"
+msgstr ""
+
+#: includes/admin-payment-plan.php:65
+#: includes/admin-payment-plan.php:172
+msgid "Day(s)"
+msgstr ""
+
+#: includes/admin-payment-plan.php:66
+#: includes/admin-payment-plan.php:173
+msgid "Week(s)"
+msgstr ""
+
+#: includes/admin-payment-plan.php:67
+#: includes/admin-payment-plan.php:174
+msgid "Month(s)"
+msgstr ""
+
+#: includes/admin-payment-plan.php:68
+#: includes/admin-payment-plan.php:175
+msgid "Year(s)"
+msgstr ""
+
+#: includes/admin-payment-plan.php:76
+msgid "The amount to be billed one cycle after the initial payment."
+msgstr ""
+
+#: includes/admin-payment-plan.php:82
+msgid "Braintree integration currently only supports billing periods of \"Month\" or \"Year\"."
+msgstr ""
+
+#: includes/admin-payment-plan.php:88
+msgid "Stripe integration does not allow billing periods longer than 1 year."
+msgstr ""
+
+#: includes/admin-payment-plan.php:95
+msgid "Billing Cycle Limit"
+msgstr ""
+
+#: includes/admin-payment-plan.php:100
+msgid "The <strong>total</strong> number of recurring billing cycles for this level, including the trial period (if applicable) but not including the initial payment. Set to zero if membership is indefinite."
+msgstr ""
+
+#: includes/admin-payment-plan.php:106
+msgid "Stripe integration currently does not support billing limits. You can still set an expiration date below."
+msgstr ""
+
+#: includes/admin-payment-plan.php:113
+msgid "Custom Trial"
+msgstr ""
+
+#: includes/admin-payment-plan.php:115
+msgid "Check to add a custom trial period."
+msgstr ""
+
+#: includes/admin-payment-plan.php:121
+msgid "2Checkout integration does not support custom trials. You can do one period trials by setting an initial payment different from the billing amount."
+msgstr ""
+
+#: includes/admin-payment-plan.php:126
+msgid "Trial Billing Amount"
+msgstr ""
+
+#: includes/admin-payment-plan.php:139
+msgid "for the first"
+msgstr ""
+
+#: includes/admin-payment-plan.php:141
+msgid "subscription payments"
+msgstr ""
+
+#: includes/admin-payment-plan.php:147
+msgid "Stripe integration currently does not support trial amounts greater than $0."
+msgstr ""
+
+#: includes/admin-payment-plan.php:153
+msgid "Braintree integration currently does not support trial amounts greater than $0."
+msgstr ""
+
+#: includes/admin-payment-plan.php:159
+msgid "Payflow integration currently does not support trial amounts greater than $0."
+msgstr ""
+
+#: includes/admin-payment-plan.php:164
+msgid "Membership Expiration"
+msgstr ""
+
+#: includes/admin-payment-plan.php:165
+msgid "Check this to set when membership access expires."
+msgstr ""
+
+#: includes/admin-payment-plan.php:168
+msgid "Expires In:"
+msgstr ""
+
+#: includes/admin-payment-plan.php:177
+msgid "Set the duration of membership access. Note that the any future payments (recurring subscription, if any) will be cancelled when the membership expires."
+msgstr ""
+
+#: includes/admin-payment-plan.php:180
+msgid "WARNING: This level is set with both a recurring billing amount and an expiration date. You only need to set one of these unless you really want this membership to expire after a certain number of payments. For more information, %s."
+msgstr ""
+
+#: includes/admin-payment-plan.php:180
+msgid "see our post here"
+msgstr ""
+
+#: pmpro-payment-plans.php:39
+msgid "New Payment Plan"
+msgstr ""
+
+#: pmpro-payment-plans.php:110
+msgid "Payment Plans"
+msgstr ""
+
+#: pmpro-payment-plans.php:111
+msgid "Create multiple payment plans for this level, giving your members multiple options to pay for a membership"
+msgstr ""
+
+#: pmpro-payment-plans.php:117
+msgid "Add Payment Plan"
+msgstr ""
+
+#: pmpro-payment-plans.php:331
+msgid "Select a Payment Plan"
+msgstr ""
+
+#: pmpro-payment-plans.php:408
+msgid "Payment Plan"
+msgstr ""
