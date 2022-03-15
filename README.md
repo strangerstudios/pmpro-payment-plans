@@ -1,3 +1,5 @@
+![](pmpro-payment-plans-add-on-banner.jpg)
+
 # [Paid Memberships Pro - Payment Plans](https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/) #
 [comment]: # (Generate badges from shields.io, only works for .org plugins to get other stats etc. We'd have to create our own endpoints for Premium plugins)
 
@@ -32,5 +34,5 @@ There are various **ways to the help development** of Plugin Name:
 Here are some ways for **non-developers to contribute** to Plugin Name:
 
 1. Translate Plugin Name into your own [language](https://www.paidmembershipspro.com/paid-memberships-pro-in-your-language/).
-2. [Purchase a plus membership](https://paidmembershipspro.com/pricing) to help fund ongoing development and bug fixes.
+2. [Purchase a paid membership](https://paidmembershipspro.com/pricing) to help fund ongoing development and bug fixes.
 3. Leave an honest review for [Plugin Name](https://wordpress.org/support/plugin/pmpro-payment-plans/reviews/#new-post).
