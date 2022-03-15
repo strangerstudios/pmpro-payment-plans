@@ -279,7 +279,7 @@ function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
 					$ordered_plans[] = $plan;
 
 					$plan->html = sprintf(
-						'<input type="radio" name="pmpropp_chosen_plan" class="pmpropp_chosen_plan" value="%1$s" id="%2$s" %3$s /> <label for="%2$s">%4$s</label>',
+						'<input type="radio" name="pmpropp_chosen_plan" class="pmpropp_chosen_plan" value="%1$s" id="%2$s" %3$s /> <label for="%2$s" class="pmpro_label-inline">%4$s</label>',
 						esc_attr( $plan->id ),
 						esc_attr( 'pmpropp_chosen_plan_choice_' . $plan->id ),
 						checked( 'yes', $plan->default, false ),
@@ -326,8 +326,14 @@ function pmpropp_render_payment_plans_checkout() {
 
 		if ( ! empty( $plans ) ) {
 			?>
-			<div class="<?php echo pmpro_get_element_class( 'pmpro_checkout-field' ); ?>" id="pmpropp_select_payment_plan">
-			<h3><?php _e( 'Select a Payment Plan', 'pmpro-payment-plans' ); ?></h3>	
+			<div id="pmpropp_select_payment_plan" class="pmpro_checkout">
+				<hr />
+				<h3>
+					<span class="pmpro_checkout-h3-name"><?php _e( 'Select a Payment Plan', 'pmpro-payment-plans' ); ?></span>
+				</h3>
+				<div id="pmpropp_payment_plans" class="pmpro_checkout-fields">
+					<!-- JavaScript populates plan options here -->
+				</div> <!-- end pmpro_checkout-fields -->
 			</div>
 			<?php
 		}
@@ -417,7 +423,7 @@ function pmpropp_payment_plan_body( $morder ) {
 	if ( ! empty( $plan->name ) ) {
 		echo '<td>' . $plan->name . '</td>';
 	} else {
-		echo '<td>' . __( 'No Payment Plan Used', 'pmpro-payment-plans' ) . '</td>';
+		echo '<td>' . __( '&#8212;', 'paid-memberships-pro' ) . '</td>';
 	}
 
 }
