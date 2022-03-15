@@ -269,13 +269,7 @@ function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
 				$counter++;
 
 				if ( $plan->status === 'active' ) {
-
-					// if( $plan->display_order === 0 || empty( $plan->display_order ) ){
-						// $ordered_plans[$counter] = $plan;
-					// } else {
-						// $ordered_plans[$plan->display_order] = $plan;
-					// }
-
+				
 					$ordered_plans[] = $plan;
 
 					$plan->html = sprintf(
@@ -300,7 +294,12 @@ function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
 				}
 			}
 
-			ksort( $ordered_plans );
+			//Lets order by the display order value
+			array_multisort(
+				array_column($ordered_plans, 'display_order'), 
+				SORT_ASC, 
+				$ordered_plans
+			);
 
 			return $ordered_plans;
 
