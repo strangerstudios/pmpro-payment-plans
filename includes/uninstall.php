@@ -1,4 +1,8 @@
 <?php
+/**
+ * Clean up on uninstall and if the PMPro settings are set to delete data on uninstall.
+ * @since 0.1
+ */
 
 // exit if uninstall/delete not called
 if ( !defined( 'ABSPATH' ) && !defined( 'WP_UNINSTALL_PLUGIN' ) ) {
