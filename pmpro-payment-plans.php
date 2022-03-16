@@ -9,7 +9,7 @@
  */
 
 /**
- * Incluses the cleanup script on uninstall.
+ * Includes the cleanup script on uninstall.
  */
 include plugin_dir_path( __FILE__ ) . 'includes/uninstall.php';
 
