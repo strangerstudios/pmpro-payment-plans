@@ -9,6 +9,11 @@
  */
 
 /**
+ * Includes the cleanup script on uninstall.
+ */
+include plugin_dir_path( __FILE__ ) . 'includes/uninstall.php';
+
+/**
  * Load required scripts for admin settings.
  *
  * @since 0.1.0
@@ -132,7 +137,7 @@ function pmpropp_membership_level_save() {
 
 		$payment_plans = pmpropp_pair_plan_fields( $_REQUEST );
 
-		update_pmpro_membership_level_meta( $_REQUEST['saveid'], 'payment_plans', $payment_plans );
+		update_pmpro_membership_level_meta( $_REQUEST['saveid'], 'payment_plan', $payment_plans );
 
 	}
 
@@ -237,7 +242,7 @@ function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
 
 		$currency_position = pmpro_getCurrencyPosition();
 
-		$payment_plans = get_pmpro_membership_level_meta( $level_id, 'payment_plans', true );
+		$payment_plans = get_pmpro_membership_level_meta( $level_id, 'payment_plan', true );
 
 		$ordered_plans = array();
 
