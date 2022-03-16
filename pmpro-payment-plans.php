@@ -3,7 +3,7 @@
  * Plugin Name: Paid Memberships Pro - Payment Plans Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
  * Description: Integrates with Paid Memberships Pro to provide payment plans for membership levels.
- * Version: 0.1.0
+ * Version: 0.1
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com
  */
@@ -16,7 +16,7 @@ include plugin_dir_path( __FILE__ ) . 'includes/uninstall.php';
 /**
  * Load required scripts for admin settings.
  *
- * @since 0.1.0
+ * @since 0.1
  */
 function pmpropp_load_admin_scripts() {
 
@@ -64,7 +64,7 @@ add_action( 'admin_enqueue_scripts', 'pmpropp_load_admin_scripts' );
 /**
  * Load required frontend scripts
  *
- * @since 0.1.0
+ * @since 0.1
  */
 function pmpropp_load_frontend_scripts() {
 
@@ -95,7 +95,7 @@ add_action( 'wp_enqueue_scripts', 'pmpropp_load_frontend_scripts' );
 /**
  * Load text domain for localizations.
  *
- * @since 0.1.0
+ * @since 0.1
  */
 function pmpropp_load_text_domains() {
 
@@ -107,7 +107,7 @@ add_action( 'init', 'pmpropp_load_text_domains' );
 /**
  * Add options to level settings to add payment plans.
  *
- * @since 0.1.0
+ * @since 0.1
  */
 function pmpropp_membership_level_after_other_settings() {
 
@@ -129,7 +129,7 @@ add_action( 'pmpro_membership_level_after_billing_details_settings', 'pmpropp_me
 /**
  * Save the payment plan settings when the level is saved.
  *
- * @since 0.1.0
+ * @since 0.1
  */
 function pmpropp_membership_level_save() {
 
@@ -149,7 +149,7 @@ add_action( 'admin_init', 'pmpropp_membership_level_save' );
  *
  * @param array $request The $_REQUEST parameters passed through to handle it.
  * @return array $payment_plans An array containing level objects for each payment plan.
- * @since 0.1.0
+ * @since 0.1
  */
 function pmpropp_pair_plan_fields( $request ) {
 
@@ -175,8 +175,8 @@ function pmpropp_pair_plan_fields( $request ) {
 
 		for ( $i = 0; $i < $size; $i++ ) {
 
-			// Clear out all recurring information if checkbox isn't selected.
-			if ( empty( $request['pmpropp_recurring'][$i] ) ) {
+			// Clear out all recurring information if checkbox isn't selected or billing amount is empty.
+			if ( ! isset( $request['pmpropp_recurring'][$i] ) || empty( $request['pmpropp_billing_amount'][$i] ) ) {
 				$pmpropp_billing_amount[$i] = '';
 				$pmpropp_cycle_number[$i] = '';
 				$pmpropp_cycle_period[$i] = '';
@@ -184,14 +184,14 @@ function pmpropp_pair_plan_fields( $request ) {
 				$request['pmpropp_custom_trial'][$i] = ''; //Make sure we clear this out if recurring option is deselected.
 			}
 
-			// Clear out if trial checkbox isn't selected.
-			if ( empty( $request['pmpropp_custom_trial'][$i] ) ) {
+			// Clear out if trial checkbox isn't selected or trial amount is blanked out.
+			if ( ! isset( $request['pmpropp_custom_trial'][$i] ) || empty( $request['pmpropp_trial_amount'][$i] ) ) {
 				$pmpropp_trial_amount[$i] = '';
 				$pmpropp_trial_limit[$i] = '';
 			}
 
-			// Clear out the expiration data if checkbox isn't selected.
-			if ( empty( $request['pmpropp_plan_expiration'][$i] ) ) {
+			// Clear out the expiration data if checkbox isn't selected or the expiration number is blank/empty.
+			if ( ! isset( $request['pmpropp_plan_expiration'][$i] ) || empty( $request['pmpropp_expiration_number'][$i] ) ) {
 				$pmpropp_expiration_number[$i] = '';
 				$pmpropp_expiration_period[$i] = '';
 			}
@@ -227,7 +227,7 @@ function pmpropp_pair_plan_fields( $request ) {
 /**
  * Return payment plan array or single object if plan_id is specified
  *
- * @since 0.1.0
+ * @since 0.1
  * @param object $level_id The membership level ID.
  * @param int    $plan_id The payment plan ID.
  *
@@ -320,7 +320,7 @@ function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
 /**
  * Display payment plans section on checkout page.
  *
- * @since 0.1.0
+ * @since 0.1
  */
 function pmpropp_render_payment_plans_checkout() {
 
@@ -348,7 +348,7 @@ add_action( 'pmpro_checkout_boxes', 'pmpropp_render_payment_plans_checkout', 10 
 /**
  * Override levels object with a payment plan - if chosen by the customer at checkout.
  *
- * @since 0.1.0
+ * @since 0.1
  */
 function pmpropp_override_checkout_level( $level ) {
 
@@ -388,7 +388,7 @@ add_filter( 'pmpro_checkout_level', 'pmpropp_override_checkout_level' );
 /**
  * After checkout - Add note and meta of plan
  *
- * @since 0.1.0
+ * @since 0.1
  */
 function pmpropp_after_checkout( $user_id, $morder ) {
 
@@ -406,7 +406,7 @@ add_action( 'pmpro_after_checkout', 'pmpropp_after_checkout', 10, 2 );
 /**
  * Add payment plan column header to orders page.
  *
- * @since 0.1.0
+ * @since 0.1
  */
 function pmpropp_payment_plan_header() {
 
@@ -418,7 +418,7 @@ add_action( 'pmpro_orders_extra_cols_header', 'pmpropp_payment_plan_header', 10 
 /**
  * Add payment plan column to the order page.
  *
- * @since 0.1.0
+ * @since 0.1
  */
 function pmpropp_payment_plan_body( $morder ) {
 
@@ -436,7 +436,7 @@ add_action( 'pmpro_orders_extra_cols_body', 'pmpropp_payment_plan_body', 10, 1 )
 /**
  * Ajax request to handle price change on checkout.
  *
- * @since 0.1.0
+ * @since 0.1
  */
 function pmpropp_request_price_change() {
 
@@ -456,7 +456,7 @@ add_action( 'wp_ajax_nopriv_pmpropp_request_price_change', 'pmpropp_request_pric
 /**
  * Render admin plans in HTML
  *
- * @since 0.1.0
+ * @since 0.1
  */
 function pmpropp_render_plans( $template ) {
 
@@ -480,13 +480,14 @@ function pmpropp_render_plans( $template ) {
 	return $ret;
 }
 
-// TODO UPDATE DOC BLOCK
 /**
  * Helper function to str_replace variables with plan values.
  *
- * @param [type] $template
- * @param [type] $values
- * @return void
+ * @param string $template The template content to replace.
+ * @param string $values The dynamic values to replace the template variables with.
+ * @return string The formatted data for the template values. String replaced for the dynamic content.
+ * 
+ * @since 0.1
  */
 function pmpropp_replace_template_values( $template, $values ) {
 
