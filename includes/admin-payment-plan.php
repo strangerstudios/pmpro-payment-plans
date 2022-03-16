@@ -37,7 +37,7 @@
 					<label><?php esc_html_e( 'Recurring Subscription', 'pmpro-payment-plans' ); ?>:</label>
 				</th>
 				<td>
-					<input type="hidden" name="pmpropp_recurring[]" value="0"><input id="pmpropp_recurring_!!plan_id!!" name="pmpropp_recurring[]" class="pmpropp_recurring" type="checkbox" value="yes"/>
+					<input type="hidden" name="pmpropp_recurring_present[]" value="0"><input id="pmpropp_recurring_!!plan_id!!" name="pmpropp_recurring[]" class="pmpropp_recurring" type="checkbox" value="yes"/>
 					<label for="pmpropp_recurring_!!plan_id!!"><?php esc_html_e( 'Check if this level has a recurring subscription payment.', 'pmpro-payment-plans' ); ?></label>
 				</td>
 			</tr>
@@ -112,7 +112,7 @@
 			<tr class="pmpropp_plan_recurring" style="display:none;">
 				<th scope="row" valign="top"><label><?php esc_html_e( 'Custom Trial', 'pmpro-payment-plans' ); ?>:</label></th>
 				<td>
-					<input type="hidden" name="pmpropp_custom_trial[]" value="0"><input id="pmpropp_custom_trial_!!plan_id!!" class="pmpropp_custom_trial" name="pmpropp_custom_trial[]" type="checkbox" value="yes" onclick="jQuery('.pmpropp_trial_info').toggle();"/> <label for="pmpropp_custom_trial_!!plan_id!!"><?php _e( 'Check to add a custom trial period.', 'pmpro-payment-plans' ); ?></label>
+					<input type="hidden" name="pmpropp_custom_trial_present[]" value="0"><input id="pmpropp_custom_trial_!!plan_id!!" class="pmpropp_custom_trial" name="pmpropp_custom_trial[]" type="checkbox" value="yes" onclick="jQuery('.pmpropp_trial_info').toggle();"/> <label for="pmpropp_custom_trial_!!plan_id!!"><?php _e( 'Check to add a custom trial period.', 'pmpro-payment-plans' ); ?></label>
 					<?php if ( $gateway == 'twocheckout' ) { ?>
 						<p class="description"><strong 
 						<?php
@@ -162,7 +162,7 @@
 			</tr>
 			<tr>
 				<th scope="row" valign="top"><label><?php esc_html_e( 'Membership Expiration', 'pmpro-payment-plans' ); ?>:</label></th>
-				<td><input id="pmpropp_plan_expiration_!!plan_id!!" class="pmpropp_plan_expiration" name="pmpropp_plan_expiration[]" type="checkbox" value="yes"><input type="hidden" name="pmpropp_plan_expiration[]" value="0"> <label for="pmpropp_plan_expiration_!!plan_id!!"><?php esc_html_e( 'Check this to set when membership access expires.', 'pmpro-payment-plans' ); ?></label></td>
+				<td><input type="hidden" name="pmpropp_plan_expiration_present[]" value="0"><input id="pmpropp_plan_expiration_!!plan_id!!" class="pmpropp_plan_expiration" name="pmpropp_plan_expiration[]" type="checkbox" value="yes"> <label for="pmpropp_plan_expiration_!!plan_id!!"><?php esc_html_e( 'Check this to set when membership access expires.', 'pmpro-payment-plans' ); ?></label></td>
 			</tr>
 			<tr class="pmpropp_plan_expiration_info" style="display:none;">					
 				<th scope="row" valign="top"><label for="pmpropp_expiration_number"><?php esc_html_e( 'Expires In:', 'pmpro-payment-plans' ); ?></label></th>
