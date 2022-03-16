@@ -171,12 +171,17 @@ function pmpropp_pair_plan_fields( $request ) {
 		$pmpropp_plan_status       = $request['pmpropp_plan_status'];
 		$pmpropp_plan_default      = $request['pmpropp_plan_default'];
 
+		// Checkboxes hidden values to see if these options are selected or not.
+		$pmpropp_plan_expiration   = $request['pmpropp_plan_expiration'];
+		$pmpropp_custom_trial = $request['pmpropp_custom_trial'];
+		$pmpropp_recurring = $request['pmpropp_recurring']; // Remove the last value as it's a stray value.
+		
 		$size = count( $pmpropp_plan_name );
 
 		for ( $i = 0; $i < $size; $i++ ) {
 
 			// Clear out all recurring information if checkbox isn't selected or billing amount is empty.
-			if ( ! isset( $request['pmpropp_recurring'][$i] ) || empty( $request['pmpropp_billing_amount'][$i] ) ) {
+			if ( empty( $pmpropp_recurring[$i] ) ) {
 				$pmpropp_billing_amount[$i] = '';
 				$pmpropp_cycle_number[$i] = '';
 				$pmpropp_cycle_period[$i] = '';
@@ -185,16 +190,16 @@ function pmpropp_pair_plan_fields( $request ) {
 			}
 
 			// Clear out if trial checkbox isn't selected or trial amount is blanked out.
-			if ( ! isset( $request['pmpropp_custom_trial'][$i] ) || empty( $request['pmpropp_trial_amount'][$i] ) ) {
+			if ( empty( $pmpropp_custom_trial[$i] ) ) {
 				$pmpropp_trial_amount[$i] = '';
 				$pmpropp_trial_limit[$i] = '';
 			}
 
-			// Clear out the expiration data if checkbox isn't selected or the expiration number is blank/empty.
-			if ( ! isset( $request['pmpropp_plan_expiration'][$i] ) || empty( $request['pmpropp_expiration_number'][$i] ) ) {
+			// // Clear out the expiration data if checkbox isn't selected or the expiration number is blank/empty.
+			if ( empty( $pmpropp_plan_expiration[$i] ) ) {
 				$pmpropp_expiration_number[$i] = '';
 				$pmpropp_expiration_period[$i] = '';
-			}
+			}			
 
 			$level                    = new stdClass();
 			$level->id                = 'L-' . intval( $request['saveid'] ) . '-P-' . $i;
