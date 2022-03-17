@@ -11,27 +11,30 @@ jQuery(document).ready(function () {
         // Show recurring settings by default.
         if (val.cycle_number) {
             jQuery("#pmpropp_plan_" + key + " .pmpropp_recurring").prop('checked', true); //set it to checked.
+            pmpropp_update_hidden_field("#pmpropp_plan_" + key + " .pmpropp_recurring", 1);
         }
 
         // Show trial by default.
         if (val.trial_limit) {
-            jQuery("#pmpropp_plan_" + key + " .pmpropp_custom_trial").prop('checked', true); //set it to checked.
+            jQuery("#pmpropp_plan_" + key + " .pmpropp_custom_trial").prop('checked', true); //set it to checked.            pmpropp_update_hidden_field("#pmpropp_plan_" + key + " .pmpropp_recurring", 1);
+            pmpropp_update_hidden_field("#pmpropp_plan_" + key + " .pmpropp_custom_trial", 1);
         }
 
         // Set the expiration checkbox to set if data is found.
         if (val.expiration_number) {
             jQuery("#pmpropp_plan_" + key + " .pmpropp_plan_expiration").prop('checked', true); //set it to checked.
+            pmpropp_update_hidden_field("#pmpropp_plan_" + key + " .pmpropp_plan_expiration", 1);
         }
 
         //Change the dropdown the selected cycle period        
         var cycle_period_val = jQuery("#pmpropp_plan_" + key + " #cycle_period").attr("selectval");
-        if( cycle_period_val !== "" ) {
+        if (cycle_period_val !== "") {
             jQuery("#pmpropp_plan_" + key + " #cycle_period").val(cycle_period_val).change();
         }
 
         //Change the dropdown the selected expiration period        
-        var expiration_period_val = jQuery("#pmpropp_plan_" + key + " #expiration_period").attr("selectval");                
-        if( expiration_period_val !== "" ){
+        var expiration_period_val = jQuery("#pmpropp_plan_" + key + " #expiration_period").attr("selectval");
+        if (expiration_period_val !== "") {
             jQuery("#pmpropp_plan_" + key + " #expiration_period").val(expiration_period_val).change();
         }
 
@@ -95,25 +98,39 @@ jQuery(document).ready(function () {
     jQuery("body").on("click", ".pmpropp_recurring", function () {
 
         var menu_order = jQuery(this).attr('menu_order');
-
+        var checked = 0;
         if (jQuery(this).is(':checked')) {
             jQuery(".pmpropp_recurring_" + menu_order).show();
+            checked = 1;
         } else {
             jQuery(".pmpropp_recurring_" + menu_order).hide();
+            checked = 0;
         }
-
+        pmpropp_update_hidden_field('#' + jQuery(this).attr('id'), checked); //Try to update the hidden field value.
     });
 
     jQuery("body").on("click", ".pmpropp_plan_expiration", function () {
 
         var menu_order = jQuery(this).attr('menu_order');
-
+        var checked = 0;
         if (jQuery(this).is(':checked')) {
             jQuery(".pmpropp_expirations_" + menu_order).show();
+            checked = 1;
         } else {
             jQuery(".pmpropp_expirations_" + menu_order).hide();
+            checked = 0;
         }
+        pmpropp_update_hidden_field('#' + jQuery(this).attr('id'), checked); //Try to update the hidden field value.
+    });
 
+    jQuery("body").on("click", ".pmpropp_custom_trial", function () {
+        var checked = 0;
+        if (jQuery(this).is(':checked')) {
+            checked = 1;
+        } else {
+            checked = 0;
+        }
+        pmpropp_update_hidden_field('#' + jQuery(this).attr('id'), checked); //Try to update the hidden field value.
     });
 
     jQuery("body").on("click", ".pmpropp_remove_plan", function () {
@@ -123,6 +140,15 @@ jQuery(document).ready(function () {
 
     });
 });
+
+/**
+ * Update hidden field value if a checkbox is checked or unchecked.
+ * Reason we need this is unchecked checkboxes don't $_POST and we need to keep array keys matching across all plans.
+ * This circumvents an array key mismatch between data sets. Let's GO!
+ */
+function pmpropp_update_hidden_field(element, value) {
+    jQuery(element).parent().children('input[type=hidden]').val(value);
+}
 
 /**
  * Initialize the accordions if data already exists.
