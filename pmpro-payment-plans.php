@@ -172,9 +172,9 @@ function pmpropp_pair_plan_fields( $request ) {
 		$pmpropp_plan_default      = $request['pmpropp_plan_default'];
 
 		// Checkboxes hidden values to see if these options are selected or not.
-		$pmpropp_plan_expiration   = $request['pmpropp_plan_expiration_present'];
-		$pmpropp_custom_trial = $request['pmpropp_custom_trial_present'];
-		$pmpropp_recurring = $request['pmpropp_recurring_present']; // Remove the last value as it's a stray value.
+		$pmpropp_plan_expiration   = $request['pmpropp_plan_expiration'];
+		$pmpropp_custom_trial = $request['pmpropp_custom_trial'];
+		$pmpropp_recurring = $request['pmpropp_recurring']; // Remove the last value as it's a stray value.
 		
 		$size = count( $pmpropp_plan_name );
 
