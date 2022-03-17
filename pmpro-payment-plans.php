@@ -290,7 +290,7 @@ function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
 						esc_attr( $plan->id ),
 						esc_attr( 'pmpropp_chosen_plan_choice_' . $plan->id ),
 						checked( 'yes', $plan->default, false ),
-						esc_html( $plan->name ) . ' - ' . pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) . ' ' . pmpro_getLevelExpiration( $plan ) )
+						esc_html( $plan->name ) . ' - ' . trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) . ' ' . pmpro_getLevelExpiration( $plan ) ) )
 					);
 
 					/**
@@ -452,7 +452,7 @@ function pmpropp_request_price_change() {
 
 		$plan = pmpropp_return_payment_plans( $_REQUEST['level'], $_REQUEST['plan'] );
 
-		echo pmpro_no_quotes( pmpro_getLevelCost( $plan, array( '"', "'", "\n", "\r" ) ) . ' '. pmpro_getLevelExpiration( $plan ) );
+		echo trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, array( '"', "'", "\n", "\r" ) ) . ' '. pmpro_getLevelExpiration( $plan ) ) );
 
 		wp_die();
 	}
