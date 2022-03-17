@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Payment Plans Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Payment Plans Add On 0.1.0\n"
+"Project-Id-Version: Paid Memberships Pro - Payment Plans Add On 0.1\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-03-15T13:03:11+00:00\n"
+"POT-Creation-Date: 2022-03-17T12:15:31+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: pmpro-payment-plans\n"
@@ -198,26 +198,30 @@ msgstr ""
 msgid "see our post here"
 msgstr ""
 
-#: pmpro-payment-plans.php:39
+#: pmpro-payment-plans.php:44
 msgid "New Payment Plan"
 msgstr ""
 
-#: pmpro-payment-plans.php:110
+#: pmpro-payment-plans.php:115
 msgid "Payment Plans"
 msgstr ""
 
-#: pmpro-payment-plans.php:111
+#: pmpro-payment-plans.php:117
 msgid "Create multiple payment plans for this level, giving your members multiple options to pay for a membership"
 msgstr ""
 
-#: pmpro-payment-plans.php:117
+#: pmpro-payment-plans.php:123
 msgid "Add Payment Plan"
 msgstr ""
 
-#: pmpro-payment-plans.php:331
+#: pmpro-payment-plans.php:127
+msgid "Please save your level first before creating a payment plan"
+msgstr ""
+
+#: pmpro-payment-plans.php:344
 msgid "Select a Payment Plan"
 msgstr ""
 
-#: pmpro-payment-plans.php:408
+#: pmpro-payment-plans.php:421
 msgid "Payment Plan"
 msgstr ""
