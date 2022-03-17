@@ -1,4 +1,4 @@
-=== Paid Memberships Pro - Approvals ===
+=== Paid Memberships Pro - Payment Plans ===
 Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, payment plan, payments
 Requires at least: 5.0
@@ -30,7 +30,7 @@ Multiple pricing structures, such as a monthly and annual/yearly option, helps y
 1. Add additional payment plans if you’d like to offer more than one. The default level pricing will be shown first in the list with any additional active payment plans shown below.
 1. Save the membership level and browse to the checkout page for that level to see your plans in action.
 
-View full documentation at: https://www.paidmembershipspro.com/add-ons/approval-process-membership/
+View full documentation at: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
 
 == Changelog ==
 = 0.1 - 2022-03-17 =
