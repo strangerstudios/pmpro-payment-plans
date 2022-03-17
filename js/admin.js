@@ -11,16 +11,19 @@ jQuery(document).ready(function () {
         // Show recurring settings by default.
         if (val.cycle_number) {
             jQuery("#pmpropp_plan_" + key + " .pmpropp_recurring").prop('checked', true); //set it to checked.
+            pmpropp_update_hidden_field("#pmpropp_plan_" + key + " .pmpropp_recurring", 1);
         }
 
         // Show trial by default.
         if (val.trial_limit) {
-            jQuery("#pmpropp_plan_" + key + " .pmpropp_custom_trial").prop('checked', true); //set it to checked.
+            jQuery("#pmpropp_plan_" + key + " .pmpropp_custom_trial").prop('checked', true); //set it to checked.            pmpropp_update_hidden_field("#pmpropp_plan_" + key + " .pmpropp_recurring", 1);
+            pmpropp_update_hidden_field("#pmpropp_plan_" + key + " .pmpropp_custom_trial", 1);
         }
 
         // Set the expiration checkbox to set if data is found.
         if (val.expiration_number) {
             jQuery("#pmpropp_plan_" + key + " .pmpropp_plan_expiration").prop('checked', true); //set it to checked.
+            pmpropp_update_hidden_field("#pmpropp_plan_" + key + " .pmpropp_plan_expiration", 1);
         }
 
         //Change the dropdown the selected cycle period        
@@ -103,7 +106,7 @@ jQuery(document).ready(function () {
             jQuery(".pmpropp_recurring_" + menu_order).hide();
             checked = 0;
         }
-        pmpropp_update_hidden_field(jQuery(this).attr('id'), checked); //Try to update the hidden field value.
+        pmpropp_update_hidden_field('#' + jQuery(this).attr('id'), checked); //Try to update the hidden field value.
     });
 
     jQuery("body").on("click", ".pmpropp_plan_expiration", function () {
@@ -117,7 +120,7 @@ jQuery(document).ready(function () {
             jQuery(".pmpropp_expirations_" + menu_order).hide();
             checked = 0;
         }
-        pmpropp_update_hidden_field(jQuery(this).attr('id'), checked); //Try to update the hidden field value.
+        pmpropp_update_hidden_field('#' + jQuery(this).attr('id'), checked); //Try to update the hidden field value.
     });
 
     jQuery("body").on("click", ".pmpropp_custom_trial", function () {
@@ -127,7 +130,7 @@ jQuery(document).ready(function () {
         } else {
             checked = 0;
         }
-        pmpropp_update_hidden_field(jQuery(this).attr('id'), checked); //Try to update the hidden field value.
+        pmpropp_update_hidden_field('#' + jQuery(this).attr('id'), checked); //Try to update the hidden field value.
     });
 
     jQuery("body").on("click", ".pmpropp_remove_plan", function () {
@@ -144,7 +147,7 @@ jQuery(document).ready(function () {
  * This circumvents an array key mismatch between data sets. Let's GO!
  */
 function pmpropp_update_hidden_field(element, value) {
-    jQuery('#' + element).parent().children('input[type=hidden]').val(value);
+    jQuery(element).parent().children('input[type=hidden]').val(value);
 }
 
 /**
