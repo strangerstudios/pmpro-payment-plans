@@ -113,16 +113,19 @@ function pmpropp_membership_level_after_other_settings() {
 
 	?>
 	<h3 class="topborder"><?php esc_html_e( 'Payment Plans', 'pmpro-payment-plans' ); ?></h3>
-	   <p><?php _e( 'Create multiple payment plans for this level, giving your members multiple options to pay for a membership', 'pmpro-payment-plans' ); ?></p>
-	<div class='pmpro_payment_plan_level_container'>
-		<div class='pmpro_payment_plan_level_inner'>
-			<div id="accordion"></div> 
+	<?php if( $_REQUEST['edit'] !== "-1" ) { ?>	   
+	   	<p><?php _e( 'Create multiple payment plans for this level, giving your members multiple options to pay for a membership', 'pmpro-payment-plans' ); ?></p>	
+		<div class='pmpro_payment_plan_level_container'>
+			<div class='pmpro_payment_plan_level_inner'>
+				<div id="accordion"></div> 
+			</div>
+			<div>
+				<button class='button button-primary' id='pmpropp_add_payment_plan'><?php _e( 'Add Payment Plan', 'pmpro-payment-plans' ); ?></button>
+			</div>
 		</div>
-		<div>
-			<button class='button button-primary' id='pmpropp_add_payment_plan'><?php _e( 'Add Payment Plan', 'pmpro-payment-plans' ); ?></button>
-		</div>
-	</div>
-	<?php
+	<?php } else { ?>
+		<p><?php _e( 'Please save your level first before creating a payment plan', 'pmpro-payment-plans' ); ?></p>
+	<?php }	
 }
 add_action( 'pmpro_membership_level_after_billing_details_settings', 'pmpropp_membership_level_after_other_settings', 1 );
 
