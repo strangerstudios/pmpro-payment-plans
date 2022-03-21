@@ -269,19 +269,24 @@ function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
 		}
 
 		$counter = 0;
+		$plan_exists = false;
 
 		if ( ! empty( $payment_plans ) ) {
 			foreach ( $payment_plans as $plan ) {
 
-				if ( ! empty( $plan_id ) ) {
+				if ( ! empty( $plan_id ) ) {					
 					if ( $plan->id == $plan_id ) {
+						$plan_exists = true;
 						return $plan;
+					} 
+					if( !$plan_exists ) {
+						return array();
 					}
 				}
 
 				$counter++;
 
-				if ( $plan->status === 'active' ) {
+				if ( $plan->status === 'active' && empty( $plan_id ) ) {
 				
 					$ordered_plans[] = $plan;
 
@@ -327,6 +332,35 @@ function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
 }
 
 /**
+ * Perform registration checks to make sure a valid plan is being selected.
+ *
+ * @since TBD
+ */
+function pmpropp_registration_checks( $okay ) {
+
+	global $pmpro_msg, $pmpro_msgt;
+
+	if( empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
+		return $okay;
+	}
+
+	$plan = pmpropp_return_payment_plans( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
+
+	if( !empty( $plan ) ) {
+		$okay = true;
+	} else {
+		$pmpro_msg = __( 'Please select a valid payment plan.', 'pmpro-payment-plans' );
+		$pmpro_msgt = "pmpro_error";
+		$okay = false;
+	}
+
+	return $okay;
+
+}
+add_filter( 'pmpro_registration_checks', 'pmpropp_registration_checks', 10, 1);
+
+
+/**
  * Display payment plans section on checkout page.
  *
  * @since 0.1
@@ -364,6 +398,10 @@ function pmpropp_override_checkout_level( $level ) {
 	if ( ! empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 
 		$plan = pmpropp_return_payment_plans( intval( $level->id ), $_REQUEST['pmpropp_chosen_plan'] );
+
+		if( empty( $plan ) ) {
+			return $level;
+		}
 
 		// If the plan ID is exactly same as the level ID just bail and return the current level object.
 		if ( $plan->id === $level->id ) {
@@ -405,7 +443,9 @@ function pmpropp_after_checkout( $user_id, $morder ) {
 
 		$plan = pmpropp_return_payment_plans( $morder->membership_id, $_REQUEST['pmpropp_chosen_plan'] );
 
-		update_pmpro_membership_order_meta( intval( $morder->id ), 'payment_plan', $plan );
+		if( !empty( $plan ) ) {
+			update_pmpro_membership_order_meta( intval( $morder->id ), 'payment_plan', $plan );
+		}
 
 	}
 
@@ -451,9 +491,11 @@ function pmpropp_request_price_change() {
 
 	if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'pmpropp_request_price_change' ) {
 
-		$plan = pmpropp_return_payment_plans( $_REQUEST['level'], $_REQUEST['plan'] );
+		$plan = pmpropp_return_payment_plans( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['plan'] ) );
 
-		echo trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, array( '"', "'", "\n", "\r" ) ) . ' '. pmpro_getLevelExpiration( $plan ) ) );
+		if( !empty( $plan ) ) {
+			echo trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, array( '"', "'", "\n", "\r" ) ) . ' '. pmpro_getLevelExpiration( $plan ) ) );
+		}
 
 		wp_die();
 	}
