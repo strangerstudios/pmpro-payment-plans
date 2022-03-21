@@ -37,4 +37,3 @@ function pmpropp_uninstall() {
        
     }
 }
-register_uninstall_hook( __FILE__, 'pmpropp_uninstall' );

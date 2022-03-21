@@ -12,6 +12,10 @@
  * Includes the cleanup script on uninstall.
  */
 include plugin_dir_path( __FILE__ ) . 'includes/uninstall.php';
+function pmpropp_activate(){
+    register_uninstall_hook( __FILE__, 'pmpropp_uninstall' );
+}
+register_activation_hook( __FILE__, 'pmpropp_activate' );
 
 /**
  * Load required scripts for admin settings.
