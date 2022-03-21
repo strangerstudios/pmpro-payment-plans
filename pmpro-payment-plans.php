@@ -42,7 +42,7 @@ function pmpropp_load_admin_scripts() {
 		ob_end_clean();
 
 		$stored_plans = pmpropp_render_plans( $output );
-		$plan_data = pmpropp_return_payment_plans( $_REQUEST['edit'] );
+		$plan_data = pmpropp_return_payment_plans( intval( $_REQUEST['edit'] ) );
 
 		$template_plan       = new StdClass();
 		$template_plan->name = __( 'New Payment Plan', 'pmpro-payment-plans' );
@@ -83,7 +83,7 @@ function pmpropp_load_frontend_scripts() {
 				'pmpro-payment-plans-frontend-js',
 				'payment_plans',
 				array(
-					'plans'        => pmpropp_return_payment_plans( $_REQUEST['level'] ),
+					'plans'        => pmpropp_return_payment_plans( intval( $_REQUEST['level'] ) ),
 					'ajaxurl'      => admin_url( 'admin-ajax.php' ),
 					'parent_level' => ( ! empty( $_REQUEST['level'] ) ? $_REQUEST['level'] : 0 ),
 				)
@@ -237,11 +237,33 @@ function pmpropp_pair_plan_fields( $request ) {
 }
 
 /**
+ * Get a single plan by id.
+ * @since 0.2
+ * @param int    $level_id The membership level ID.
+ * @param string $plan_id  The plan ID.
+ * 
+ * @return object|false $plan The plan if found. False if not.
+ */
+function pmpropp_get_plan( $level_id, $plan_id ) {
+    $plans = pmpropp_return_payment_plans( $level_id );
+    
+    if ( ! empty( $plans ) ) {
+        foreach ( $plans as $plan ) {
+            if ( $plan->id === $plan_id ) {
+                return $plan;
+            }
+        }
+    }
+    
+    return false;
+}
+
+/**
  * Return payment plan array or single object if plan_id is specified
  *
  * @since 0.1
  * @param object $level_id The membership level ID.
- * @param int    $plan_id The payment plan ID.
+ * @param string    $plan_id The payment plan ID.
  *
  * @return array $plan An array of the plans.
  */
@@ -348,7 +370,7 @@ function pmpropp_registration_checks( $okay ) {
 		return $okay;
 	}
 
-	$plan = pmpropp_return_payment_plans( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
+	$plan = pmpropp_get_plan( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
 
 	if( !empty( $plan ) ) {
 		$okay = true;
@@ -373,7 +395,7 @@ function pmpropp_render_payment_plans_checkout() {
 
 	if ( ! empty( $_REQUEST['level'] ) ) {
 
-		$plans = pmpropp_return_payment_plans( $_REQUEST['level'] );
+		$plans = pmpropp_return_payment_plans( intval( $_REQUEST['level'] ) );
 
 		if ( ! empty( $plans ) ) {
 			?>
@@ -401,7 +423,7 @@ function pmpropp_override_checkout_level( $level ) {
 
 	if ( ! empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 
-		$plan = pmpropp_return_payment_plans( intval( $level->id ), $_REQUEST['pmpropp_chosen_plan'] );
+		$plan = pmpropp_get_plan( intval( $level->id ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
 
 		if( empty( $plan ) ) {
 			return $level;
@@ -445,7 +467,7 @@ function pmpropp_after_checkout( $user_id, $morder ) {
 
 	if ( ! empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 
-		$plan = pmpropp_return_payment_plans( $morder->membership_id, $_REQUEST['pmpropp_chosen_plan'] );
+		$plan = pmpropp_get_plan( $morder->membership_id, sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
 
 		if( !empty( $plan ) ) {
 			update_pmpro_membership_order_meta( intval( $morder->id ), 'payment_plan', $plan );
@@ -495,7 +517,7 @@ function pmpropp_request_price_change() {
 
 	if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'pmpropp_request_price_change' ) {
 
-		$plan = pmpropp_return_payment_plans( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['plan'] ) );
+		$plan = pmpropp_get_plan( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['plan'] ) );
 
 		if( !empty( $plan ) ) {
 			echo trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, array( '"', "'", "\n", "\r" ) ) . ' '. pmpro_getLevelExpiration( $plan ) ) );
@@ -519,7 +541,7 @@ function pmpropp_render_plans( $template ) {
 
 	global $pmpro_currency_symbol;
 
-	$plans = pmpropp_return_payment_plans( $_REQUEST['edit'] );
+	$plans = pmpropp_return_payment_plans( intval( $_REQUEST['edit'] ) );
 
 	if ( ! empty( $plans ) ) {
 		foreach ( $plans as $plan ) {
