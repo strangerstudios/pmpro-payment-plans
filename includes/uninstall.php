@@ -30,10 +30,6 @@ function pmpropp_uninstall() {
             // run the query
             $wpdb->query($sql);
 
-        }
-
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        dbDelta( $sql );
-       
+        }       
     }
 }
