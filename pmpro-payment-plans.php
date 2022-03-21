@@ -42,7 +42,7 @@ function pmpropp_load_admin_scripts() {
 		ob_end_clean();
 
 		$stored_plans = pmpropp_render_plans( $output );
-		$plan_data = pmpropp_return_payment_plans( $_REQUEST['edit'] );
+		$plan_data = pmpropp_return_payment_plans( intval( $_REQUEST['edit'] ) );
 
 		$template_plan       = new StdClass();
 		$template_plan->name = __( 'New Payment Plan', 'pmpro-payment-plans' );
@@ -83,7 +83,7 @@ function pmpropp_load_frontend_scripts() {
 				'pmpro-payment-plans-frontend-js',
 				'payment_plans',
 				array(
-					'plans'        => pmpropp_return_payment_plans( $_REQUEST['level'] ),
+					'plans'        => pmpropp_return_payment_plans( intval( $_REQUEST['level'] ) ),
 					'ajaxurl'      => admin_url( 'admin-ajax.php' ),
 					'parent_level' => ( ! empty( $_REQUEST['level'] ) ? $_REQUEST['level'] : 0 ),
 				)
@@ -237,102 +237,106 @@ function pmpropp_pair_plan_fields( $request ) {
 }
 
 /**
+ * Get a single plan by id.
+ * @since 0.2
+ * @param int    $level_id The membership level ID.
+ * @param string $plan_id  The plan ID.
+ * 
+ * @return object|false $plan The plan if found. False if not.
+ */
+function pmpropp_get_plan( $level_id, $plan_id ) {
+    $plans = pmpropp_return_payment_plans( $level_id );
+    
+    if ( ! empty( $plans ) ) {
+        foreach ( $plans as $plan ) {
+            if ( $plan->id === $plan_id ) {
+                return $plan;
+            }
+        }
+    }
+    
+    return false;
+}
+
+/**
  * Return payment plan array or single object if plan_id is specified
  *
  * @since 0.1
- * @param object $level_id The membership level ID.
- * @param int    $plan_id The payment plan ID.
+ * @param int $level_id The membership level ID.
  *
  * @return array $plan An array of the plans.
  */
-function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
+function pmpropp_return_payment_plans( $level_id ) {
 	global $pmpro_pages;
 
-	if ( ! empty( $level_id ) ) {
+	if ( empty( $level_id ) ) {
+        return array();
+    }    
 
-		global $pmpro_currency_symbol;
+	global $pmpro_currency_symbol;
 
-		$currency_position = pmpro_getCurrencyPosition();
+	$currency_position = pmpro_getCurrencyPosition();
 
-		$payment_plans = get_pmpro_membership_level_meta( $level_id, 'payment_plan', true );
+	$payment_plans = get_pmpro_membership_level_meta( $level_id, 'payment_plan', true );
 
-		$ordered_plans = array();
+    if ( empty( $payment_plans ) ) {
+        return array();
+    }
 
-		/**
-		 * Include the default level billing price at checkout as a radio checkbox.
-		 * 
-		 * @param bool $include_level_price Should the levels default pricing be automatically included at checkout.
-		 * @param int $level_id The level ID value of current checkout/level in question.
-		 */
-		if ( apply_filters( 'pmpropp_include_level_pricing_option_at_checkout', true, $level_id ) && ( is_page( $pmpro_pages['checkout'] ) || wp_doing_ajax() ) && is_array( $payment_plans ) ) {
-			$level = pmpro_getLevel( $level_id );
-			$level->status = 'active';
-			$level->default = 'yes'; //Default to yes, as it can be adjusted by "real" plans later on.
-			$level->display_order = 0;
-			array_unshift( $payment_plans, $level );
-		}
+	$ordered_plans = array();
 
-		$counter = 0;
-		$plan_exists = false;
+	/**
+	 * Include the default level billing price at checkout as a radio checkbox.
+	 * 
+	 * @param bool $include_level_price Should the levels default pricing be automatically included at checkout.
+	 * @param int $level_id The level ID value of current checkout/level in question.
+	 */
+	$level_pricing_at_checkout = apply_filters( 'pmpropp_include_level_pricing_option_at_checkout', true, $level_id );
+    
+    if ( $level_pricing_at_checkout && ( pmpro_is_checkout() || wp_doing_ajax() ) && is_array( $payment_plans ) ) {
+		$level = pmpro_getLevel( $level_id );
+		$level->status = 'active';
+		$level->default = 'yes'; //Default to yes, as it can be adjusted by "real" plans later on.
+		$level->display_order = 0;
+		array_unshift( $payment_plans, $level );
+	}
+			
+	foreach ( $payment_plans as $plan ) {				
 
-		if ( ! empty( $payment_plans ) ) {
-			foreach ( $payment_plans as $plan ) {
+		if ( $plan->status === 'active' ) {
+		
+			$ordered_plans[] = $plan;
 
-				if ( ! empty( $plan_id ) ) {					
-					if ( $plan->id == $plan_id ) {
-						$plan_exists = true;
-						return $plan;
-					} 
-					if( !$plan_exists ) {
-						return array();
-					}
-				}
-
-				$counter++;
-
-				if ( $plan->status === 'active' && empty( $plan_id ) ) {
-				
-					$ordered_plans[] = $plan;
-
-					$plan->html = sprintf(
-						'<input type="radio" name="pmpropp_chosen_plan" class="%5$s" value="%1$s" id="%2$s" %3$s /> <label for="%2$s" class="pmpro_label-inline">%4$s</label>',
-						esc_attr( $plan->id ),
-						esc_attr( 'pmpropp_chosen_plan_choice_' . $plan->id ),
-						checked( 'yes', $plan->default, false ),
-						esc_html( $plan->name ) . ' - ' . trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) . ' ' . pmpro_getLevelExpiration( $plan ) ) ),
-						pmpro_get_element_class( 'pmpropp_chosen_plan pmpro_alter_price', 'pmpropp_chosen_plan_choice_-' . $plan->id )
-					);
-
-					/**
-					 * Allow filtering the plan HTML input.
-					 *
-					 * @since 0.1
-					 *
-					 * @param string $html     The plan HTML input.
-					 * @param object $plan     The plan object.
-					 * @param int    $level_id The level ID.
-					 */
-					$plan->html = apply_filters( 'pmpropp_plan_html_template', $plan->html, $plan, $level_id );
-
-				}
-			}
-
-			//Lets order by the display order value
-			array_multisort(
-				array_column($ordered_plans, 'display_order'), 
-				SORT_ASC, 
-				$ordered_plans
+			$plan->html = sprintf(
+				'<input type="radio" name="pmpropp_chosen_plan" class="%5$s" value="%1$s" id="%2$s" %3$s /> <label for="%2$s" class="pmpro_label-inline">%4$s</label>',
+				esc_attr( $plan->id ),
+				esc_attr( 'pmpropp_chosen_plan_choice_' . $plan->id ),
+				checked( 'yes', $plan->default, false ),
+				esc_html( $plan->name ) . ' - ' . trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) . ' ' . pmpro_getLevelExpiration( $plan ) ) ),
+				pmpro_get_element_class( 'pmpropp_chosen_plan pmpro_alter_price', 'pmpropp_chosen_plan_choice_-' . $plan->id )
 			);
 
-			return $ordered_plans;
-
-		} else {
-			return array();
+			/**
+			 * Allow filtering the plan HTML input.
+			 *
+			 * @since 0.1
+			 *
+			 * @param string $html     The plan HTML input.
+			 * @param object $plan     The plan object.
+			 * @param int    $level_id The level ID.
+			 */
+			$plan->html = apply_filters( 'pmpropp_plan_html_template', $plan->html, $plan, $level_id );
 		}
 	}
 
-	return array();
+	//Lets order by the display order value
+	array_multisort(
+		array_column($ordered_plans, 'display_order'), 
+		SORT_ASC, 
+		$ordered_plans
+	);
 
+	return $ordered_plans;
 }
 
 /**
@@ -348,7 +352,7 @@ function pmpropp_registration_checks( $okay ) {
 		return $okay;
 	}
 
-	$plan = pmpropp_return_payment_plans( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
+	$plan = pmpropp_get_plan( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
 
 	if( !empty( $plan ) ) {
 		$okay = true;
@@ -373,7 +377,7 @@ function pmpropp_render_payment_plans_checkout() {
 
 	if ( ! empty( $_REQUEST['level'] ) ) {
 
-		$plans = pmpropp_return_payment_plans( $_REQUEST['level'] );
+		$plans = pmpropp_return_payment_plans( intval( $_REQUEST['level'] ) );
 
 		if ( ! empty( $plans ) ) {
 			?>
@@ -401,7 +405,7 @@ function pmpropp_override_checkout_level( $level ) {
 
 	if ( ! empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 
-		$plan = pmpropp_return_payment_plans( intval( $level->id ), $_REQUEST['pmpropp_chosen_plan'] );
+		$plan = pmpropp_get_plan( intval( $level->id ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
 
 		if( empty( $plan ) ) {
 			return $level;
@@ -445,7 +449,7 @@ function pmpropp_after_checkout( $user_id, $morder ) {
 
 	if ( ! empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 
-		$plan = pmpropp_return_payment_plans( $morder->membership_id, $_REQUEST['pmpropp_chosen_plan'] );
+		$plan = pmpropp_get_plan( $morder->membership_id, sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
 
 		if( !empty( $plan ) ) {
 			update_pmpro_membership_order_meta( intval( $morder->id ), 'payment_plan', $plan );
@@ -495,7 +499,7 @@ function pmpropp_request_price_change() {
 
 	if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'pmpropp_request_price_change' ) {
 
-		$plan = pmpropp_return_payment_plans( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['plan'] ) );
+		$plan = pmpropp_get_plan( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['plan'] ) );
 
 		if( !empty( $plan ) ) {
 			echo trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, array( '"', "'", "\n", "\r" ) ) . ' '. pmpro_getLevelExpiration( $plan ) ) );
@@ -519,7 +523,7 @@ function pmpropp_render_plans( $template ) {
 
 	global $pmpro_currency_symbol;
 
-	$plans = pmpropp_return_payment_plans( $_REQUEST['edit'] );
+	$plans = pmpropp_return_payment_plans( intval( $_REQUEST['edit'] ) );
 
 	if ( ! empty( $plans ) ) {
 		foreach ( $plans as $plan ) {
