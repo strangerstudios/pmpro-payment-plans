@@ -16,7 +16,7 @@ jQuery(document).ready(function(){
 				}
 
 				jQuery.post( payment_plans.ajaxurl, data, function( response ){
-					if( response !== '' ){
+					if( response !== '' ){						
 						jQuery("#pmpro_level_cost").html(response);
 					}
 				});	
@@ -24,6 +24,13 @@ jQuery(document).ready(function(){
 			}
 			
 		});
+
+		if( typeof localStorage !== 'undefined' ) { 
+			var chosen_plan = localStorage.getItem( 'pmpropp_chosen_plan' );
+			if( chosen_plan !== "" ){
+				jQuery( "#pmpropp_chosen_plan_choice_"+chosen_plan ).click();
+			}
+		}
 
 		jQuery("body").on("click", ".pmpropp_chosen_plan", function(){
 
@@ -41,6 +48,9 @@ jQuery(document).ready(function(){
 
 					jQuery.post( payment_plans.ajaxurl, data, function( response ){
 						if( response !== '' ){
+							if( typeof localStorage !== 'undefined' ) { 								
+								localStorage.setItem( 'pmpropp_chosen_plan', value );
+							}
 							jQuery("#pmpro_level_cost").html(response);
 						}
 					});			
