@@ -286,11 +286,12 @@ function pmpropp_return_payment_plans( $level_id, $plan_id = '' ) {
 					$ordered_plans[] = $plan;
 
 					$plan->html = sprintf(
-						'<input type="radio" name="pmpropp_chosen_plan" class="pmpropp_chosen_plan" value="%1$s" id="%2$s" %3$s /> <label for="%2$s" class="pmpro_label-inline">%4$s</label>',
+						'<input type="radio" name="pmpropp_chosen_plan" class="%5$s" value="%1$s" id="%2$s" %3$s /> <label for="%2$s" class="pmpro_label-inline">%4$s</label>',
 						esc_attr( $plan->id ),
 						esc_attr( 'pmpropp_chosen_plan_choice_' . $plan->id ),
 						checked( 'yes', $plan->default, false ),
-						esc_html( $plan->name ) . ' - ' . trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) . ' ' . pmpro_getLevelExpiration( $plan ) ) )
+						esc_html( $plan->name ) . ' - ' . trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) . ' ' . pmpro_getLevelExpiration( $plan ) ) ),
+						pmpro_get_element_class( 'pmpropp_chosen_plan pmpro_alter_price', 'pmpropp_chosen_plan_choice_-' . $plan->id )
 					);
 
 					/**
