@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, payment plan, payments
 Requires at least: 5.0
 Tested up to: 5.9
-Stable tag: 0.1
+Stable tag: 0.1.1
 
 This allows you to offer more than one pricing structure on the same membership level. 
 
@@ -33,5 +33,14 @@ Multiple pricing structures, such as a monthly and annual/yearly option, helps y
 View full documentation at: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
 
 == Changelog ==
+= 0.1.1 - 2022-03-23 =
+* ENHANCEMENT: The selected payment plan will now be remembered at checkout when the page is reloaded. (@JarrydLong)
+* ENHANCEMENT: Radio buttons used to select payment plans at checkout now utilize the `pmpro_get_element_class()` function. (@JarrydLong)
+* BUG FIX/ENHANCEMENT: Stripe Payment Request button will now show price for selected payment plan. (@JarrydLong)
+* BUG FIX: Now checking that a valid payment plan is selected at checkout. (@JarrydLong)
+* BUG FIX: Now only clearing payment plan settings when this pluin is deleted and when PMPro is set to delete settings on uninstall. (@JarrydLong)
+* REFACTOR: Created new function `pmpropp_get_plan()` to simplify expected behavior of `pmpropp_return_payment_plans()`. (@ideadude)
+
+
 = 0.1 - 2022-03-17 =
 * Initial version.

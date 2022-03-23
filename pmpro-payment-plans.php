@@ -3,7 +3,7 @@
  * Plugin Name: Paid Memberships Pro - Payment Plans Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
  * Description: Integrates with Paid Memberships Pro to provide payment plans for membership levels.
- * Version: 0.1
+ * Version: 0.1.1
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com
  */
