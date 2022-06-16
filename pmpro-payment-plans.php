@@ -72,10 +72,26 @@ add_action( 'admin_enqueue_scripts', 'pmpropp_load_admin_scripts' );
  */
 function pmpropp_load_frontend_scripts() {
 
+	// Require PMPro
+	if ( ! defined( 'PMPRO_VERSION' ) ) {
+		return;
+	}
+
 	global $pmpro_pages, $post;
 
 	if ( ! empty( $pmpro_pages['checkout'] ) && ! empty( $post->ID ) ) {
 		if ( $pmpro_pages['checkout'] == $post->ID ) {
+
+			// Get the level for checkout.
+			$level = pmpro_getLevelAtCheckout();
+
+			// Get the level ID.
+			$level_id = ! empty( $level ) ? $level->id : ( ! empty( $_REQUEST['level'] ) ? $_REQUEST['level'] : false );
+
+			// Do we have a level ID and payment plans for that level?
+			if ( empty( $level_id ) || empty( pmpropp_return_payment_plans( $level_id ) ) ) {
+				return;
+			}
 
 			wp_enqueue_script( 'pmpro-payment-plans-frontend-js', plugins_url( 'js/frontend.js', __FILE__ ) );
 
