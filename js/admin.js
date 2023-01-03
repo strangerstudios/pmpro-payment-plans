@@ -43,6 +43,11 @@ jQuery(document).ready(function () {
             jQuery("#pmpropp_plan_" + key + " #pmpropp_plan_status").val(plan_status).change();
         }
 
+        var plan_default = jQuery("#pmpropp_plan_" + key + " #pmpropp_plan_default").attr("selectval");        
+        if (plan_default !== "") {
+            jQuery("#pmpropp_plan_" + key + " #pmpropp_plan_default").val(plan_default).change();
+        }
+
     });
 
 
