@@ -550,22 +550,22 @@ function pmpropp_render_plans( $template ) {
  */
 function pmpropp_replace_template_values( $template, $values ) {
 
-	$template = str_replace( '!!plan_id!!', ( ! empty( $values->id ) ) ? $values->id : '', $template );
+	$template = str_replace( '!!plan_id!!', ( ! empty( $values->id ) ) ? ( int) $values->id : '', $template );
 
-	$template = str_replace( '!!plan_name!!', ( ! empty( $values->name ) ) ? $values->name : '', $template );
-	$template = str_replace( '!!display_order!!', ( ! empty( $values->display_order ) ) ? $values->display_order : '', $template );
-	$template = str_replace( '!!billing_amount!!', ( ! empty( $values->billing_amount ) ) ? $values->billing_amount : '', $template );
-	$template = str_replace( '!!plan_status!!', ( ! empty( $values->status ) ) ? $values->status : '', $template );
-	$template = str_replace( '!!initial_amount!!', ( ! empty( $values->initial_payment ) ) ? $values->initial_payment : '', $template );
-	$template = str_replace( '!!cycle_number!!', ( ! empty( $values->cycle_number ) ) ? $values->cycle_number : '', $template );
-	$template = str_replace( '!!cycle_period!!', ( ! empty( $values->cycle_period ) ) ? $values->cycle_period : '', $template );
-	$template = str_replace( '!!billing_limit!!', ( ! empty( $values->billing_limit ) ) ? $values->billing_limit : '', $template );
-	$template = str_replace( '!!trial_amount!!', ( ! empty( $values->trial_amount ) ) ? $values->trial_amount : '', $template );
-	$template = str_replace( '!!trial_limit!!', ( ! empty( $values->trial_limit ) ) ? $values->trial_limit : '', $template );
-	$template = str_replace( '!!expiration_number!!', ( ! empty( $values->expiration_number ) ) ? $values->expiration_number : '', $template );
-	$template = str_replace( '!!expiration_period!!', ( ! empty( $values->expiration_period ) ) ? $values->expiration_period : '', $template );
+	$template = str_replace( '!!plan_name!!', ( ! empty( $values->name ) ) ? esc_html( $values->name ) : '', $template );
+	$template = str_replace( '!!display_order!!', ( ! empty( $values->display_order ) ) ? esc_html( $values->display_order ) : '', $template );
+	$template = str_replace( '!!billing_amount!!', ( ! empty( $values->billing_amount ) ) ? esc_html( $values->billing_amount ) : '', $template );
+	$template = str_replace( '!!plan_status!!', ( ! empty( $values->status ) ) ? esc_html( $values->status ) : '', $template );
+	$template = str_replace( '!!initial_amount!!', ( ! empty( $values->initial_payment ) ) ? esc_html( $values->initial_payment ) : '', $template );
+	$template = str_replace( '!!cycle_number!!', ( ! empty( $values->cycle_number ) ) ? esc_html( $values->cycle_number ) : '', $template );
+	$template = str_replace( '!!cycle_period!!', ( ! empty( $values->cycle_period ) ) ? esc_html( $values->cycle_period ) : '', $template );
+	$template = str_replace( '!!billing_limit!!', ( ! empty( $values->billing_limit ) ) ? esc_html( $values->billing_limit ) : '', $template );
+	$template = str_replace( '!!trial_amount!!', ( ! empty( $values->trial_amount ) ) ? esc_html( $values->trial_amount ) : '', $template );
+	$template = str_replace( '!!trial_limit!!', ( ! empty( $values->trial_limit ) ) ? esc_html( $values->trial_limit ) : '', $template );
+	$template = str_replace( '!!expiration_number!!', ( ! empty( $values->expiration_number ) ) ? esc_html( $values->expiration_number ) : '', $template );
+	$template = str_replace( '!!expiration_period!!', ( ! empty( $values->expiration_period ) ) ? esc_html( $values->expiration_period ) : '', $template );
 	if ( ! empty( $values->default) ) {
-		$template = str_replace( "<option value='" . $values->default . "' >", "<option value='" . $values->default . "' selected >", $template );
+		$template = str_replace( "<option value='" . esc_attr( $values->default ) . "' >", "<option value='" . esc_attr( $values->default ) . "' selected >", $template );
 	}
 
 	return $template;
