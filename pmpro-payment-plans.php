@@ -143,7 +143,7 @@ function pmpropp_membership_level_after_other_settings() {
 				<div id="accordion"></div> 
 			</div>
 			<div>
-				<button class='button button-primary' id='pmpropp_add_payment_plan'><?php esc_html_e( 'Add Payment Plan', 'pmpro-payment-plans' ); ?></button>
+				<button class='button button-secondary' id='pmpropp_add_payment_plan'><?php esc_html_e( 'Add Payment Plan', 'pmpro-payment-plans' ); ?></button>
 			</div>
 		</div>
 	<?php } else { ?>
