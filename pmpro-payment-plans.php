@@ -71,13 +71,12 @@ add_action( 'admin_enqueue_scripts', 'pmpropp_load_admin_scripts' );
  * @since 0.1
  */
 function pmpropp_load_frontend_scripts() {
+	global $pmpro_pages, $post;
 
 	// Require PMPro
 	if ( ! defined( 'PMPRO_VERSION' ) ) {
 		return;
 	}
-
-	global $pmpro_pages, $post;
 
 	if ( ! empty( $pmpro_pages['checkout'] ) && ! empty( $post->ID ) ) {
 		if ( $pmpro_pages['checkout'] == $post->ID ) {
