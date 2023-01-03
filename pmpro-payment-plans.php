@@ -159,7 +159,7 @@ add_action( 'pmpro_membership_level_after_billing_details_settings', 'pmpropp_me
  */
 function pmpropp_membership_level_save() {
 
-	if ( isset( $_REQUEST['saveid'] ) ) { // TODO: Check page param as well as saveid may be used elsewhere.
+	if ( isset( $_REQUEST['saveid'] ) && ! empty( $_REQUEST['page'] ) && 'pmpro-membershiplevels' === $_REQUEST['page'] ) {
 
 		$payment_plans = pmpropp_pair_plan_fields( $_REQUEST );
 
