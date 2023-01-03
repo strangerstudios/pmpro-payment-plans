@@ -71,11 +71,30 @@ add_action( 'admin_enqueue_scripts', 'pmpropp_load_admin_scripts' );
  * @since 0.1
  */
 function pmpropp_load_frontend_scripts() {
-
 	global $pmpro_pages, $post;
+
+	// Require PMPro
+	if ( ! defined( 'PMPRO_VERSION' ) ) {
+		return;
+	}
 
 	if ( ! empty( $pmpro_pages['checkout'] ) && ! empty( $post->ID ) ) {
 		if ( $pmpro_pages['checkout'] == $post->ID ) {
+
+			// Get the level for checkout.
+			$level = pmpro_getLevelAtCheckout();
+
+			// Get the level ID.
+			if ( ! empty( $level ) ) {
+				$level_id = intval( $level->id );
+			} else {
+				$level_id = false;
+			}
+
+			// Do we have a level ID and payment plans for that level?
+			if ( empty( $level_id ) || empty( pmpropp_return_payment_plans( $level_id ) ) ) {
+				return;
+			}
 
 			wp_enqueue_script( 'pmpro-payment-plans-frontend-js', plugins_url( 'js/frontend.js', __FILE__ ) );
 
@@ -83,7 +102,7 @@ function pmpropp_load_frontend_scripts() {
 				'pmpro-payment-plans-frontend-js',
 				'payment_plans',
 				array(
-					'plans'        => pmpropp_return_payment_plans( intval( $_REQUEST['level'] ) ),
+					'plans'        => pmpropp_return_payment_plans( $level_id ),
 					'ajaxurl'      => admin_url( 'admin-ajax.php' ),
 					'parent_level' => ( ! empty( $_REQUEST['level'] ) ? $_REQUEST['level'] : 0 ),
 				)
