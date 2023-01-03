@@ -394,6 +394,17 @@ add_filter( 'pmpro_registration_checks', 'pmpropp_registration_checks', 10, 1);
  */
 function pmpropp_render_payment_plans_checkout() {
 
+	//Add in support for Add On Packages
+	if ( ! empty( $_REQUEST['ap'] ) && ! empty( $_REQUEST['level'] ) ) {
+		if ( pmpro_hasMembershipLevel( $_REQUEST['level'] ) ) {
+			/**
+			 * Purchasing an add on package and have the required level 
+			 * so don't show the payment plan options
+			 */
+			return;
+		}
+	}
+
 	if ( ! empty( $_REQUEST['level'] ) ) {
 
 		$plans = pmpropp_return_payment_plans( intval( $_REQUEST['level'] ) );
