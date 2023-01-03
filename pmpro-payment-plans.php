@@ -598,9 +598,8 @@ function pmpropp_replace_template_values( $template, $values ) {
 	$template = str_replace( '!!trial_limit!!', ( ! empty( $values->trial_limit ) ) ? esc_html( $values->trial_limit ) : '', $template );
 	$template = str_replace( '!!expiration_number!!', ( ! empty( $values->expiration_number ) ) ? esc_html( $values->expiration_number ) : '', $template );
 	$template = str_replace( '!!expiration_period!!', ( ! empty( $values->expiration_period ) ) ? esc_html( $values->expiration_period ) : '', $template );
-	if ( ! empty( $values->default) ) {
-		$template = str_replace( "<option value='" . esc_attr( $values->default ) . "' >", "<option value='" . esc_attr( $values->default ) . "' selected >", $template );
-	}
+	$template = str_replace( '!!plan_default!!', ( ! empty( $values->default ) ) ? esc_html( $values->default ) : '', $template );
+
 
 	return $template;
 

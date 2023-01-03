@@ -38,6 +38,11 @@ jQuery(document).ready(function () {
             jQuery("#pmpropp_plan_" + key + " #expiration_period").val(expiration_period_val).change();
         }
 
+        var plan_default = jQuery("#pmpropp_plan_" + key + " #pmpropp_plan_default").attr("selectval");
+        if (plan_defualt !== "") {
+            jQuery("#pmpropp_plan_" + key + " #pmpropp_plan_default").val(plan_default).change();
+        }
+
         var plan_status = jQuery("#pmpropp_plan_" + key + " #pmpropp_plan_status").attr("selectval");
         if (plan_status !== "") {
             jQuery("#pmpropp_plan_" + key + " #pmpropp_plan_status").val(plan_status).change();
