@@ -39,7 +39,7 @@ jQuery(document).ready(function () {
         }
 
         var plan_default = jQuery("#pmpropp_plan_" + key + " #pmpropp_plan_default").attr("selectval");
-        if (plan_defualt !== "") {
+        if (plan_default !== "") {
             jQuery("#pmpropp_plan_" + key + " #pmpropp_plan_default").val(plan_default).change();
         }
 
