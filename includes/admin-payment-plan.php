@@ -13,7 +13,7 @@
 			<tr>
 				<th><label for='pmpropp_plan_default'><?php esc_html_e( 'Is Default Payment Plan', 'pmpro-payment-plans' ); ?>:</label></th>
 				<td>
-					<select id='pmpropp_plan_default' name='pmpropp_plan_default[]' >
+					<select id='pmpropp_plan_default' name='pmpropp_plan_default[]'>
 						<option value='no'><?php esc_html_e( 'No', 'pmpro-payment-plans' ); ?></option>	
 						<option value='yes' ><?php esc_html_e( 'Yes', 'pmpro-payment-plans' ); ?></option>						
 					</select>
