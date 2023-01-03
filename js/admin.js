@@ -39,7 +39,6 @@ jQuery(document).ready(function () {
         }
 
         var plan_status = jQuery("#pmpropp_plan_" + key + " #pmpropp_plan_status").attr("selectval");
-        console.log(plan_status);
         if (plan_status !== "") {
             jQuery("#pmpropp_plan_" + key + " #pmpropp_plan_status").val(plan_status).change();
         }
