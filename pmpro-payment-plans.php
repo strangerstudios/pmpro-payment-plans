@@ -3,9 +3,11 @@
  * Plugin Name: Paid Memberships Pro - Payment Plans Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
  * Description: Integrates with Paid Memberships Pro to provide payment plans for membership levels.
- * Version: 0.1.1
+ * Version: 0.2
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com
+ * Text Domain: pmpro-payment-plans
+ * Domain Path: /languages
  */
 
 /**
@@ -596,7 +598,7 @@ function pmpropp_replace_template_values( $template, $values ) {
 	$template = str_replace( '!!trial_limit!!', ( ! empty( $values->trial_limit ) ) ? esc_html( $values->trial_limit ) : '', $template );
 	$template = str_replace( '!!expiration_number!!', ( ! empty( $values->expiration_number ) ) ? esc_html( $values->expiration_number ) : '', $template );
 	$template = str_replace( '!!expiration_period!!', ( ! empty( $values->expiration_period ) ) ? esc_html( $values->expiration_period ) : '', $template );
-	$template = str_replace( '!!default!!', ( ! empty( $values->default ) ) ? esc_html( $values->default ) : '', $template );
+	$template = str_replace( '!!plan_default!!', ( ! empty( $values->default ) ) ? esc_html( $values->default ) : '', $template );
 
 	return $template;
 

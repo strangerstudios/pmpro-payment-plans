@@ -36,3 +36,7 @@
 .pmpropp_small_text{
     font-size:10px;
 }
+
+.pmpro_payment_plan_level_container .inactive {
+    color: #AAA;
+}
