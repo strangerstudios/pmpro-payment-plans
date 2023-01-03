@@ -41,8 +41,8 @@ function pmpropp_load_admin_scripts() {
 		$output = ob_get_contents();
 		ob_end_clean();
 
-		$stored_plans = pmpropp_render_plans( $output );
-		$plan_data = pmpropp_return_payment_plans( intval( $_REQUEST['edit'] ) );
+		$stored_plans = pmpropp_render_plans( $output, true );
+		$plan_data = pmpropp_return_payment_plans( intval( $_REQUEST['edit'] ), true );
 
 		$template_plan       = new StdClass();
 		$template_plan->name = __( 'New Payment Plan', 'pmpro-payment-plans' );
@@ -285,7 +285,7 @@ function pmpropp_get_plan( $level_id, $plan_id ) {
  *
  * @return array $plan An array of the plans.
  */
-function pmpropp_return_payment_plans( $level_id ) {
+function pmpropp_return_payment_plans( $level_id, $is_admin = false ) {
 	global $pmpro_pages;
 
 	if ( empty( $level_id ) ) {
@@ -321,8 +321,10 @@ function pmpropp_return_payment_plans( $level_id ) {
 	}
 			
 	foreach ( $payment_plans as $plan ) {				
-
-		if ( $plan->status === 'active' ) {
+		/**
+		 * Show plans that are active, or if we're on the level edit page show all
+		 */
+		if ( $plan->status === 'active' || $is_admin ) {
 		
 			$ordered_plans[] = $plan;
 
@@ -547,13 +549,13 @@ add_action( 'wp_ajax_nopriv_pmpropp_request_price_change', 'pmpropp_request_pric
  *
  * @since 0.1
  */
-function pmpropp_render_plans( $template ) {
+function pmpropp_render_plans( $template, $is_admin = false ) {
 
 	$ret = '';
 
 	global $pmpro_currency_symbol;
 
-	$plans = pmpropp_return_payment_plans( intval( $_REQUEST['edit'] ) );
+	$plans = pmpropp_return_payment_plans( intval( $_REQUEST['edit'] ), $is_admin );
 
 	if ( ! empty( $plans ) ) {
 		foreach ( $plans as $plan ) {
