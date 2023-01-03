@@ -86,7 +86,13 @@ function pmpropp_load_frontend_scripts() {
 			$level = pmpro_getLevelAtCheckout();
 
 			// Get the level ID.
-			$level_id = ! empty( $level ) ? $level->id : ( ! empty( $_REQUEST['level'] ) ? $_REQUEST['level'] : false );
+			if ( ! empty( $level ) ) {
+				$level_id = intval( $level->id );
+			} elseif ( empty( $level ) && ! empty( $_REQUEST['level'] ) ) {
+				$level_id = intval( $_REQUEST['level'] );
+			} else {
+				$level_id = false;
+			}
 
 			// Do we have a level ID and payment plans for that level?
 			if ( empty( $level_id ) || empty( pmpropp_return_payment_plans( $level_id ) ) ) {
