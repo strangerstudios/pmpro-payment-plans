@@ -87,8 +87,6 @@ function pmpropp_load_frontend_scripts() {
 			// Get the level ID.
 			if ( ! empty( $level ) ) {
 				$level_id = intval( $level->id );
-			} elseif ( empty( $level ) && ! empty( $_REQUEST['level'] ) ) {
-				$level_id = intval( $_REQUEST['level'] );
 			} else {
 				$level_id = false;
 			}
@@ -104,7 +102,7 @@ function pmpropp_load_frontend_scripts() {
 				'pmpro-payment-plans-frontend-js',
 				'payment_plans',
 				array(
-					'plans'        => pmpropp_return_payment_plans( intval( $_REQUEST['level'] ) ),
+					'plans'        => pmpropp_return_payment_plans( $level_id ),
 					'ajaxurl'      => admin_url( 'admin-ajax.php' ),
 					'parent_level' => ( ! empty( $_REQUEST['level'] ) ? $_REQUEST['level'] : 0 ),
 				)
