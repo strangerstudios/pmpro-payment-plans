@@ -42,7 +42,7 @@ function pmpropp_load_admin_scripts() {
 		ob_end_clean();
 
 		$stored_plans = pmpropp_render_plans( $output, true );
-		$plan_data = pmpropp_return_payment_plans( intval( $_REQUEST['edit'] ), $is_admin );
+		$plan_data = pmpropp_return_payment_plans( intval( $_REQUEST['edit'] ), true );
 
 		$template_plan       = new StdClass();
 		$template_plan->name = __( 'New Payment Plan', 'pmpro-payment-plans' );
