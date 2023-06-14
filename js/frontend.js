@@ -11,7 +11,7 @@ jQuery(document).ready(function(){
 
 				var data = {
 					action: 'pmpropp_request_price_change',
-					level: payment_plans.parent_level,
+					pmpro_level: payment_plans.parent_level,
 					plan: val.id
 				}
 
@@ -42,7 +42,7 @@ jQuery(document).ready(function(){
 
 					var data = {
 						action: 'pmpropp_request_price_change',
-						level: payment_plans.parent_level,
+						pmpro_level: payment_plans.parent_level,
 						plan: value
 					}
 

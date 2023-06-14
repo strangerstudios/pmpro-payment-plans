@@ -87,10 +87,10 @@ function pmpropp_load_frontend_scripts() {
 			$level = pmpro_getLevelAtCheckout();
 
 			// Get the level ID.
-			if ( ! empty( $level ) ) {
+			if ( ! empty( $level->id ) ) {
 				$level_id = intval( $level->id );
 			} else {
-				$level_id = false;
+				$level_id = 0;
 			}
 
 			// Do we have a level ID and payment plans for that level?
@@ -106,7 +106,7 @@ function pmpropp_load_frontend_scripts() {
 				array(
 					'plans'        => pmpropp_return_payment_plans( $level_id ),
 					'ajaxurl'      => admin_url( 'admin-ajax.php' ),
-					'parent_level' => ( ! empty( $_REQUEST['level'] ) ? $_REQUEST['level'] : 0 ),
+					'parent_level' => $level_id,
 				)
 			);
 
@@ -375,7 +375,8 @@ function pmpropp_registration_checks( $okay ) {
 		return $okay;
 	}
 
-	$plan = pmpropp_get_plan( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
+	$level = pmpro_getLevelAtCheckout();
+	$plan = pmpropp_get_plan( intval( $level->id ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
 
 	if( !empty( $plan ) ) {
 		$okay = true;
@@ -399,8 +400,9 @@ add_filter( 'pmpro_registration_checks', 'pmpropp_registration_checks', 10, 1);
 function pmpropp_render_payment_plans_checkout() {
 
 	//Add in support for Add On Packages
-	if ( ! empty( $_REQUEST['ap'] ) && ! empty( $_REQUEST['level'] ) ) {
-		if ( pmpro_hasMembershipLevel( $_REQUEST['level'] ) ) {
+	$level = pmpro_getLevelAtCheckout();
+	if ( ! empty( $_REQUEST['ap'] ) && ! empty( $level->id ) ) {
+		if ( pmpro_hasMembershipLevel( $level->id ) ) {
 			/**
 			 * Purchasing an add on package and have the required level 
 			 * so don't show the payment plan options
@@ -409,9 +411,9 @@ function pmpropp_render_payment_plans_checkout() {
 		}
 	}
 
-	if ( ! empty( $_REQUEST['level'] ) ) {
+	if ( ! empty( $level->id ) ) {
 
-		$plans = pmpropp_return_payment_plans( intval( $_REQUEST['level'] ) );
+		$plans = pmpropp_return_payment_plans( intval( $level->id ) );
 
 		if ( ! empty( $plans ) ) {
 			?>
@@ -533,7 +535,7 @@ function pmpropp_request_price_change() {
 
 	if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'pmpropp_request_price_change' ) {
 
-		$plan = pmpropp_get_plan( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['plan'] ) );
+		$plan = pmpropp_get_plan( intval( $_REQUEST['pmpro_level'] ), sanitize_text_field( $_REQUEST['plan'] ) );
 
 		if( !empty( $plan ) ) {
 			echo trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, array( '"', "'", "\n", "\r" ) ) . ' '. pmpro_getLevelExpiration( $plan ) ) );
