@@ -36,7 +36,7 @@ function pmpropp_load_admin_scripts() {
 
 		global $pmpro_currency_symbol;
 
-		$gateway = pmpro_getOption( 'gateway' );
+		$gateway = get_option( 'pmpro_gateway' );
 
 		ob_start();
 		include plugin_dir_path( __FILE__ ) . 'includes/admin-payment-plan.php';
