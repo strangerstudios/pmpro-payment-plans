@@ -417,9 +417,9 @@ function pmpropp_render_payment_plans_checkout() {
 			?>
 			<div id="pmpropp_select_payment_plan" class="pmpro_checkout">
 				<hr />
-				<h3>
-					<span class="pmpro_checkout-h3-name"><?php _e( 'Select a Payment Plan', 'pmpro-payment-plans' ); ?></span>
-				</h3>
+				<h2>
+					<span class="pmpro_checkout-h2-name"><?php _e( 'Select a Payment Plan', 'pmpro-payment-plans' ); ?></span>
+				</h2>
 				<div id="pmpropp_payment_plans" class="pmpro_checkout-fields">
 					<!-- JavaScript populates plan options here -->
 				</div> <!-- end pmpro_checkout-fields -->
