@@ -229,9 +229,25 @@ function pmpropp_pair_plan_fields( $request ) {
 				$pmpropp_expiration_period[$i] = '';
 			}			
 
+			$main_level_name = isset( $request['name'] ) ? sanitize_text_field( $request['name'] ) : "";
+			$plan_name = sanitize_text_field( $pmpropp_plan_name[ $i ] );
+
+			$new_plan_name = $main_level_name . " (" .$plan_name . ")";
+
+			/**
+				* Allow filtering the payment plan name
+				*
+				* @since TBD
+				*
+				* @param string $new_plan_name The formatted plan name. Defaults to Level Name (Plan Name)
+				* @param string $main_level_name  The level name
+				* @param string $plan_name The plan name
+				*/
+			$new_plan_name = apply_filters( 'pmpropp_plan_name', $new_plan_name, $main_level_name, $plan_name );
+
 			$level                    = new stdClass();
 			$level->id                = 'L-' . intval( $request['saveid'] ) . '-P-' . $i;
-			$level->name              = sanitize_text_field( $pmpropp_plan_name[ $i ] );
+			$level->name              = $new_plan_name;
 			$level->description       = sanitize_text_field( $request['description'] );
 			$level->confirmation      = sanitize_text_field( $request['confirmation'] );
 			$level->billing_amount    = floatval( $pmpropp_billing_amount[ $i ] );
