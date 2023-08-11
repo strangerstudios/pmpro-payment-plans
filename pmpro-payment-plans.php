@@ -229,9 +229,25 @@ function pmpropp_pair_plan_fields( $request ) {
 				$pmpropp_expiration_period[$i] = '';
 			}			
 
+			$main_level_name = isset( $request['name'] ) ? sanitize_text_field( $request['name'] ) : "";
+			$plan_name = sanitize_text_field( $pmpropp_plan_name[ $i ] );
+
+			$new_plan_name = $main_level_name . " (" .$plan_name . ")";
+
+			/**
+			 * Allow filtering the payment plan name
+			 *
+			 * @since TBD
+			 *
+			 * @param string $new_plan_name The formatted plan name. Defaults to Level Name (Plan Name)
+			 * @param string $main_level_name  The level name
+			 * @param string $plan_name The plan name
+			 */
+			$new_plan_name = apply_filters( 'pmpropp_plan_name', $new_plan_name, $main_level_name, $plan_name );
+
 			$level                    = new stdClass();
 			$level->id                = 'L-' . intval( $request['saveid'] ) . '-P-' . $i;
-			$level->name              = sanitize_text_field( $pmpropp_plan_name[ $i ] );
+			$level->name              = $new_plan_name;
 			$level->description       = sanitize_text_field( $request['description'] );
 			$level->confirmation      = sanitize_text_field( $request['confirmation'] );
 			$level->billing_amount    = floatval( $pmpropp_billing_amount[ $i ] );
@@ -604,3 +620,50 @@ function pmpropp_replace_template_values( $template, $values ) {
 	return $template;
 
 }
+
+/**
+ * Filters the member's level and pairs it with a payment plan if need be
+ *
+ * @param string $levels The levels the user holds
+ * @param string $user_id The user's ID
+ * 
+ * @since TBD
+ */
+function pmpropp_levels_for_user_with_plans( $levels, $user_id ) {
+
+	global $pmpro_pages;
+	 
+	if( is_page( $pmpro_pages['account'] ) || is_page( $pmpro_pages['billing'] ) ) {
+
+		$order = new MemberOrder();
+		$order->getLastMemberOrder();
+
+		foreach( $levels as $level ) {
+
+			if( $order->membership_id == $level->ID ) {
+				//Lets see if this level was a plan
+				$plan = get_pmpro_membership_order_meta( intval( $order->id ), 'payment_plan', true );
+				
+				if( ! empty( $plan ) ) {
+					
+					$level->name 			  = $plan->name;					
+					$level->description       = $plan->description;
+					$level->confirmation      = $plan->confirmation;
+					$level->initial_payment   = $plan->initial_payment;
+					$level->billing_amount    = $plan->billing_amount;
+					$level->cycle_number      = $plan->cycle_number;
+					$level->cycle_period      = $plan->cycle_period;
+					$level->billing_limit     = $plan->billing_limit;
+					$level->trial_amount      = $plan->trial_amount;
+					$level->trial_limit       = $plan->trial_limit;
+					$level->expiration_number = $plan->expiration_number;
+					$level->expiration_period = $plan->expiration_period;
+				}
+			}	
+		}
+
+	}
+
+	return $levels;
+}
+add_filter( 'pmpro_get_membership_levels_for_user', 'pmpropp_levels_for_user_with_plans', 99, 2 );
