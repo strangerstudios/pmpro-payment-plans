@@ -229,25 +229,9 @@ function pmpropp_pair_plan_fields( $request ) {
 				$pmpropp_expiration_period[$i] = '';
 			}			
 
-			$main_level_name = isset( $request['name'] ) ? sanitize_text_field( $request['name'] ) : "";
-			$plan_name = sanitize_text_field( $pmpropp_plan_name[ $i ] );
-
-			$new_plan_name = $main_level_name . " (" .$plan_name . ")";
-
-			/**
-				* Allow filtering the payment plan name
-				*
-				* @since TBD
-				*
-				* @param string $new_plan_name The formatted plan name. Defaults to Level Name (Plan Name)
-				* @param string $main_level_name  The level name
-				* @param string $plan_name The plan name
-				*/
-			$new_plan_name = apply_filters( 'pmpropp_plan_name', $new_plan_name, $main_level_name, $plan_name );
-
 			$level                    = new stdClass();
 			$level->id                = 'L-' . intval( $request['saveid'] ) . '-P-' . $i;
-			$level->name              = $new_plan_name;
+			$level->name              = sanitize_text_field( $pmpropp_plan_name[$i] );
 			$level->description       = sanitize_text_field( $request['description'] );
 			$level->confirmation      = sanitize_text_field( $request['confirmation'] );
 			$level->billing_amount    = floatval( $pmpropp_billing_amount[ $i ] );
@@ -346,12 +330,18 @@ function pmpropp_return_payment_plans( $level_id, $is_admin = false ) {
 		
 			$ordered_plans[] = $plan;
 
+			// Assign the HTML output to a variable to make it easier to work with.
+			$plan_name_raw = $plan->name . ' - ' . trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) . ' ' . pmpro_getLevelExpiration( $plan ) ) );
+
+			// The plan name used for checkout, sanitized using wp_kses
+			$plan_name = pmpro_kses( apply_filters( 'pmpropp_plan_label_checkout', $plan_name_raw, $plan ) ); 
+
 			$plan->html = sprintf(
 				'<input type="radio" name="pmpropp_chosen_plan" class="%5$s" value="%1$s" id="%2$s" %3$s /> <label for="%2$s" class="pmpro_label-inline">%4$s</label>',
 				esc_attr( $plan->id ),
 				esc_attr( 'pmpropp_chosen_plan_choice_' . $plan->id ),
 				checked( 'yes', $plan->default, false ),
-				esc_html( $plan->name ) . ' - ' . trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) . ' ' . pmpro_getLevelExpiration( $plan ) ) ),
+				$plan_name,
 				pmpro_get_element_class( 'pmpropp_chosen_plan pmpro_alter_price', 'pmpropp_chosen_plan_choice_-' . $plan->id )
 			);
 
