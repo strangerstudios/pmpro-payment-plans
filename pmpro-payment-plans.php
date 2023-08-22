@@ -333,8 +333,15 @@ function pmpropp_return_payment_plans( $level_id, $is_admin = false ) {
 			// Assign the HTML output to a variable to make it easier to work with.
 			$plan_name_raw = $plan->name . ' - ' . trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) . ' ' . pmpro_getLevelExpiration( $plan ) ) );
 
-			// The plan name used for checkout, sanitized using wp_kses
-			$plan_name = pmpro_kses( apply_filters( 'pmpropp_plan_label_checkout', $plan_name_raw, $plan ) ); 
+			/**
+			 * Allow filtering of each plan cost text at checkout (Includes the plan name - cost text)
+			 * 
+			 * @since TBD
+			 * 
+			 * @param $plan_name_raw The raw plan name and cost text/expiration text.
+			 * @param $plan The plan object, this is allowed to obtain further information about the plan when filtering.
+			 */
+			$plan_name = pmpro_kses( apply_filters( 'pmpropp_plan_cost_text_checkout', $plan_name_raw, $plan ) ); 
 
 			$plan->html = sprintf(
 				'<input type="radio" name="pmpropp_chosen_plan" class="%5$s" value="%1$s" id="%2$s" %3$s /> <label for="%2$s" class="pmpro_label-inline">%4$s</label>',
