@@ -604,3 +604,57 @@ function pmpropp_replace_template_values( $template, $values ) {
 	return $template;
 
 }
+
+/**
+ * Filters the member's level and pairs it with a payment plan if need be
+ *
+ * @param string $levels The levels the user holds
+ * @param string $user_id The user's ID
+ * 
+ * @since TBD
+ */
+function pmpropp_levels_for_user_with_plans( $levels, $user_id ) {
+	global $pmpro_pages;
+	 
+	// Don't load if pages global isn't ready.
+	if ( empty( $pmpro_pages ) ) {
+		return $levels;
+	}
+
+	// Pages we want to make this change on.
+	$allowed_pmpro_pages = array( $pmpro_pages['account'], $pmpro_pages['billing'] );
+
+	if ( is_page( $allowed_pmpro_pages ) ) {
+
+		$order = new MemberOrder();
+		$order->getLastMemberOrder();
+
+		foreach( $levels as $level ) {
+
+			if( $order->membership_id == $level->ID ) {
+				//Lets see if this level was a plan
+				$plan = get_pmpro_membership_order_meta( intval( $order->id ), 'payment_plan', true );
+				
+				if( ! empty( $plan ) ) {
+					
+					$level->name 			  = $plan->name;					
+					$level->description       = $plan->description;
+					$level->confirmation      = $plan->confirmation;
+					$level->initial_payment   = $plan->initial_payment;
+					$level->billing_amount    = $plan->billing_amount;
+					$level->cycle_number      = $plan->cycle_number;
+					$level->cycle_period      = $plan->cycle_period;
+					$level->billing_limit     = $plan->billing_limit;
+					$level->trial_amount      = $plan->trial_amount;
+					$level->trial_limit       = $plan->trial_limit;
+					$level->expiration_number = $plan->expiration_number;
+					$level->expiration_period = $plan->expiration_period;
+				}
+			}	
+		}
+
+	}
+
+	return $levels;
+}
+add_filter( 'pmpro_get_membership_levels_for_user', 'pmpropp_levels_for_user_with_plans', 99, 2 );
