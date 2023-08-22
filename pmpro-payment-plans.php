@@ -614,10 +614,17 @@ function pmpropp_replace_template_values( $template, $values ) {
  * @since TBD
  */
 function pmpropp_levels_for_user_with_plans( $levels, $user_id ) {
-
 	global $pmpro_pages;
 	 
-	if( is_page( $pmpro_pages['account'] ) || is_page( $pmpro_pages['billing'] ) ) {
+	// Don't load if pages global isn't ready.
+	if ( empty( $pmpro_pages ) ) {
+		return $levels;
+	}
+
+	// Pages we want to make this change on.
+	$allowed_pmpro_pages = array( $pmpro_pages['account'], $pmpro_pages['billing'] );
+
+	if ( is_page( $allowed_pmpro_pages ) ) {
 
 		$order = new MemberOrder();
 		$order->getLastMemberOrder();
