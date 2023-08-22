@@ -231,7 +231,7 @@ function pmpropp_pair_plan_fields( $request ) {
 
 			$level                    = new stdClass();
 			$level->id                = 'L-' . intval( $request['saveid'] ) . '-P-' . $i;
-			$level->name              = sanitize_text_field( $pmpropp_plan_name[ $i ] );
+			$level->name              = sanitize_text_field( $pmpropp_plan_name[$i] );
 			$level->description       = sanitize_text_field( $request['description'] );
 			$level->confirmation      = sanitize_text_field( $request['confirmation'] );
 			$level->billing_amount    = floatval( $pmpropp_billing_amount[ $i ] );
@@ -330,12 +330,25 @@ function pmpropp_return_payment_plans( $level_id, $is_admin = false ) {
 		
 			$ordered_plans[] = $plan;
 
+			// Assign the HTML output to a variable to make it easier to work with.
+			$plan_name_raw = $plan->name . ' - ' . trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) . ' ' . pmpro_getLevelExpiration( $plan ) ) );
+
+			/**
+			 * Allow filtering of each plan cost text at checkout (Includes the plan name - cost text)
+			 * 
+			 * @since TBD
+			 * 
+			 * @param $plan_name_raw The raw plan name and cost text/expiration text.
+			 * @param $plan The plan object, this is allowed to obtain further information about the plan when filtering.
+			 */
+			$plan_name = pmpro_kses( apply_filters( 'pmpropp_plan_cost_text_checkout', $plan_name_raw, $plan ) ); 
+
 			$plan->html = sprintf(
 				'<input type="radio" name="pmpropp_chosen_plan" class="%5$s" value="%1$s" id="%2$s" %3$s /> <label for="%2$s" class="pmpro_label-inline">%4$s</label>',
 				esc_attr( $plan->id ),
 				esc_attr( 'pmpropp_chosen_plan_choice_' . $plan->id ),
 				checked( 'yes', $plan->default, false ),
-				esc_html( $plan->name ) . ' - ' . trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, true, true ) . ' ' . pmpro_getLevelExpiration( $plan ) ) ),
+				$plan_name,
 				pmpro_get_element_class( 'pmpropp_chosen_plan pmpro_alter_price', 'pmpropp_chosen_plan_choice_-' . $plan->id )
 			);
 
