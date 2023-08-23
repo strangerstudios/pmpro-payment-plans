@@ -452,42 +452,58 @@ add_action( 'pmpro_checkout_boxes', 'pmpropp_render_payment_plans_checkout', 10 
  */
 function pmpropp_override_checkout_level( $level ) {
 
+	global $pmpro_pages;
+
+	$has_plans = pmpropp_return_payment_plans( $level->id );
+
 	if ( ! empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 
-		$plan = pmpropp_get_plan( intval( $level->id ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
+		$plan = pmpropp_get_plan( intval( $level->id ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );		
 
-		if( empty( $plan ) ) {
-			return $level;
-		}
+	} else if( $has_plans ) {
+		/**
+		 * We could be coming from an offsite gateway that 
+		 * can only identify a level. We're going to check the order meta for this.
+		 */
+		$morder = new MemberOrder();
+		$morder->getLastMemberOrder();
+		$plan = get_pmpro_membership_order_meta( intval( $morder->id ), 'payment_plan', true );
 
-		// If the plan ID is exactly same as the level ID just bail and return the current level object.
-		if ( $plan->id === $level->id ) {
-			return $level;
-		}
-
-		$level->name = $level->name . ' - ' . $plan->name;
-
-		$level->type         = 'payment_plan';
-		$level->payment_plan = $_REQUEST['pmpropp_chosen_plan'];
-
-		$level->description       = $plan->description;
-		$level->confirmation      = $plan->confirmation;
-		$level->initial_payment   = $plan->initial_payment;
-		$level->billing_amount    = $plan->billing_amount;
-		$level->cycle_number      = $plan->cycle_number;
-		$level->cycle_period      = $plan->cycle_period;
-		$level->billing_limit     = $plan->billing_limit;
-		$level->trial_amount      = $plan->trial_amount;
-		$level->trial_limit       = $plan->trial_limit;
-		$level->expiration_number = $plan->expiration_number;
-		$level->expiration_period = $plan->expiration_period;
 
 	}
+
+	if( empty( $plan ) ) {
+		return $level;
+	}
+
+	// If the plan ID is exactly same as the level ID just bail and return the current level object.
+	if ( $plan->id === $level->id ) {
+		return $level;
+	}
+
+	$level->name = $level->name . ' - ' . $plan->name;
+
+	$level->type         = 'payment_plan';
+	$level->payment_plan = ( ! empty( $_REQUEST['pmpropp_chosen_plan'] ) ) ? $_REQUEST['pmpropp_chosen_plan'] : $plan->id;
+
+	$level->description       = $plan->description;
+	$level->confirmation      = $plan->confirmation;
+	$level->initial_payment   = $plan->initial_payment;
+	$level->InitialPayment   = $plan->initial_payment;
+	$level->billing_amount    = $plan->billing_amount;
+	$level->PaymentAmount    = $plan->billing_amount;
+	$level->cycle_number      = $plan->cycle_number;
+	$level->cycle_period      = $plan->cycle_period;
+	$level->billing_limit     = $plan->billing_limit;
+	$level->trial_amount      = $plan->trial_amount;
+	$level->trial_limit       = $plan->trial_limit;
+	$level->expiration_number = $plan->expiration_number;
+	$level->expiration_period = $plan->expiration_period;
 
 	return $level;
 
 }
-add_filter( 'pmpro_checkout_level', 'pmpropp_override_checkout_level' );
+add_filter( 'pmpro_checkout_level', 'pmpropp_override_checkout_level', 1 );
 
 /**
  * After checkout - Add note and meta of plan
@@ -672,4 +688,52 @@ function pmpropp_levels_for_user_with_plans( $levels, $user_id ) {
 
 	return $levels;
 }
-add_filter( 'pmpro_get_membership_levels_for_user', 'pmpropp_levels_for_user_with_plans', 99, 2 );
+add_filter( 'pmpro_get_membership_levels_for_user', 'pmpropp_levels_for_user_with_plans', 99, 2 );add_filter( 'pmpro_get_membership_levels_for_user', 'pmpropp_levels_for_user_with_plans', 99, 2 );
+/**
+ * Store the checkout variables to the order meta before sending the user
+ * to PayPal Express
+ *
+ * @param object $morder The member order
+ * 
+ * @since TBD
+ */
+function pmpropp_paypal_express_before_send_to_ppe( $morder ) {
+
+	update_pmpro_membership_order_meta( $morder->id, 'checkout_vars', $_REQUEST );
+
+}
+add_action( 'pmpro_before_commit_express_checkout', 'pmpropp_paypal_express_before_send_to_ppe', 1, 1 );
+
+/**
+ * Store the checkout variables to the order meta before sending the user
+ * to Payfast
+ *
+ * @param object $morder The member order
+ * 
+ * @since TBD
+ */
+function pmpropp_payfast_before_send_to_payfast( $user_id, $morder ) {
+
+	update_pmpro_membership_order_meta( $morder->id, 'checkout_vars', $_REQUEST );
+
+}
+add_action( 'pmpro_before_send_to_payfast', 'pmpropp_payfast_before_send_to_payfast', 1, 2 );
+
+/**
+ * We need to merge the chekout variables sooner rather than later.
+ * Doing this separately due to priority changes.
+ *
+ * @param object $morder The member order
+ * 
+ * @since TBD
+ */
+function pmpropp_merge_checkout_after_checkout( $user_id, $morder ) {
+
+	$checkout_vars = get_pmpro_membership_order_meta( $morder->id, 'checkout_vars', true );
+
+	if( ! empty( $checkout_vars ) ) {
+		$_REQUEST = array_merge( $_REQUEST, $checkout_vars );		
+	}
+	
+}
+add_action( 'pmpro_after_checkout', 'pmpropp_merge_checkout_after_checkout', 1, 2 );
