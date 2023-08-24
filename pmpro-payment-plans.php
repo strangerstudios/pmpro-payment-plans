@@ -288,13 +288,12 @@ function pmpropp_get_plan( $level_id, $plan_id ) {
  * @return array $plan An array of the plans.
  */
 function pmpropp_return_payment_plans( $level_id, $is_admin = false ) {
-	global $pmpro_pages;
+	global $pmpro_pages, $pmpro_currency_symbol;
 
 	if ( empty( $level_id ) ) {
         return array();
     }    
 
-	global $pmpro_currency_symbol;
 
 	$currency_position = pmpro_getCurrencyPosition();
 
@@ -454,9 +453,12 @@ function pmpropp_override_checkout_level( $level ) {
 
 	if ( ! empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 
-		$plan = pmpropp_get_plan( intval( $level->id ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
+		$chosen_plan = sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] );
 
-		if( empty( $plan ) ) {
+		$plan = pmpropp_get_plan( intval( $level->id ), $chosen_plan );
+
+		// No plan chosen, return the 'normal' level.
+		if ( empty( $plan ) ) {
 			return $level;
 		}
 
@@ -468,7 +470,7 @@ function pmpropp_override_checkout_level( $level ) {
 		$level->name = $level->name . ' - ' . $plan->name;
 
 		$level->type         = 'payment_plan';
-		$level->payment_plan = $_REQUEST['pmpropp_chosen_plan'];
+		$level->payment_plan = $chosen_plan;
 
 		$level->description       = $plan->description;
 		$level->confirmation      = $plan->confirmation;
@@ -500,7 +502,7 @@ function pmpropp_after_checkout( $user_id, $morder ) {
 
 		$plan = pmpropp_get_plan( $morder->membership_id, sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
 
-		if( !empty( $plan ) ) {
+		if ( ! empty( $plan ) ) {
 			update_pmpro_membership_order_meta( intval( $morder->id ), 'payment_plan', $plan );
 		}
 
@@ -531,7 +533,7 @@ function pmpropp_payment_plan_body( $morder ) {
 	$plan = get_pmpro_membership_order_meta( $morder->id, 'payment_plan', true );
 
 	if ( ! empty( $plan->name ) ) {
-		echo '<td>' . $plan->name . '</td>';
+		echo '<td>' . esc_html( $plan->name ) . '</td>';
 	} else {
 		echo '<td>' . __( '&#8212;', 'paid-memberships-pro' ) . '</td>';
 	}
@@ -547,6 +549,11 @@ add_action( 'pmpro_orders_extra_cols_body', 'pmpropp_payment_plan_body', 10, 1 )
 function pmpropp_request_price_change() {
 
 	if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'pmpropp_request_price_change' ) {
+
+		// Let's bail if these values are empty. We can assume the plan is available if the pmpro_level is available.
+		if ( empty( $_REQUEST['pmpro_level'] ) || empty( $_REQUEST['plan'] ) ) {
+			wp_die();
+		}
 
 		$plan = pmpropp_get_plan( intval( $_REQUEST['pmpro_level'] ), sanitize_text_field( $_REQUEST['plan'] ) );
 
@@ -673,3 +680,73 @@ function pmpropp_levels_for_user_with_plans( $levels, $user_id ) {
 	return $levels;
 }
 add_filter( 'pmpro_get_membership_levels_for_user', 'pmpropp_levels_for_user_with_plans', 99, 2 );
+/**
+ * Store the checkout variables to the order meta before sending the user
+ * to PayPal Express
+ *
+ * @param object $morder The member order
+ * 
+ * @since TBD
+ */
+function pmpropp_paypal_express_before_send_to_ppe( $morder ) {
+
+	// Don't run this code when no plan is chosen.
+	if ( empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
+		return;
+	}
+
+	update_pmpro_membership_order_meta( $morder->id, 'checkout_vars', $_REQUEST );
+
+}
+add_action( 'pmpro_before_commit_express_checkout', 'pmpropp_paypal_express_before_send_to_ppe', 1, 1 );
+
+/**
+ * Store the checkout variables to the order meta before sending the user
+ * to Payfast
+ *
+ * @param object $morder The member order
+ * 
+ * @since TBD
+ */
+function pmpropp_payfast_before_send_to_payfast( $user_id, $morder ) {
+
+	// Don't run this code when no plan is chosen.
+	if ( empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
+		return;
+	}
+
+	update_pmpro_membership_order_meta( $morder->id, 'checkout_vars', $_REQUEST );
+
+}
+add_action( 'pmpro_before_send_to_payfast', 'pmpropp_payfast_before_send_to_payfast', 1, 2 );
+
+/**
+ * We need to merge the chekout variables sooner rather than later.
+ * Doing this separately due to priority changes.
+ *
+ * @param object $morder The member order
+ * 
+ * @since TBD
+ */
+function pmpropp_merge_checkout_after_checkout( $user_id, $morder ) {
+
+	// Don't run this code when no plan is chosen.
+	if ( empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
+		return;
+	}
+
+	$checkout_vars = get_pmpro_membership_order_meta( $morder->id, 'checkout_vars', true );
+
+	if ( ! empty( $checkout_vars ) ) {
+		$_REQUEST = array_merge( array_map( 'sanitize_text_field', $_REQUEST ), $checkout_vars );	
+	}
+
+	// Let's save the order amount for PayPal Express as it overrides this in the gateways class.
+	if ( $morder->gateway == 'paypalexpress' ) {
+		$plan = pmpropp_get_plan( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
+		$morder->subtotal = $plan->initial_payment;; 
+		$morder->saveOrder();
+	}
+	
+}
+add_action( 'pmpro_after_checkout', 'pmpropp_merge_checkout_after_checkout', 1, 2 );
