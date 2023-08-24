@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, payment plan, payments
 Requires at least: 5.0
-Tested up to: 6.1
-Stable tag: 0.2
+Tested up to: 6.3
+Stable tag: 0.3
 
 This allows you to offer more than one pricing structure on the same membership level. 
 
@@ -33,6 +33,13 @@ Multiple pricing structures, such as a monthly and annual/yearly option, helps y
 View full documentation at: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
 
 == Changelog ==
+= 0.3 - 2023-08-24 =
+* ENHANCEMENT: General improvements to accessibility for screen readers. (@kimcoleman)
+* ENHANCEMENT: Show the payment plan name on the account and billing page instead of just the level's name. (@JarrydLong)
+* ENHANCEMENT: Added a filter to allow the payment plan name and cost text to be changed - `pmpropp_plan_cost_text_checkout`. (@andrewlimaza)
+* REFACTOR: Refactored code to use default get_option instead of our own wrapper function. (@dwanjuki)
+* BUG FIX: Fixed issues where offsite gateways such as PayPal Express, PayFast and other gateways wouldn't show the correct amount charged in the order information. (@JarrydLong)
+
 = 0.2 - 2023-01-03 =
 * ENHANCEMENT: Added better UI for inactive plans. (@JarrydLong)
 * ENHANCEMENT: Improved support for Addon Packages. (@JarrydLong)

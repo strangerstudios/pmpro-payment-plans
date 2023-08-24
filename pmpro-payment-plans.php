@@ -3,7 +3,7 @@
  * Plugin Name: Paid Memberships Pro - Payment Plans Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
  * Description: Integrates with Paid Memberships Pro to provide payment plans for membership levels.
- * Version: 0.2
+ * Version: 0.3
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com
  * Text Domain: pmpro-payment-plans
@@ -335,7 +335,7 @@ function pmpropp_return_payment_plans( $level_id, $is_admin = false ) {
 			/**
 			 * Allow filtering of each plan cost text at checkout (Includes the plan name - cost text)
 			 * 
-			 * @since TBD
+			 * @since 0.3
 			 * 
 			 * @param $plan_name_raw The raw plan name and cost text/expiration text.
 			 * @param $plan The plan object, this is allowed to obtain further information about the plan when filtering.
@@ -377,7 +377,7 @@ function pmpropp_return_payment_plans( $level_id, $is_admin = false ) {
 /**
  * Perform registration checks to make sure a valid plan is being selected.
  *
- * @since TBD
+ * @since 0.3
  */
 function pmpropp_registration_checks( $okay ) {
 
@@ -633,7 +633,7 @@ function pmpropp_replace_template_values( $template, $values ) {
  * @param string $levels The levels the user holds
  * @param string $user_id The user's ID
  * 
- * @since TBD
+ * @since 0.3
  */
 function pmpropp_levels_for_user_with_plans( $levels, $user_id ) {
 	global $pmpro_pages;
@@ -686,7 +686,7 @@ add_filter( 'pmpro_get_membership_levels_for_user', 'pmpropp_levels_for_user_wit
  *
  * @param object $morder The member order
  * 
- * @since TBD
+ * @since 0.3
  */
 function pmpropp_paypal_express_before_send_to_ppe( $morder ) {
 
@@ -706,7 +706,7 @@ add_action( 'pmpro_before_commit_express_checkout', 'pmpropp_paypal_express_befo
  *
  * @param object $morder The member order
  * 
- * @since TBD
+ * @since 0.3
  */
 function pmpropp_payfast_before_send_to_payfast( $user_id, $morder ) {
 
@@ -726,7 +726,7 @@ add_action( 'pmpro_before_send_to_payfast', 'pmpropp_payfast_before_send_to_payf
  *
  * @param object $morder The member order
  * 
- * @since TBD
+ * @since 0.3
  */
 function pmpropp_merge_checkout_after_checkout( $user_id, $morder ) {
 
@@ -747,6 +747,9 @@ function pmpropp_merge_checkout_after_checkout( $user_id, $morder ) {
 		$morder->subtotal = $plan->initial_payment;; 
 		$morder->saveOrder();
 	}
+
+	// Delete the checkout var order meta as we no longer need it.
+	delete_pmpro_membership_order_meta( $morder->id, 'checkout_vars' );
 	
 }
 add_action( 'pmpro_after_checkout', 'pmpropp_merge_checkout_after_checkout', 1, 2 );
