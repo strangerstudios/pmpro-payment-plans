@@ -688,7 +688,7 @@ function pmpropp_levels_for_user_with_plans( $levels, $user_id ) {
 
 	return $levels;
 }
-add_filter( 'pmpro_get_membership_levels_for_user', 'pmpropp_levels_for_user_with_plans', 99, 2 );add_filter( 'pmpro_get_membership_levels_for_user', 'pmpropp_levels_for_user_with_plans', 99, 2 );
+add_filter( 'pmpro_get_membership_levels_for_user', 'pmpropp_levels_for_user_with_plans', 99, 2 );
 /**
  * Store the checkout variables to the order meta before sending the user
  * to PayPal Express
@@ -732,7 +732,8 @@ function pmpropp_merge_checkout_after_checkout( $user_id, $morder ) {
 	$checkout_vars = get_pmpro_membership_order_meta( $morder->id, 'checkout_vars', true );
 
 	if( ! empty( $checkout_vars ) ) {
-		$_REQUEST = array_merge( $_REQUEST, $checkout_vars );		
+		$_REQUEST = array_merge( array_map( 'sanitize_text_field', $_REQUEST ), $checkout_vars );	
+			
 	}
 	
 }
