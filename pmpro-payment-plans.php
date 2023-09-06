@@ -753,3 +753,47 @@ function pmpropp_merge_checkout_after_checkout( $user_id, $morder ) {
 	
 }
 add_action( 'pmpro_after_checkout', 'pmpropp_merge_checkout_after_checkout', 1, 2 );
+
+/**
+ * Fix issue where incorrect payment plan amount is charged when using PayPal Express.
+ *
+ * @since TBD
+ */
+function pmpropp_ppe_add_plan_to_request() {
+    // Check if the "review" or "confirm" request variables are set.
+    if ( empty( $_REQUEST['review'] ) && empty( $_REQUEST['confirm'] ) ) {
+        return;
+    }
+
+    // Check if we have a PPE token that we are reviewing.
+    if ( empty( $_REQUEST['token'] ) ) {
+        return;
+    }
+    $token = sanitize_text_field( $_REQUEST['token'] );
+
+    // Make sure that the MemberOrder class is loaded.
+    if ( ! class_exists( 'MemberOrder' ) ) {
+        return;
+    }
+
+    // Check if we have an order with this token.
+    $order = new MemberOrder();
+    $order->getMemberOrderByPayPalToken( $token );
+    if ( empty( $order->id ) ) {
+        return;
+    }
+
+    // Make sure that this order is in token status.
+    if ( $order->status !== 'token' ) {
+        return;
+    }
+
+    // Get the donation information for this order.
+    $checkout_vars = get_pmpro_membership_order_meta( $order->id, 'checkout_vars', true );
+
+    // If there is a payment plan on the order but not yet in $_REQUEST, add it.
+    if ( ! empty( $checkout_vars['pmpropp_chosen_plan'] ) && empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
+        $_REQUEST['pmpropp_chosen_plan'] = $checkout_vars['pmpropp_chosen_plan'];
+    }
+}
+add_action( 'pmpro_checkout_preheader_before_get_level_at_checkout', 'pmpropp_ppe_add_plan_to_request' );
