@@ -343,12 +343,13 @@ function pmpropp_return_payment_plans( $level_id, $is_admin = false ) {
 			$plan_name = pmpro_kses( apply_filters( 'pmpropp_plan_cost_text_checkout', $plan_name_raw, $plan ) ); 
 
 			$plan->html = sprintf(
-				'<input type="radio" name="pmpropp_chosen_plan" class="%5$s" value="%1$s" id="%2$s" %3$s /> <label for="%2$s" class="pmpro_label-inline">%4$s</label>',
+				'<input type="radio" name="pmpropp_chosen_plan" class="%5$s" value="%1$s" id="%2$s" %3$s /> <label for="%2$s" class="%6$s">%4$s</label>',
 				esc_attr( $plan->id ),
 				esc_attr( 'pmpropp_chosen_plan_choice_' . $plan->id ),
 				checked( 'yes', $plan->default, false ),
-				$plan_name,
-				pmpro_get_element_class( 'pmpropp_chosen_plan pmpro_alter_price', 'pmpropp_chosen_plan_choice_-' . $plan->id )
+				$plan_name, // escaped above with pmpro_kses.
+				esc_attr( pmpro_get_element_class( 'pmpropp_chosen_plan pmpro_form_input pmpro_form_input-radio', 'pmpropp_chosen_plan_choice_-' . $plan->id ) ),
+				esc_attr( pmpro_get_element_class( 'pmpro_form_label pmpro_form_label-inline pmpro_clickable', 'pmpropp_chosen_plan_label_-' . $plan->id ) )
 			);
 
 			/**
@@ -429,15 +430,18 @@ function pmpropp_render_payment_plans_checkout() {
 
 		if ( ! empty( $plans ) ) {
 			?>
-			<div id="pmpropp_select_payment_plan" class="pmpro_checkout">
-				<hr />
-				<h2>
-					<span class="pmpro_checkout-h2-name"><?php _e( 'Select a Payment Plan', 'pmpro-payment-plans' ); ?></span>
-				</h2>
-				<div id="pmpropp_payment_plans" class="pmpro_checkout-fields">
-					<!-- JavaScript populates plan options here -->
-				</div> <!-- end pmpro_checkout-fields -->
-			</div>
+			<fieldset id="pmpropp_select_payment_plan" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fieldset', 'pmpropp_select_payment_plan' ) ); ?>">
+				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card' ) ); ?>">
+					<div class="pmpro_card_content">
+						<legend class="pmpro_form_legend">
+							<h2 class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_heading pmpro_font-large' ) ); ?>"><?php esc_html_e( 'Select a Payment Plan', 'pmpro-payment-plans' ); ?></h2>
+						</legend>
+						<div id="pmpropp_payment_plans" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_checkout-fields pmpro_form_fields' ) ); ?>">
+							<!-- JavaScript populates plan options here -->
+						</div>
+		</div>	
+				</div>
+			</fieldset>
 			<?php
 		}
 	}
