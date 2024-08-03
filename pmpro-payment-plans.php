@@ -3,12 +3,14 @@
  * Plugin Name: Paid Memberships Pro - Payment Plans Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
  * Description: Integrates with Paid Memberships Pro to provide payment plans for membership levels.
- * Version: 0.3
+ * Version: 0.4
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com
  * Text Domain: pmpro-payment-plans
  * Domain Path: /languages
  */
+
+define( 'PMPROPP_VERSION', '0.4' );
 
 /**
  * Includes the cleanup script on uninstall.
@@ -32,7 +34,7 @@ function pmpropp_load_admin_scripts() {
 		wp_enqueue_script( 'jquery-ui-accordion' );
 		wp_enqueue_script( 'jquery-ui-sortable' );
 
-		wp_enqueue_script( 'pmpro-payment-plans-admin', plugins_url( 'js/admin.js', __FILE__ ) );
+		wp_enqueue_script( 'pmpro-payment-plans-admin', plugins_url( 'js/admin.js', __FILE__ ), array( 'jquery' ), PMPROPP_VERSION, array( 'in_footer' => true ) );
 
 		global $pmpro_currency_symbol;
 
@@ -61,7 +63,7 @@ function pmpropp_load_admin_scripts() {
 			)
 		);
 
-		wp_enqueue_style( 'pmpro-payment-plans-admin-styles', plugins_url( 'css/admin.css', __FILE__ ) );
+		wp_enqueue_style( 'pmpro-payment-plans-admin-styles', plugins_url( 'css/admin.css', __FILE__ ), array(), PMPROPP_VERSION, 'all' );
 	}
 
 }
@@ -98,7 +100,7 @@ function pmpropp_load_frontend_scripts() {
 				return;
 			}
 
-			wp_enqueue_script( 'pmpro-payment-plans-frontend-js', plugins_url( 'js/frontend.js', __FILE__ ) );
+			wp_enqueue_script( 'pmpro-payment-plans-frontend-js', plugins_url( 'js/frontend.js', __FILE__ ), array( 'jquery' ), PMPROPP_VERSION, array( 'in_footer' => true ) );
 
 			wp_localize_script(
 				'pmpro-payment-plans-frontend-js',
@@ -110,7 +112,7 @@ function pmpropp_load_frontend_scripts() {
 				)
 			);
 
-			wp_enqueue_style( 'pmpro-payment-plans-frontend-css', plugins_url( 'css/frontend.css', __FILE__ ) );
+			wp_enqueue_style( 'pmpro-payment-plans-frontend-css', plugins_url( 'css/frontend.css', __FILE__ ), array(), PMPROPP_VERSION, 'all' );
 
 		}
 	}
@@ -135,9 +137,9 @@ add_action( 'init', 'pmpropp_load_text_domains' );
  * @since 0.1
  */
 function pmpropp_membership_level_after_other_settings() {
-
 	?>
-	<h3 class="topborder"><?php esc_html_e( 'Payment Plans', 'pmpro-payment-plans' ); ?></h3>
+	<hr />
+	<h3><?php esc_html_e( 'Payment Plans', 'pmpro-payment-plans' ); ?></h3>
 	<?php if( $_REQUEST['edit'] !== "-1" ) { ?>	   
 	   	<p><?php esc_html_e( 'Create multiple payment plans for this level, giving your members multiple options to pay for a membership', 'pmpro-payment-plans' ); ?></p>	
 		<div class='pmpro_payment_plan_level_container'>
@@ -152,7 +154,7 @@ function pmpropp_membership_level_after_other_settings() {
 		<p><?php esc_html_e( 'Please save your level first before creating a payment plan', 'pmpro-payment-plans' ); ?></p>
 	<?php }	
 }
-add_action( 'pmpro_membership_level_after_billing_details_settings', 'pmpropp_membership_level_after_other_settings', 1 );
+add_action( 'pmpro_membership_level_after_trial_settings', 'pmpropp_membership_level_after_other_settings', 1 );
 
 /**
  * Save the payment plan settings when the level is saved.
@@ -343,12 +345,13 @@ function pmpropp_return_payment_plans( $level_id, $is_admin = false ) {
 			$plan_name = pmpro_kses( apply_filters( 'pmpropp_plan_cost_text_checkout', $plan_name_raw, $plan ) ); 
 
 			$plan->html = sprintf(
-				'<input type="radio" name="pmpropp_chosen_plan" class="%5$s" value="%1$s" id="%2$s" %3$s /> <label for="%2$s" class="%6$s">%4$s</label>',
+				'<div class="%6$s"><input type="radio" name="pmpropp_chosen_plan" class="%5$s" value="%1$s" id="%2$s" %3$s /> <label for="%2$s" class="%7$s">%4$s</label></div>',
 				esc_attr( $plan->id ),
 				esc_attr( 'pmpropp_chosen_plan_choice_' . $plan->id ),
 				checked( 'yes', $plan->default, false ),
 				$plan_name, // escaped above with pmpro_kses.
 				esc_attr( pmpro_get_element_class( 'pmpropp_chosen_plan pmpro_form_input pmpro_form_input-radio', 'pmpropp_chosen_plan_choice_-' . $plan->id ) ),
+				esc_attr( pmpro_get_element_class( 'pmpro_form_field pmpro_form_field-radio-item' ) ),
 				esc_attr( pmpro_get_element_class( 'pmpro_form_label pmpro_form_label-inline pmpro_clickable', 'pmpropp_chosen_plan_label_-' . $plan->id ) )
 			);
 
@@ -432,14 +435,16 @@ function pmpropp_render_payment_plans_checkout() {
 			?>
 			<fieldset id="pmpropp_select_payment_plan" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fieldset', 'pmpropp_select_payment_plan' ) ); ?>">
 				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card' ) ); ?>">
-					<div class="pmpro_card_content">
-						<legend class="pmpro_form_legend">
+					<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
+						<legend class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_legend' ) ); ?>">
 							<h2 class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_heading pmpro_font-large' ) ); ?>"><?php esc_html_e( 'Select a Payment Plan', 'pmpro-payment-plans' ); ?></h2>
 						</legend>
-						<div id="pmpropp_payment_plans" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_checkout-fields pmpro_form_fields' ) ); ?>">
-							<!-- JavaScript populates plan options here -->
+						<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fields' ) ); ?>">
+							<div id="pmpropp_payment_plans" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field-radio-items', 'pmpropp_payment_plans' ) ); ?>">
+								<!-- JavaScript populates plan options here -->
+							</div>
 						</div>
-		</div>	
+					</div>
 				</div>
 			</fieldset>
 			<?php
@@ -539,7 +544,7 @@ function pmpropp_payment_plan_body( $morder ) {
 	if ( ! empty( $plan->name ) ) {
 		echo '<td>' . esc_html( $plan->name ) . '</td>';
 	} else {
-		echo '<td>' . __( '&#8212;', 'paid-memberships-pro' ) . '</td>';
+		echo '<td>' . esc_html__( '&#8212;', 'paid-memberships-pro' ) . '</td>';
 	}
 
 }

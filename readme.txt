@@ -1,16 +1,19 @@
 === Paid Memberships Pro - Payment Plans ===
 Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, payment plan, payments
-Requires at least: 5.0
-Tested up to: 6.3
-Stable tag: 0.3
+Requires at least: 5.4
+Tested up to: 6.6
+Stable tag: 0.4
+License: GPLv3
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-This allows you to offer more than one pricing structure on the same membership level. 
+Offer different recurring payment structures on the same level of membership. Users can select a payment plan during the checkout process.
 
 == Description ==
 
-This Add On allows you to offer more than one pricing structure on the same membership level. 
-Multiple pricing structures, such as a monthly and annual/yearly option, helps your membership appeal to a broader range of prospective buyers.
+This Add On allows you to offer different recurring payment structures on the same level of membership, such as monthly, quarterly, or annual pricing.
+
+Users can select a payment plan during the checkout process.
 
 == Installation ==
 
@@ -33,6 +36,12 @@ Multiple pricing structures, such as a monthly and annual/yearly option, helps y
 View full documentation at: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
 
 == Changelog ==
+
+= 0.4 - TBD =
+* SECURITY: Added extra sanitization to output strings. #71 (@andrewlimaza)
+* ENHANCEMENT: Updated the frontend UI for compatibility with PMPro v3.1. #71 (@andrewlimaza, @kimcoleman)
+* REFACTOR: Formatting applied to frontend.js #71 (@andrewlimaza)
+
 = 0.3 - 2023-08-24 =
 * ENHANCEMENT: General improvements to accessibility for screen readers. (@kimcoleman)
 * ENHANCEMENT: Show the payment plan name on the account and billing page instead of just the level's name. (@JarrydLong)

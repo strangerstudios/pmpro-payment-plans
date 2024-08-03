@@ -4,7 +4,7 @@ jQuery(document).ready(function () {
 
 		jQuery.each(payment_plans.plans, function (key, val) {
 
-			jQuery("#pmpropp_payment_plans").append("<div class='pmpro_checkout-field'>" + val.html + "</div>");
+			jQuery("#pmpropp_payment_plans").append(val.html);
 
 			//Make sure the level cost text applies to the selected level
 			if (val.default == "yes") {
