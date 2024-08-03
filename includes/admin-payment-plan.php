@@ -48,13 +48,13 @@
 				<td>
 					<?php
 					if ( pmpro_getCurrencyPosition() == 'left' ) {
-						echo $pmpro_currency_symbol;
+						echo wp_kses_post( $pmpro_currency_symbol );
 					}
 					?>
 					<input name="pmpropp_billing_amount[]" type="text" value="!!billing_amount!!"  class="" />
 					<?php
 					if ( pmpro_getCurrencyPosition() == 'right' ) {
-						echo $pmpro_currency_symbol;
+						echo wp_kses_post( $pmpro_currency_symbol );
 					}
 					?>
 					<?php esc_html_e( 'per', 'pmpro-payment-plans' ); ?>
@@ -68,7 +68,7 @@
 							esc_html__( 'Year(s)', 'pmpro-payment-plans' )  => 'Year',
 						);
 						foreach ( $cycles as $name => $value ) {
-							echo "<option value='$value'>$name</option>";
+							echo '<option value="' . esc_attr( $value ) . '">' . esc_html( $name ) . '</option>';
 						}
 						?>
 					</select>
@@ -112,7 +112,7 @@
 			<tr class="pmpropp_plan_recurring" style="display:none;">
 				<th scope="row" valign="top"><label><?php esc_html_e( 'Custom Trial', 'pmpro-payment-plans' ); ?>:</label></th>
 				<td>
-					<input type="hidden" name="pmpropp_custom_trial[]" value="0"><input id="pmpropp_custom_trial_!!plan_id!!" class="pmpropp_custom_trial" name="pmpropp_custom_trial_checkbox[]" type="checkbox" value="yes" onclick="jQuery('.pmpropp_trial_info').toggle();"/> <label for="pmpropp_custom_trial_!!plan_id!!"><?php _e( 'Check to add a custom trial period.', 'pmpro-payment-plans' ); ?></label>
+					<input type="hidden" name="pmpropp_custom_trial[]" value="0"><input id="pmpropp_custom_trial_!!plan_id!!" class="pmpropp_custom_trial" name="pmpropp_custom_trial_checkbox[]" type="checkbox" value="yes" onclick="jQuery('.pmpropp_trial_info').toggle();"/> <label for="pmpropp_custom_trial_!!plan_id!!"><?php esc_html_e( 'Check to add a custom trial period.', 'pmpro-payment-plans' ); ?></label>
 					<?php if ( $gateway == 'twocheckout' ) { ?>
 						<p class="description"><strong 
 						<?php
@@ -127,13 +127,13 @@
 				<td>
 					<?php
 					if ( pmpro_getCurrencyPosition() == 'left' ) {
-						echo $pmpro_currency_symbol;
+						echo wp_kses_post( $pmpro_currency_symbol );
 					}
 					?>
 					<input name="pmpropp_trial_amount[]" type="text" value="!!trial_amount!!" class="" />
 					<?php
 					if ( pmpro_getCurrencyPosition() == 'right' ) {
-						echo $pmpro_currency_symbol;
+						echo wp_kses_post( $pmpro_currency_symbol );
 					}
 					?>
 					<?php esc_html_e( 'for the first', 'pmpro-payment-plans' ); ?>
@@ -144,13 +144,13 @@
 						<?php
 						if ( ! empty( $pmpro_stripe_error ) ) {
 							?>
-							class="pmpro_red"<?php } ?>><?php _e( 'Stripe integration currently does not support trial amounts greater than $0.', 'pmpro-payment-plans' ); ?></strong></p>
+							class="pmpro_red"<?php } ?>><?php esc_html_e( 'Stripe integration currently does not support trial amounts greater than $0.', 'pmpro-payment-plans' ); ?></strong></p>
 					<?php } elseif ( $gateway == 'braintree' ) { ?>
 						<p class="description"><strong 
 						<?php
 						if ( ! empty( $pmpro_braintree_error ) ) {
 							?>
-							class="pmpro_red"<?php } ?>><?php _e( 'Braintree integration currently does not support trial amounts greater than $0.', 'pmpro-payment-plans' ); ?></strong></p>
+							class="pmpro_red"<?php } ?>><?php esc_html_e( 'Braintree integration currently does not support trial amounts greater than $0.', 'pmpro-payment-plans' ); ?></strong></p>
 					<?php } elseif ( $gateway == 'payflowpro' ) { ?>
 						<p class="description"><strong 
 						<?php
@@ -177,7 +177,12 @@
 					<p class="description"><?php esc_html_e( 'Set the duration of membership access. Note that the any future payments (recurring subscription, if any) will be cancelled when the membership expires.', 'pmpro-payment-plans' ); ?></p>
 					
 					<div id="pmpropp_plan_expiration_warning" style="display: none;" class="notice error inline">
-						<p><?php echo sprintf( __( 'WARNING: This level is set with both a recurring billing amount and an expiration date. You only need to set one of these unless you really want this membership to expire after a certain number of payments. For more information, %s.', 'pmpro-payment-plans') , '<a target="_blank" href="https://www.paidmembershipspro.com/important-notes-on-recurring-billing-and-expiration-dates-for-membership-levels/?utm_source=plugin&amp;utm_medium=pmpro-membershiplevels&amp;utm_campaign=blog&amp;utm_content=important-notes-on-recurring-billing-and-expiration-dates-for-membership-levels">' . __( 'see our post here', 'pmpro-payment-plans' ) . '</a>'); ?></p>
+						<p>
+							<?php
+								/* translators: %s - link to blog post */
+								echo sprintf( esc_html__( 'WARNING: This level is set with both a recurring billing amount and an expiration date. You only need to set one of these unless you really want this membership to expire after a certain number of payments. For more information, %s.', 'pmpro-payment-plans') , '<a target="_blank" href="https://www.paidmembershipspro.com/membership-level-recurring-billing-and-expiration-date/?utm_source=plugin&amp;utm_medium=pmpro-membershiplevels&amp;utm_campaign=blog&amp;utm_content=important-notes-on-recurring-billing-and-expiration-dates-for-membership-levels">' . esc_html__( 'see our post here', 'pmpro-payment-plans' ) . '</a>');
+							?>
+						</p>
 					</div>					
 				</td>
 			</tr>
