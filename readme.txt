@@ -37,7 +37,7 @@ View full documentation at: https://www.paidmembershipspro.com/add-ons/pmpro-pay
 
 == Changelog ==
 
-= 0.4 - TBD =
+= 0.4 - 2024-09-24 =
 * SECURITY: Added extra sanitization to output strings. #71 (@andrewlimaza)
 * ENHANCEMENT: Updated the frontend UI for compatibility with PMPro v3.1. #71 (@andrewlimaza, @kimcoleman)
 * REFACTOR: Formatting applied to frontend.js #71 (@andrewlimaza)
