@@ -615,7 +615,7 @@ function pmpropp_render_plans( $template, $is_admin = false ) {
  */
 function pmpropp_replace_template_values( $template, $values ) {
 
-	$template = str_replace( '!!plan_id!!', ( ! empty( $values->id ) ) ? (int) $values->id : '', $template );
+	$template = str_replace( '!!plan_id!!', ( ! empty( $values->id ) ) ? esc_attr( $values->id ) : '', $template );
 
 	$template = str_replace( '!!plan_name!!', ( ! empty( $values->name ) ) ? esc_html( $values->name ) : '', $template );
 	$template = str_replace( '!!display_order!!', ( ! empty( $values->display_order ) ) ? esc_html( $values->display_order ) : '', $template );
