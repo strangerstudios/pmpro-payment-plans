@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, payment plan, payments
 Requires at least: 5.4
 Tested up to: 6.6
-Stable tag: 0.4
+Stable tag: 0.4.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -36,6 +36,8 @@ Users can select a payment plan during the checkout process.
 View full documentation at: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
 
 == Changelog ==
+= 0.4.1 - 2024-10-24 =
+* BUG FIX: Fixed an issue that may have caused payment plans to not be saved correctly. #74 (@dparker1005)
 
 = 0.4 - 2024-09-24 =
 * SECURITY: Added extra sanitization to output strings. #71 (@andrewlimaza)
