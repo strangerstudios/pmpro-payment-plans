@@ -689,25 +689,6 @@ function pmpropp_levels_for_user_with_plans( $levels, $user_id ) {
 	return $levels;
 }
 add_filter( 'pmpro_get_membership_levels_for_user', 'pmpropp_levels_for_user_with_plans', 99, 2 );
-/**
- * Store the checkout variables to the order meta before sending the user
- * to PayPal Express
- *
- * @param object $morder The member order
- * 
- * @since 0.3
- */
-function pmpropp_paypal_express_before_send_to_ppe( $morder ) {
-
-	// Don't run this code when no plan is chosen.
-	if ( empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
-		return;
-	}
-
-	update_pmpro_membership_order_meta( $morder->id, 'checkout_vars', $_REQUEST );
-
-}
-add_action( 'pmpro_before_commit_express_checkout', 'pmpropp_paypal_express_before_send_to_ppe', 1, 1 );
 
 /**
  * Store the checkout variables to the order meta before sending the user
@@ -748,13 +729,6 @@ function pmpropp_merge_checkout_after_checkout( $user_id, $morder ) {
 
 	if ( ! empty( $checkout_vars ) ) {
 		$_REQUEST = array_merge( array_map( 'sanitize_text_field', $_REQUEST ), $checkout_vars );	
-	}
-
-	// Let's save the order amount for PayPal Express as it overrides this in the gateways class.
-	if ( $morder->gateway == 'paypalexpress' ) {
-		$plan = pmpropp_get_plan( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
-		$morder->subtotal = $plan->initial_payment;; 
-		$morder->saveOrder();
 	}
 
 	// Delete the checkout var order meta as we no longer need it.
