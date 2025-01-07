@@ -166,9 +166,12 @@ function pmpropp_membership_level_save() {
 	if ( isset( $_REQUEST['saveid'] ) && ! empty( $_REQUEST['page'] ) && 'pmpro-membershiplevels' === $_REQUEST['page'] ) {
 
 		$payment_plans = pmpropp_pair_plan_fields( $_REQUEST );
+		//Bail if we don't have any payment plans to save. Saving an empty array would  cause parse issues later.
+		if ( empty( $payment_plans ) ) {
+			return;
+		}
 
 		update_pmpro_membership_level_meta( $_REQUEST['saveid'], 'payment_plan', $payment_plans );
-
 	}
 
 }
