@@ -426,29 +426,41 @@ function pmpropp_render_payment_plans_checkout() {
 		}
 	}
 
-	if ( ! empty( $level->id ) ) {
+	//Bail if empty level.
+	if ( empty( $level->id ) ) {
+		return;
+	}
 
-		$plans = pmpropp_return_payment_plans( intval( $level->id ) );
 
-		if ( ! empty( $plans ) ) {
-			?>
-			<fieldset id="pmpropp_select_payment_plan" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fieldset', 'pmpropp_select_payment_plan' ) ); ?>">
-				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card' ) ); ?>">
-					<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
-						<legend class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_legend' ) ); ?>">
-							<h2 class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_heading pmpro_font-large' ) ); ?>"><?php esc_html_e( 'Select a Payment Plan', 'pmpro-payment-plans' ); ?></h2>
-						</legend>
-						<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fields' ) ); ?>">
-							<div id="pmpropp_payment_plans" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field-radio-items', 'pmpropp_payment_plans' ) ); ?>">
-								<!-- JavaScript populates plan options here -->
-							</div>
-						</div>
+	$plans = pmpropp_return_payment_plans( intval( $level->id ) );
+
+	//Bail if no plans.
+	if ( empty( $plans ) ) {
+		return;
+	}
+
+	//Bail if discount code is being used.
+	if ( isset( $level->code_id ) ) {
+		return;
+	}
+
+	?>
+	<fieldset id="pmpropp_select_payment_plan" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fieldset', 'pmpropp_select_payment_plan' ) ); ?>">
+		<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card' ) ); ?>">
+			<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_card_content' ) ); ?>">
+				<legend class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_legend' ) ); ?>">
+					<h2 class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_heading pmpro_font-large' ) ); ?>"><?php esc_html_e( 'Select a Payment Plan', 'pmpro-payment-plans' ); ?></h2>
+				</legend>
+				<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_fields' ) ); ?>">
+					<div id="pmpropp_payment_plans" class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_form_field-radio-items', 'pmpropp_payment_plans' ) ); ?>">
+						<!-- JavaScript populates plan options here -->
 					</div>
 				</div>
-			</fieldset>
-			<?php
-		}
-	}
+			</div>
+		</div>
+	</fieldset>
+	<?php
+
 }
 add_action( 'pmpro_checkout_boxes', 'pmpropp_render_payment_plans_checkout', 10 );
 
@@ -736,7 +748,26 @@ function pmpropp_merge_checkout_after_checkout( $user_id, $morder ) {
 }
 add_action( 'pmpro_after_checkout', 'pmpropp_merge_checkout_after_checkout', 1, 2 );
 
-
+/**
+ *  Remove payment plans when a discount code is applied.
+ *
+ * @param string $discount_code The discount code.
+ * @param int    $discount_code_id The discount code ID.
+ * @param int    $level_id The level ID.
+ * @param object $code_level The level object.
+ * @return void
+ * @since TBD
+ *
+ */
+function pmpropp_remove_payment_plans_when_discount_code_applied( $discount_code, $discount_code_id, $level_id,
+	$code_level ) {
+	// If a valid discount code is applied, remove payment plans.
+	if ( ! empty( $code_level ) ) {
+		// Remove the payment plans from the checkout page.
+		echo "jQuery( '#pmpropp_select_payment_plan' ).remove();";
+	}
+}
+add_action( 'pmpro_applydiscountcode_return_js', 'pmpropp_remove_payment_plans_when_discount_code_applied', 10, 4 );
 
 /**
  * Add payment plans to site health info
@@ -758,5 +789,5 @@ function pmpropp_add_payment_plans_to_site_health( $membership_level ) {
 	$membership_level->payment_plans = $payment_plans;
 	return $membership_level;
 }
-
 add_filter( 'pmpro_site_health_info_membership_level', 'pmpropp_add_payment_plans_to_site_health', 1, 1 );
+
