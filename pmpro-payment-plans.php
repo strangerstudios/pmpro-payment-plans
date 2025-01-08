@@ -773,7 +773,7 @@ add_action( 'pmpro_after_checkout', 'pmpropp_merge_checkout_after_checkout', 1, 
  * @since TBD
  *
  */
-function pmpropp_add_pp_to_site_health( $membership_level ) {
+function pmpropp_add_payment_plans_to_site_health( $membership_level ) {
 	//unset payment plan from level meta
 	unset( $membership_level->meta[ 'payment_plan' ] );
 
@@ -786,4 +786,4 @@ function pmpropp_add_pp_to_site_health( $membership_level ) {
 	return $membership_level;
 }
 
-add_filter( 'pmpro_site_health_info_membership_level', 'pmpropp_add_pp_to_site_health', 1, 1 );
+add_filter( 'pmpro_site_health_info_membership_level', 'pmpropp_add_payment_plans_to_site_health', 1, 1 );
