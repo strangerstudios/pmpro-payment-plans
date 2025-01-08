@@ -161,18 +161,17 @@ add_action( 'pmpro_membership_level_after_trial_settings', 'pmpropp_membership_l
  *
  * @since 0.1
  */
-function pmpropp_membership_level_save() {
+function pmpropp_membership_level_save( $level_id ) {
 
-	if ( isset( $_REQUEST['saveid'] ) && ! empty( $_REQUEST['page'] ) && 'pmpro-membershiplevels' === $_REQUEST['page'] ) {
+	$payment_plans = pmpropp_pair_plan_fields( $_REQUEST );
 
-		$payment_plans = pmpropp_pair_plan_fields( $_REQUEST );
-
-		update_pmpro_membership_level_meta( $_REQUEST['saveid'], 'payment_plan', $payment_plans );
-
+	if ( empty( $payment_plans ) ) {
+		return;
 	}
 
+	update_pmpro_membership_level_meta( $level_id, 'payment_plan', $payment_plans );
 }
-add_action( 'admin_init', 'pmpropp_membership_level_save' );
+add_action( 'pmpro_save_membership_level', 'pmpropp_membership_level_save' );
 
 /**
  * Helper function to convert the settings into Membership Level Objects.
@@ -701,25 +700,6 @@ function pmpropp_levels_for_user_with_plans( $levels, $user_id ) {
 	return $levels;
 }
 add_filter( 'pmpro_get_membership_levels_for_user', 'pmpropp_levels_for_user_with_plans', 99, 2 );
-/**
- * Store the checkout variables to the order meta before sending the user
- * to PayPal Express
- *
- * @param object $morder The member order
- * 
- * @since 0.3
- */
-function pmpropp_paypal_express_before_send_to_ppe( $morder ) {
-
-	// Don't run this code when no plan is chosen.
-	if ( empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
-		return;
-	}
-
-	update_pmpro_membership_order_meta( $morder->id, 'checkout_vars', $_REQUEST );
-
-}
-add_action( 'pmpro_before_commit_express_checkout', 'pmpropp_paypal_express_before_send_to_ppe', 1, 1 );
 
 /**
  * Store the checkout variables to the order meta before sending the user
@@ -762,13 +742,6 @@ function pmpropp_merge_checkout_after_checkout( $user_id, $morder ) {
 		$_REQUEST = array_merge( array_map( 'sanitize_text_field', $_REQUEST ), $checkout_vars );	
 	}
 
-	// Let's save the order amount for PayPal Express as it overrides this in the gateways class.
-	if ( $morder->gateway == 'paypalexpress' ) {
-		$plan = pmpropp_get_plan( intval( $_REQUEST['level'] ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
-		$morder->subtotal = $plan->initial_payment;; 
-		$morder->saveOrder();
-	}
-
 	// Delete the checkout var order meta as we no longer need it.
 	delete_pmpro_membership_order_meta( $morder->id, 'checkout_vars' );
 	
@@ -795,3 +768,26 @@ function pmpropp_remove_payment_plans_when_discount_code_applied( $discount_code
 	}
 }
 add_action( 'pmpro_applydiscountcode_return_js', 'pmpropp_remove_payment_plans_when_discount_code_applied', 10, 4 );
+
+/**
+ * Add payment plans to site health info
+ *
+ * @param object $membership_level The membership level object.
+ * @return object $membership_level The membership level object with payment plans added if they exist.
+ * @since TBD
+ *
+ */
+function pmpropp_add_payment_plans_to_site_health( $membership_level ) {
+	//unset payment plan from level meta
+	unset( $membership_level->meta[ 'payment_plan' ] );
+
+	$payment_plans =  pmpropp_return_payment_plans( $membership_level->id );
+	// If no payment plans, return the level as is.
+	if ( empty( $payment_plans ) ) {
+		return $membership_level;
+	}
+	$membership_level->payment_plans = $payment_plans;
+	return $membership_level;
+}
+add_filter( 'pmpro_site_health_info_membership_level', 'pmpropp_add_payment_plans_to_site_health', 1, 1 );
+
