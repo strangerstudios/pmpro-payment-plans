@@ -736,3 +736,28 @@ function pmpropp_merge_checkout_after_checkout( $user_id, $morder ) {
 	
 }
 add_action( 'pmpro_after_checkout', 'pmpropp_merge_checkout_after_checkout', 1, 2 );
+
+
+
+/**
+ * Add payment plans to site health info
+ *
+ * @param object $membership_level The membership level object.
+ * @return object $membership_level The membership level object with payment plans added if they exist.
+ * @since TBD
+ *
+ */
+function pmpropp_add_payment_plans_to_site_health( $membership_level ) {
+	//unset payment plan from level meta
+	unset( $membership_level->meta[ 'payment_plan' ] );
+
+	$payment_plans =  pmpropp_return_payment_plans( $membership_level->id );
+	// If no payment plans, return the level as is.
+	if ( empty( $payment_plans ) ) {
+		return $membership_level;
+	}
+	$membership_level->payment_plans = $payment_plans;
+	return $membership_level;
+}
+
+add_filter( 'pmpro_site_health_info_membership_level', 'pmpropp_add_payment_plans_to_site_health', 1, 1 );
