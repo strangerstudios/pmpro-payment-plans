@@ -161,18 +161,17 @@ add_action( 'pmpro_membership_level_after_trial_settings', 'pmpropp_membership_l
  *
  * @since 0.1
  */
-function pmpropp_membership_level_save() {
+function pmpropp_membership_level_save( $level_id ) {
 
-	if ( isset( $_REQUEST['saveid'] ) && ! empty( $_REQUEST['page'] ) && 'pmpro-membershiplevels' === $_REQUEST['page'] ) {
+	$payment_plans = pmpropp_pair_plan_fields( $_REQUEST );
 
-		$payment_plans = pmpropp_pair_plan_fields( $_REQUEST );
-
-		update_pmpro_membership_level_meta( $_REQUEST['saveid'], 'payment_plan', $payment_plans );
-
+	if ( empty( $payment_plans ) ) {
+		return;
 	}
 
+	update_pmpro_membership_level_meta( $level_id, 'payment_plan', $payment_plans );
 }
-add_action( 'admin_init', 'pmpropp_membership_level_save' );
+add_action( 'pmpro_save_membership_level', 'pmpropp_membership_level_save' );
 
 /**
  * Helper function to convert the settings into Membership Level Objects.
