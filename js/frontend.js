@@ -20,7 +20,12 @@ jQuery(document).ready(function ($) {
 
 	// If there is a payment plan in the URL, select it and ignore the default
 	if ( payment_plan_query) {
-		appendPlanAndPriceByNumberId( payment_plan_query );
+		// Check if value is a number
+		if ( /^\d+$/.test( payment_plan_query ) ) {
+			appendPlanAndPriceByNumberId( payment_plan_query );
+		} else {
+			appendPlanAndPriceByPlanId( payment_plan_query );
+		}
 	// Apply the default plan if there is no plan in the URL
 	} else if ( default_plan ) {
 		appendPlanAndPrice( default_plan );
