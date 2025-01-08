@@ -301,7 +301,7 @@ function pmpropp_return_payment_plans( $level_id, $is_admin = false ) {
 
 	$payment_plans = get_pmpro_membership_level_meta( $level_id, 'payment_plan', true );
 
-    if ( empty( $payment_plans ) || ! is_array( $payment_plans ) ) {
+    if ( empty( $payment_plans ) ) {
         return array();
     }
 
