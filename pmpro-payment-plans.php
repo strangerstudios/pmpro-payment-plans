@@ -509,7 +509,7 @@ function pmpropp_override_checkout_level( $level ) {
 	return $level;
 
 }
-add_filter( 'pmpro_checkout_level', 'pmpropp_override_checkout_level' );
+add_filter( 'pmpro_checkout_level', 'pmpropp_override_checkout_level', 5 );
 
 /**
  * After checkout - Add note and meta of plan
@@ -568,21 +568,34 @@ add_action( 'pmpro_orders_extra_cols_body', 'pmpropp_payment_plan_body', 10, 1 )
  */
 function pmpropp_request_price_change() {
 
-	if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'pmpropp_request_price_change' ) {
-
-		// Let's bail if these values are empty. We can assume the plan is available if the pmpro_level is available.
-		if ( empty( $_REQUEST['pmpro_level'] ) || empty( $_REQUEST['plan'] ) ) {
-			wp_die();
-		}
-
-		$plan = pmpropp_get_plan( intval( $_REQUEST['pmpro_level'] ), sanitize_text_field( $_REQUEST['plan'] ) );
-
-		if( !empty( $plan ) ) {
-			echo trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, array( '"', "'", "\n", "\r" ) ) . ' '. pmpro_getLevelExpiration( $plan ) ) );
-		}
-
+	// Bail if it's  not an ajax  price change request.
+	if ( empty( $_REQUEST['action'] ) || $_REQUEST['action'] != 'pmpropp_request_price_change' ) {
 		wp_die();
 	}
+
+	// Let's bail if these values are empty. We can assume the plan is available if the pmpro_level is available.
+	if ( empty( $_REQUEST['pmpro_level'] ) || empty( $_REQUEST['plan'] ) ) {
+		wp_die();
+	}
+
+	$level_id = intval( $_REQUEST['pmpro_level'] );
+	$plan = pmpropp_get_plan( $level_id, sanitize_text_field( $_REQUEST['plan'] ) );
+
+	//Bail if the plan is empty
+	if ( empty( $plan ) ) {
+		wp_die();
+	}
+
+	//If prorate is set, we need to calculate the prorated amount
+	if( function_exists( 'pmprorate_pmpro_checkout_level') ) {
+		$plan->id = $level_id;
+		pmprorate_pmpro_checkout_level( $plan );
+	}
+
+	//Return the changed level cost text and expiration
+	echo trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, array( '"', "'", "\n", "\r" ) ) . ' '. pmpro_getLevelExpiration( $plan ) ) );
+
+	wp_die();
 
 }
 add_action( 'wp_ajax_pmpropp_request_price_change', 'pmpropp_request_price_change' );
