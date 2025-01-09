@@ -575,18 +575,6 @@ function pmpropp_request_price_change() {
 		wp_die();
 	}
 
-	//If group accounts is enabled, we need to determine if its a parent or child account and determine the price cost
-	if ( function_exists('pmprogroupacct_pmpro_checkout_level_parent') ) {
-		$settings = pmprogroupacct_get_settings_for_level( $level_id );
-
-		// If there are no settings, then this is not a group parent level. Bail.
-		if ( ! empty( $settings ) ) {
-			$plan->id = $level_id;
-			//Let's add the group account seats price to the plan
-			pmprogroupacct_pmpro_checkout_level_parent( $plan );
-		}
-	}
-
 	//If prorate is set, we need to calculate the prorated amount
 	if( function_exists( 'pmprorate_pmpro_checkout_level') ) {
 		$plan->id = $level_id;
