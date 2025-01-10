@@ -3,14 +3,14 @@
  * Plugin Name: Paid Memberships Pro - Payment Plans Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
  * Description: Integrates with Paid Memberships Pro to provide payment plans for membership levels.
- * Version: 0.4.1
+ * Version: 0.5
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com
  * Text Domain: pmpro-payment-plans
  * Domain Path: /languages
  */
 
-define( 'PMPROPP_VERSION', '0.4.1' );
+define( 'PMPROPP_VERSION', '0.5' );
 
 /**
  * Includes the cleanup script on uninstall.
@@ -769,7 +769,7 @@ add_action( 'pmpro_after_checkout', 'pmpropp_merge_checkout_after_checkout', 1, 
  * @param int    $level_id The level ID.
  * @param object $code_level The level object.
  * @return void
- * @since TBD
+ * @since 0.5
  *
  */
 function pmpropp_remove_payment_plans_when_discount_code_applied( $discount_code, $discount_code_id, $level_id,
@@ -787,7 +787,7 @@ add_action( 'pmpro_applydiscountcode_return_js', 'pmpropp_remove_payment_plans_w
  *
  * @param object $membership_level The membership level object.
  * @return object $membership_level The membership level object with payment plans added if they exist.
- * @since TBD
+ * @since 0.5
  *
  */
 function pmpropp_add_payment_plans_to_site_health( $membership_level ) {

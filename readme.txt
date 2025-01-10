@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, payment plan, payments
 Requires at least: 5.4
-Tested up to: 6.6
-Stable tag: 0.4.1
+Tested up to: 6.7
+Stable tag: 0.5
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -36,6 +36,13 @@ Users can select a payment plan during the checkout process.
 View full documentation at: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
 
 == Changelog ==
+= 0.5 - 2025-01-10 =
+* ENHANCEMENT: Added better support for Group Accounts Add On and Proration Add On. #79 (@MaximilianoRicoTabo)
+* ENHANCEMENT: Added logic to allow direct linking to payment plans via query parameter (e.g. `&pmpropp_chosen_plan=2` or `&pmpropp_chosen_plan=L-1-P-4`). #76 (@MaximilianoRicoTabo)
+* ENHANCEMENT: Added logic to add Payment Plans information to Site Health. #67 (@MaximilianoRicoTabo)
+* BUG FIX: Fixed an issue where discount codes were not being applied correctly for levels with payment plans. #77 (@MaximilianoRicoTabo)
+* BUG FIX: Fixed an issue when in some cases the payment plans would save empty values. #80 (@MaximilianoRicoTabo)
+
 = 0.4.1 - 2024-10-24 =
 * BUG FIX: Fixed an issue that may have caused payment plans to not be saved correctly. #74 (@dparker1005)
 

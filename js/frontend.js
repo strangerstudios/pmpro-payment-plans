@@ -49,7 +49,7 @@ jQuery(document).ready(function ($) {
  * Append the plan and price by the numberId (2)
  *
  * @param {number} numberId Just the int. The plan id is constructed as 'L-' + payment_plans.parent_level + '-P-' + numberId
- * @since TBD
+ * @since 0.5
  * @return {void}
  */
 const appendPlanAndPriceByNumberId = ( numberId ) => {
@@ -61,7 +61,7 @@ const appendPlanAndPriceByNumberId = ( numberId ) => {
  * Append the plan and price by the planId (L-2-P-0)
  *
  * @param {string} planId The plan id is constructed as 'L-' + payment_plans.parent_level + '-P-' + planId
- * @since TBD
+ * @since 0.5
  * @return {void}
  */
 const appendPlanAndPriceByPlanId = ( planId ) => {
@@ -74,7 +74,7 @@ const appendPlanAndPriceByPlanId = ( planId ) => {
  * Append the plan and price by the plan object
  *
  * @param {Object} plan  The plan object
- * @since TBD
+ * @since 0.5
  * @return {void}
  */
 const appendPlanAndPrice = ( plan ) => {
