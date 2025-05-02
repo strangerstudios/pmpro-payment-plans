@@ -35,4 +35,4 @@ Here are some ways for **non-developers to contribute** to Plugin Name:
 
 1. Translate Plugin Name into your own [language](https://www.paidmembershipspro.com/paid-memberships-pro-in-your-language/).
 2. [Purchase a paid membership](https://paidmembershipspro.com/pricing) to help fund ongoing development and bug fixes.
-3. Leave an honest review for [Plugin Name](https://wordpress.org/support/plugin/pmpro-payment-plans/reviews/#new-post).
+3. Leave an honest review for [Payment Plans](https://www.paidmembershipspro.com/submit-testimonial/).
