@@ -804,3 +804,17 @@ function pmpropp_add_payment_plans_to_site_health( $membership_level ) {
 }
 add_filter( 'pmpro_site_health_info_membership_level', 'pmpropp_add_payment_plans_to_site_health', 1, 1 );
 
+/**
+ * Function to add links to the plugin row meta
+ */
+function pmpropp_plugin_row_meta( $links, $file ) {
+	if ( strpos( $file, 'pmpro-payment-plans.php' ) !== false ) {
+		$new_links = array(
+			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/' ) . '" title="' . esc_attr( __( 'View Documentation', 'pmpro-payment-plans' ) ) . '">' . __( 'Docs', 'pmpro-payment-plans' ) . '</a>',
+			'<a href="' . esc_url( 'https://www.paidmembershipspro.com/support/' ) . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro-payment-plans' ) ) . '">' . __( 'Support', 'pmpro-payment-plans' ) . '</a>',
+		);
+		$links     = array_merge( $links, $new_links );
+	}
+	return $links;
+}
+add_filter( 'plugin_row_meta', 'pmpropp_plugin_row_meta', 10, 2 );
