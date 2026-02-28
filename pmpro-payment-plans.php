@@ -142,12 +142,12 @@ function pmpropp_membership_level_after_other_settings() {
 	<h3><?php esc_html_e( 'Payment Plans', 'pmpro-payment-plans' ); ?></h3>
 	<?php if( $_REQUEST['edit'] !== "-1" ) { ?>	   
 	   	<p>
-		<?php esc_html_e( 'Create multiple payment plans for this level, giving your members multiple options to pay for a membership.', 'pmpro-payment-plans' ); ?>
-		<?php
-		$payment_plans_link = '<a title="' . esc_attr__( 'Payment Plans Add On Documentation', 'pmpro-payment-plans' ) . '" target="_blank" rel="nofollow noopener" href="https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/?utm_source=plugin&utm_medium=pmpro-payment-plans&utm_campaign=add-ons">' . esc_html__( 'Payment Plans', 'pmpro-payment-plans' ) . '</a>';
-		printf( esc_html__( 'Learn more about %s.', 'pmpro-payment-plans' ), $payment_plans_link ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		?>
-	</p>	
+			<?php esc_html_e( 'Create multiple payment plans for this level, giving your members multiple options to pay for a membership.', 'pmpro-payment-plans' ); ?>
+			<?php
+			$payment_plans_link = '<a title="' . esc_attr__( 'Payment Plans Add On Documentation', 'pmpro-payment-plans' ) . '" target="_blank" rel="nofollow noopener" href="https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/?utm_source=plugin&utm_medium=pmpro-payment-plans&utm_campaign=add-ons">' . esc_html__( 'Payment Plans', 'pmpro-payment-plans' ) . '</a>';
+			printf( esc_html__( 'Learn more about %s.', 'pmpro-payment-plans' ), $payment_plans_link ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			?>
+		</p>	
 		<div class='pmpro_payment_plan_level_container'>
 			<div class='pmpro_payment_plan_level_inner'>
 				<div id="accordion"></div> 
