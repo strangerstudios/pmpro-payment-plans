@@ -593,7 +593,7 @@ function pmpropp_request_price_change() {
 	}
 
 	//Return the changed level cost text and expiration
-	echo trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, array( '"', "'", "\n", "\r" ) ) . ' '. pmpro_getLevelExpiration( $plan ) ) );
+	echo '<p>' . trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, array( '"', "'", "\n", "\r" ) ) . ' '. pmpro_getLevelExpiration( $plan ) ) ) . '</p>';
 
 	wp_die();
 

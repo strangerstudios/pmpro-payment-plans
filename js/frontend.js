@@ -94,7 +94,7 @@ const appendPlanAndPrice = ( plan ) => {
 	jQuery.post( payment_plans.ajaxurl, data, ( response ) => {
 		if ( response !== '' ) {
 			localStorage.setItem( 'pmpropp_chosen_plan', plan.id );
-			jQuery( '#pmpro_level_cost' ).html( response );
+			jQuery( '.pmpro_level_cost_text' ).html( response );
 		}
 	});
 };
