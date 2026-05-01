@@ -592,8 +592,25 @@ function pmpropp_request_price_change() {
 		pmprorate_pmpro_checkout_level( $plan );
 	}
 
-	//Return the changed level cost text and expiration
-	echo trim( pmpro_no_quotes( pmpro_getLevelCost( $plan, array( '"', "'", "\n", "\r" ) ) . ' '. pmpro_getLevelExpiration( $plan ) ) );
+	// Return the changed level cost text and expiration, structured to match core's checkout markup.
+	$level_cost_text       = pmpro_no_quotes( pmpro_getLevelCost( $plan, array( '"', "'", "\n", "\r" ) ) );
+	$level_expiration_text = pmpro_no_quotes( pmpro_getLevelExpiration( $plan ) );
+
+	if ( ! empty( $level_cost_text ) ) {
+		?>
+		<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_level_cost_text' ) ); ?>">
+			<?php echo wp_kses_post( wpautop( $level_cost_text ) ); ?>
+		</div>
+		<?php
+	}
+
+	if ( ! empty( $level_expiration_text ) ) {
+		?>
+		<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_level_expiration_text' ) ); ?>">
+			<?php echo wp_kses_post( wpautop( $level_expiration_text ) ); ?>
+		</div>
+		<?php
+	}
 
 	wp_die();
 
