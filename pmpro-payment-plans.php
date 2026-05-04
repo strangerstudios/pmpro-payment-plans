@@ -16,7 +16,18 @@ define( 'PMPROPP_VERSION', '0.5' );
  * Includes the cleanup script on uninstall.
  */
 include plugin_dir_path( __FILE__ ) . 'includes/uninstall.php';
-function pmpropp_activate(){
+
+/**
+ * Admin display: Payment Plan columns and sections on PMPro admin screens.
+ */
+if ( is_admin() ) {
+	include plugin_dir_path( __FILE__ ) . 'includes/admin.php';
+}
+
+/**
+ * Activation hook to register the uninstall hook.
+ */
+function pmpropp_activate() {
     register_uninstall_hook( __FILE__, 'pmpropp_uninstall' );
 }
 register_activation_hook( __FILE__, 'pmpropp_activate' );
@@ -530,6 +541,12 @@ function pmpropp_after_checkout( $user_id, $morder ) {
 
 		if ( ! empty( $plan ) ) {
 			update_pmpro_membership_order_meta( intval( $morder->id ), 'payment_plan', $plan );
+
+			// Also store on the subscription so reports can group by plan across recurring orders.
+			$subscription = is_callable( array( $morder, 'get_subscription' ) ) ? $morder->get_subscription() : null;
+			if ( ! empty( $subscription ) ) {
+				update_pmpro_subscription_meta( $subscription->get_id(), 'payment_plan', $plan );
+			}
 		}
 
 	}
@@ -537,35 +554,47 @@ function pmpropp_after_checkout( $user_id, $morder ) {
 }
 add_action( 'pmpro_after_checkout', 'pmpropp_after_checkout', 10, 2 );
 
-/**
- * Add payment plan column header to orders page.
- *
- * @since 0.1
- */
-function pmpropp_payment_plan_header() {
-
-	echo '<th>' . esc_html__( 'Payment Plan', 'pmpro-payment-plans' ) . '</th>';
-
-}
-add_action( 'pmpro_orders_extra_cols_header', 'pmpropp_payment_plan_header', 10 );
+// Admin display callbacks (column rendering, single-sub view section) live in includes/admin.php.
 
 /**
- * Add payment plan column to the order page.
+ * Slow-patch: backfill the `payment_plan` subscription meta from the
+ * subscription's original order on first read.
  *
- * @since 0.1
+ * Older checkouts only stored the plan on the first order. WP fires
+ * `default_pmpro_subscription_metadata` only when the meta row is missing, so
+ * each subscription is patched at most once, the next time something reads it.
+ *
+ * @since TBD
  */
-function pmpropp_payment_plan_body( $morder ) {
+function pmpropp_migrate_payment_plan_subscription_meta( $value, $subscription_id, $meta_key, $single ) {
 
-	$plan = get_pmpro_membership_order_meta( $morder->id, 'payment_plan', true );
-
-	if ( ! empty( $plan->name ) ) {
-		echo '<td>' . esc_html( $plan->name ) . '</td>';
-	} else {
-		echo '<td>' . esc_html__( '&#8212;', 'paid-memberships-pro' ) . '</td>';
+	if ( 'payment_plan' !== $meta_key ) {
+		return $value;
 	}
 
+	$subscription = new PMPro_Subscription( $subscription_id );
+	if ( empty( $subscription->get_id() ) ) {
+		return $value;
+	}
+
+	$orders = $subscription->get_orders( array(
+		'orderby' => '`timestamp` ASC, `id` ASC',
+		'limit'   => 1,
+	) );
+
+	$plan = empty( $orders ) ? '' : get_pmpro_membership_order_meta( $orders[0]->id, 'payment_plan', true );
+
+	// Persist a row either way so this filter doesn't refire on every read for
+	// subscriptions that genuinely have no plan (pre-plugin or planless checkouts).
+	update_pmpro_subscription_meta( $subscription_id, 'payment_plan', empty( $plan ) ? '' : $plan );
+
+	if ( empty( $plan ) ) {
+		return $value;
+	}
+
+	return $single ? $plan : array( $plan );
 }
-add_action( 'pmpro_orders_extra_cols_body', 'pmpropp_payment_plan_body', 10, 1 );
+add_filter( 'default_pmpro_subscription_metadata', 'pmpropp_migrate_payment_plan_subscription_meta', 10, 4 );
 
 /**
  * Ajax request to handle price change on checkout.
