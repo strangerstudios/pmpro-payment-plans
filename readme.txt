@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, payment plan, payments
 Requires at least: 5.4
-Tested up to: 6.7
-Stable tag: 0.5
+Tested up to: 6.9
+Stable tag: 0.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -36,6 +36,12 @@ Users can select a payment plan during the checkout process.
 View full documentation at: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
 
 == Changelog ==
+= 0.6 - 2026-05-04 =
+* ENHANCEMENT: Added a Payment Plan column to the Orders and Subscriptions list tables and the Edit Member panels, plus a Payment Plan section on the single subscription view. The plan is now stored on the subscription record (with self-healing for legacy orders) so reports can group recurring orders by plan. #89 (@kimcoleman)
+* ENHANCEMENT: Added a "Learn more" link to the Payment Plans Add On documentation in the level edit settings. #86 (@kimcoleman)
+* ENHANCEMENT: Added "Docs" and "Support" links to the plugin row meta on the Plugins screen. #83 (@ipokkel)
+* BUG FIX: Fixed a layout jump and stale expiration text when switching payment plans on the checkout page. #88 (@flintfromthebasement)
+
 = 0.5 - 2025-01-10 =
 * ENHANCEMENT: Added better support for Group Accounts Add On and Proration Add On. #79 (@MaximilianoRicoTabo)
 * ENHANCEMENT: Added logic to allow direct linking to payment plans via query parameter (e.g. `&pmpropp_chosen_plan=2` or `&pmpropp_chosen_plan=L-1-P-4`). #76 (@MaximilianoRicoTabo)
