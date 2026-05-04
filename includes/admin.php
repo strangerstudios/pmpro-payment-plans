@@ -47,7 +47,7 @@ function pmpropp_orderslist_custom_column( $column_name, $order_id ) {
 	if ( ! empty( $plan->name ) ) {
 		echo esc_html( $plan->name );
 	} else {
-		echo esc_html__( '&#8212;', 'paid-memberships-pro' );
+		echo '&#8212;';
 	}
 }
 add_action( 'pmpro_manage_orderlist_custom_column', 'pmpropp_orderslist_custom_column', 10, 2 );
@@ -82,7 +82,7 @@ function pmpropp_subscriptionslist_custom_column( $column_name, $item ) {
 	if ( ! empty( $plan->name ) ) {
 		echo esc_html( $plan->name );
 	} else {
-		echo esc_html__( '&#8212;', 'paid-memberships-pro' );
+		echo '&#8212;';
 	}
 }
 add_action( 'pmpro_manage_subscriptionlist_custom_column', 'pmpropp_subscriptionslist_custom_column', 10, 2 );
@@ -113,7 +113,7 @@ function pmpropp_edit_member_subscriptions_extra_cols_body( $subscription ) {
 	if ( ! empty( $plan->name ) ) {
 		echo '<td>' . esc_html( $plan->name ) . '</td>';
 	} else {
-		echo '<td>' . esc_html__( '&#8212;', 'paid-memberships-pro' ) . '</td>';
+		echo '<td>&#8212;</td>';
 	}
 }
 add_action( 'pmpro_edit_member_subscriptions_extra_cols_body', 'pmpropp_edit_member_subscriptions_extra_cols_body' );
@@ -206,7 +206,7 @@ function pmpropp_member_orders_extra_cols_body( $order ) {
 	if ( ! empty( $plan->name ) ) {
 		echo '<td>' . esc_html( $plan->name ) . '</td>';
 	} else {
-		echo '<td>' . esc_html__( '&#8212;', 'paid-memberships-pro' ) . '</td>';
+		echo '<td>&#8212;</td>';
 	}
 }
 add_action( 'pmpromh_orders_extra_cols_body', 'pmpropp_member_orders_extra_cols_body' );
@@ -241,6 +241,10 @@ function pmpropp_member_history_extra_cols_body( $user, $level ) {
 	$plan = null;
 
 	if ( ! empty( $user->ID ) && ! empty( $level->id ) && class_exists( 'PMPro_Subscription' ) ) {
+		// Known limitation: if a user canceled and resubscribed at the same level,
+		// every history row for that level will show the first subscription's plan.
+		// The history rows aren't tied to a specific subscription so we can't pick
+		// the matching one here.
 		$subscriptions = PMPro_Subscription::get_subscriptions_for_user( $user->ID, $level->id );
 		if ( ! empty( $subscriptions ) ) {
 			$plan = get_pmpro_subscription_meta( $subscriptions[0]->get_id(), 'payment_plan', true );
@@ -250,7 +254,7 @@ function pmpropp_member_history_extra_cols_body( $user, $level ) {
 	if ( ! empty( $plan->name ) ) {
 		echo '<td>' . esc_html( $plan->name ) . '</td>';
 	} else {
-		echo '<td>' . esc_html__( '&#8212;', 'paid-memberships-pro' ) . '</td>';
+		echo '<td>&#8212;</td>';
 	}
 }
 add_action( 'pmpromh_member_history_extra_cols_body', 'pmpropp_member_history_extra_cols_body', 10, 2 );

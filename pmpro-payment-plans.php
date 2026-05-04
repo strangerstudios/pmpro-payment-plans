@@ -575,16 +575,16 @@ function pmpropp_migrate_payment_plan_subscription_meta( $value, $subscription_i
 		'orderby' => '`timestamp` ASC, `id` ASC',
 		'limit'   => 1,
 	) );
-	if ( empty( $orders ) ) {
-		return $value;
-	}
 
-	$plan = get_pmpro_membership_order_meta( $orders[0]->id, 'payment_plan', true );
+	$plan = empty( $orders ) ? '' : get_pmpro_membership_order_meta( $orders[0]->id, 'payment_plan', true );
+
+	// Persist a row either way so this filter doesn't refire on every read for
+	// subscriptions that genuinely have no plan (pre-plugin or planless checkouts).
+	update_pmpro_subscription_meta( $subscription_id, 'payment_plan', empty( $plan ) ? '' : $plan );
+
 	if ( empty( $plan ) ) {
 		return $value;
 	}
-
-	update_pmpro_subscription_meta( $subscription_id, 'payment_plan', $plan );
 
 	return $single ? $plan : array( $plan );
 }
