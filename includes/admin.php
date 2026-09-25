@@ -5,6 +5,10 @@
  * @since TBD
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Add the Payment Plan column to the Orders list table.
  *

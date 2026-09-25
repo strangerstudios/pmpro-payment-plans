@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
 <div class="panel panel_template s_panel"> <!-- first panel -->
 	<h3 class="acc-header !!plan_status!!">!!plan_name!! <span class="pmpropp_small_text">!!plan_status!! (<?php esc_html_e( 'Click to view', 'pmpro-payment-plans' ); ?>)</span><span class="pmpropp_remove_plan"><?php esc_html_e( 'delete', 'pmpro-payment-plans' ); ?></span></h3>
 	<div class="acc-body">		

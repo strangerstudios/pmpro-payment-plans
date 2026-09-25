@@ -10,6 +10,10 @@
  * Domain Path: /languages
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 define( 'PMPROPP_VERSION', '0.6' );
 
 /**
@@ -39,6 +43,7 @@ register_activation_hook( __FILE__, 'pmpropp_activate' );
  */
 function pmpropp_load_admin_scripts() {
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only screen check to decide which admin scripts to enqueue.
 	if ( ! empty( $_REQUEST['page'] ) && $_REQUEST['page'] == 'pmpro-membershiplevels' && ! empty( $_REQUEST['edit'] ) ) {
 
 		wp_enqueue_script( 'jquery-ui-core' );
@@ -57,7 +62,7 @@ function pmpropp_load_admin_scripts() {
 		ob_end_clean();
 
 		$stored_plans = pmpropp_render_plans( $output, true );
-		$plan_data = pmpropp_return_payment_plans( intval( $_REQUEST['edit'] ), true );
+		$plan_data = pmpropp_return_payment_plans( intval( $_REQUEST['edit'] ), true ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only; loads plans for display on the level edit screen.
 
 		$template_plan       = new StdClass();
 		$template_plan->name = __( 'New Payment Plan', 'pmpro-payment-plans' );
@@ -151,7 +156,7 @@ function pmpropp_membership_level_after_other_settings() {
 	?>
 	<hr />
 	<h3><?php esc_html_e( 'Payment Plans', 'pmpro-payment-plans' ); ?></h3>
-	<?php if( $_REQUEST['edit'] !== "-1" ) { ?>	   
+	<?php if( $_REQUEST['edit'] !== "-1" ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated -- Read-only display check; this hook only fires on the level edit screen, where edit is always set. ?>	   
 	   	<p>
 			<?php esc_html_e( 'Create multiple payment plans for this level, giving your members multiple options to pay for a membership.', 'pmpro-payment-plans' ); ?>
 			<?php
@@ -180,6 +185,7 @@ add_action( 'pmpro_membership_level_after_trial_settings', 'pmpropp_membership_l
  */
 function pmpropp_membership_level_save( $level_id ) {
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Runs on pmpro_save_membership_level; PMPro core verifies the pmpro_membershiplevels_nonce and capability in adminpages/membershiplevels.php before saving.
 	$payment_plans = pmpropp_pair_plan_fields( $_REQUEST );
 
 	if ( empty( $payment_plans ) ) {
@@ -403,12 +409,13 @@ function pmpropp_registration_checks( $okay ) {
 
 	global $pmpro_msg, $pmpro_msgt;
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Checkout submission; PMPro core verifies pmpro_checkout_nonce in preheaders/checkout.php.
 	if( empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 		return $okay;
 	}
 
 	$level = pmpro_getLevelAtCheckout();
-	$plan = pmpropp_get_plan( intval( $level->id ), sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
+	$plan = pmpropp_get_plan( intval( $level->id ), sanitize_text_field( wp_unslash( $_REQUEST['pmpropp_chosen_plan'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Checkout submission; PMPro core verifies pmpro_checkout_nonce in preheaders/checkout.php.
 
 	if( !empty( $plan ) ) {
 		$okay = true;
@@ -433,7 +440,7 @@ function pmpropp_render_payment_plans_checkout() {
 
 	//Add in support for Add On Packages
 	$level = pmpro_getLevelAtCheckout();
-	if ( ! empty( $_REQUEST['ap'] ) && ! empty( $level->id ) ) {
+	if ( ! empty( $_REQUEST['ap'] ) && ! empty( $level->id ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only display check for Add On Packages.
 		if ( pmpro_hasMembershipLevel( $level->id ) ) {
 			/**
 			 * Purchasing an add on package and have the required level 
@@ -488,9 +495,11 @@ add_action( 'pmpro_checkout_boxes', 'pmpropp_render_payment_plans_checkout', 10 
  */
 function pmpropp_override_checkout_level( $level ) {
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only lookup of the chosen plan to build the checkout level; submissions are verified by pmpro_checkout_nonce in PMPro core preheaders/checkout.php.
 	if ( ! empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 
-		$chosen_plan = sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] );
+		$chosen_plan = sanitize_text_field( wp_unslash( $_REQUEST['pmpropp_chosen_plan'] ) );
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		$plan = pmpropp_get_plan( intval( $level->id ), $chosen_plan );
 
@@ -535,9 +544,11 @@ add_filter( 'pmpro_checkout_level', 'pmpropp_override_checkout_level', 5 );
  */
 function pmpropp_after_checkout( $user_id, $morder ) {
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Runs on pmpro_after_checkout; the checkout submission is verified by pmpro_checkout_nonce in PMPro core preheaders/checkout.php, and the plan ID is only matched against the level's saved plans.
 	if ( ! empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 
-		$plan = pmpropp_get_plan( $morder->membership_id, sanitize_text_field( $_REQUEST['pmpropp_chosen_plan'] ) );
+		$plan = pmpropp_get_plan( $morder->membership_id, sanitize_text_field( wp_unslash( $_REQUEST['pmpropp_chosen_plan'] ) ) );
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		if ( ! empty( $plan ) ) {
 			update_pmpro_membership_order_meta( intval( $morder->id ), 'payment_plan', $plan );
@@ -603,6 +614,7 @@ add_filter( 'default_pmpro_subscription_metadata', 'pmpropp_migrate_payment_plan
  */
 function pmpropp_request_price_change() {
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only AJAX endpoint that returns the price text for a public payment plan; no state changes.
 	// Bail if it's  not an ajax  price change request.
 	if ( empty( $_REQUEST['action'] ) || $_REQUEST['action'] != 'pmpropp_request_price_change' ) {
 		wp_die();
@@ -614,7 +626,8 @@ function pmpropp_request_price_change() {
 	}
 
 	$level_id = intval( $_REQUEST['pmpro_level'] );
-	$plan = pmpropp_get_plan( $level_id, sanitize_text_field( $_REQUEST['plan'] ) );
+	$plan = pmpropp_get_plan( $level_id, sanitize_text_field( wp_unslash( $_REQUEST['plan'] ) ) );
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	//Bail if the plan is empty
 	if ( empty( $plan ) ) {
@@ -664,7 +677,7 @@ function pmpropp_render_plans( $template, $is_admin = false ) {
 
 	global $pmpro_currency_symbol;
 
-	$plans = pmpropp_return_payment_plans( intval( $_REQUEST['edit'] ), $is_admin );
+	$plans = pmpropp_return_payment_plans( intval( $_REQUEST['edit'] ), $is_admin ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated -- Read-only; only called from pmpropp_load_admin_scripts() after it checks that edit is not empty.
 
 	if ( ! empty( $plans ) ) {
 		foreach ( $plans as $plan ) {
@@ -776,12 +789,14 @@ add_filter( 'pmpro_get_membership_levels_for_user', 'pmpropp_levels_for_user_wit
  */
 function pmpropp_payfast_before_send_to_payfast( $user_id, $morder ) {
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Runs on pmpro_before_send_to_payfast during checkout; PMPro core verifies pmpro_checkout_nonce in preheaders/checkout.php.
 	// Don't run this code when no plan is chosen.
 	if ( empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 		return;
 	}
 
 	update_pmpro_membership_order_meta( $morder->id, 'checkout_vars', $_REQUEST );
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 }
 add_action( 'pmpro_before_send_to_payfast', 'pmpropp_payfast_before_send_to_payfast', 1, 2 );
@@ -796,6 +811,7 @@ add_action( 'pmpro_before_send_to_payfast', 'pmpropp_payfast_before_send_to_payf
  */
 function pmpropp_merge_checkout_after_checkout( $user_id, $morder ) {
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Runs on pmpro_after_checkout; only checks for a chosen plan and restores this plugin's own saved order meta. Checkout submissions are verified by pmpro_checkout_nonce in PMPro core.
 	// Don't run this code when no plan is chosen.
 	if ( empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
 		return;
@@ -806,6 +822,7 @@ function pmpropp_merge_checkout_after_checkout( $user_id, $morder ) {
 	if ( ! empty( $checkout_vars ) ) {
 		$_REQUEST = array_merge( array_map( 'sanitize_text_field', $_REQUEST ), $checkout_vars );	
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	// Delete the checkout var order meta as we no longer need it.
 	delete_pmpro_membership_order_meta( $morder->id, 'checkout_vars' );
