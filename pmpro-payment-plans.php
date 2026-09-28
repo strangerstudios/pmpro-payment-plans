@@ -3,7 +3,7 @@
  * Plugin Name: Paid Memberships Pro - Payment Plans Add On
  * Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
  * Description: Integrates with Paid Memberships Pro to provide payment plans for membership levels.
- * Version: 0.6
+ * Version: 0.6.1
  * Author: Paid Memberships Pro
  * Author URI: https://www.paidmembershipspro.com
  * Text Domain: pmpro-payment-plans
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PMPROPP_VERSION', '0.6' );
+define( 'PMPROPP_VERSION', '0.6.1' );
 
 /**
  * Includes the cleanup script on uninstall.
@@ -580,7 +580,7 @@ add_action( 'pmpro_after_checkout', 'pmpropp_after_checkout', 10, 2 );
  * `default_pmpro_subscription_metadata` only when the meta row is missing, so
  * each subscription is patched at most once, the next time something reads it.
  *
- * @since TBD
+ * @since 0.6
  */
 function pmpropp_migrate_payment_plan_subscription_meta( $value, $subscription_id, $meta_key, $single ) {
 
@@ -817,7 +817,7 @@ add_action( 'pmpro_before_send_to_payfast', 'pmpropp_payfast_before_send_to_payf
 /**
  * Remove sensitive checkout fields from checkout variables saved by older versions.
  *
- * @since TBD
+ * @since 0.6.1
  */
 function pmpropp_clean_sensitive_checkout_vars() {
 	global $wpdb;

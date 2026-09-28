@@ -2,8 +2,8 @@
 Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, payment plan, payments
 Requires at least: 5.4
-Tested up to: 6.9
-Stable tag: 0.6
+Tested up to: 7.1
+Stable tag: 0.6.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -36,6 +36,10 @@ Users can select a payment plan during the checkout process.
 View full documentation at: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
 
 == Changelog ==
+= 0.6.1 - 2026-09-28 =
+* SECURITY: Passwords and other sensitive checkout fields are no longer saved in order meta for PayFast checkouts, and are removed from existing order meta. #91 (@dparker1005)
+* SECURITY: Added direct file access protection, unslashed the chosen payment plan ID before sanitizing it, and limited the payment plan admin data to users who can edit levels. #90 (@dparker1005)
+
 = 0.6 - 2026-05-04 =
 * ENHANCEMENT: Added a Payment Plan column to the Orders and Subscriptions list tables and the Edit Member panels, plus a Payment Plan section on the single subscription view. The plan is now stored on the subscription record (with self-healing for legacy orders) so reports can group recurring orders by plan. #89 (@kimcoleman)
 * ENHANCEMENT: Added a "Learn more" link to the Payment Plans Add On documentation in the level edit settings. #86 (@kimcoleman)

@@ -2,7 +2,7 @@
 /**
  * Admin display: Payment Plan columns and sections on PMPro admin screens.
  *
- * @since TBD
+ * @since 0.6
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Add the Payment Plan column to the Orders list table.
  *
- * @since TBD
+ * @since 0.6
  */
 function pmpropp_orderslist_columns( $columns ) {
 	$columns['pmpropp_payment_plan'] = esc_html__( 'Payment Plan', 'pmpro-payment-plans' );
@@ -26,7 +26,7 @@ add_filter( 'pmpro_manage_orderslist_columns', 'pmpropp_orderslist_columns' );
  * Reads from subscription meta first so recurring orders display the plan;
  * falls back to order meta for one-time payments and legacy data.
  *
- * @since TBD
+ * @since 0.6
  */
 function pmpropp_orderslist_custom_column( $column_name, $order_id ) {
 
@@ -59,7 +59,7 @@ add_action( 'pmpro_manage_orderlist_custom_column', 'pmpropp_orderslist_custom_c
 /**
  * Add the Payment Plan column to the Subscriptions list table.
  *
- * @since TBD
+ * @since 0.6
  */
 function pmpropp_subscriptionslist_columns( $columns ) {
 	$columns['pmpropp_payment_plan'] = esc_html__( 'Payment Plan', 'pmpro-payment-plans' );
@@ -70,7 +70,7 @@ add_filter( 'pmpro_manage_subscriptionslist_columns', 'pmpropp_subscriptionslist
 /**
  * Render the Payment Plan column on the Subscriptions list table.
  *
- * @since TBD
+ * @since 0.6
  *
  * @param string             $column_name The column being rendered.
  * @param PMPro_Subscription $item        The subscription for this row.
@@ -96,7 +96,7 @@ add_action( 'pmpro_manage_subscriptionlist_custom_column', 'pmpropp_subscription
  *
  * Hook is provided by a pending PMPro core PR.
  *
- * @since TBD
+ * @since 0.6
  */
 function pmpropp_edit_member_subscriptions_extra_cols_header() {
 	echo '<th>' . esc_html__( 'Payment Plan', 'pmpro-payment-plans' ) . '</th>';
@@ -106,7 +106,7 @@ add_action( 'pmpro_edit_member_subscriptions_extra_cols_header', 'pmpropp_edit_m
 /**
  * Render the Payment Plan column on the Edit Member → Subscriptions panel.
  *
- * @since TBD
+ * @since 0.6
  *
  * @param PMPro_Subscription $subscription The subscription for this row.
  */
@@ -128,7 +128,7 @@ add_action( 'pmpro_edit_member_subscriptions_extra_cols_body', 'pmpropp_edit_mem
  * Hook is provided by a pending PMPro core PR. Bails (renders nothing) when
  * the subscription has no plan attached.
  *
- * @since TBD
+ * @since 0.6
  *
  * @param PMPro_Subscription $subscription The subscription being viewed.
  */
@@ -175,7 +175,7 @@ add_action( 'pmpro_after_subscription_view_main', 'pmpropp_after_subscription_vi
  * Covers the Edit Member → Orders panel and the legacy user-edit profile
  * orders table.
  *
- * @since TBD
+ * @since 0.6
  */
 function pmpropp_member_orders_extra_cols_header() {
 	echo '<th>' . esc_html__( 'Payment Plan', 'pmpro-payment-plans' ) . '</th>';
@@ -188,7 +188,7 @@ add_action( 'pmpromh_orders_extra_cols_header', 'pmpropp_member_orders_extra_col
  * Reads from subscription meta first (recurring orders), falls back to order
  * meta for one-time payments and legacy data.
  *
- * @since TBD
+ * @since 0.6
  *
  * @param MemberOrder $order The order for this row.
  */
