@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Payment Plans Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Payment Plans Add On 0.6\n"
+"Project-Id-Version: Paid Memberships Pro - Payment Plans Add On 0.6.1\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-04T14:23:15+00:00\n"
+"POT-Creation-Date: 2026-09-28T19:02:36+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pmpro-payment-plans\n"
@@ -40,164 +40,207 @@ msgid "https://www.paidmembershipspro.com"
 msgstr ""
 
 #: includes/admin-payment-plan.php:2
+#: includes/admin-payment-plan.php:3
 msgid "Click to view"
 msgstr ""
 
 #: includes/admin-payment-plan.php:2
+#: includes/admin-payment-plan.php:3
 msgid "delete"
 msgstr ""
 
 #: includes/admin-payment-plan.php:6
+#: includes/admin-payment-plan.php:7
 msgid "Payment Plan Name"
 msgstr ""
 
 #: includes/admin-payment-plan.php:10
+#: includes/admin-payment-plan.php:11
 msgid "Display Order"
 msgstr ""
 
 #: includes/admin-payment-plan.php:14
+#: includes/admin-payment-plan.php:15
 msgid "Is Default Payment Plan"
 msgstr ""
 
 #: includes/admin-payment-plan.php:17
+#: includes/admin-payment-plan.php:18
 msgid "No"
 msgstr ""
 
 #: includes/admin-payment-plan.php:18
+#: includes/admin-payment-plan.php:19
 msgid "Yes"
 msgstr ""
 
 #: includes/admin-payment-plan.php:23
+#: includes/admin-payment-plan.php:24
 msgid "Payment Plan Status"
 msgstr ""
 
 #: includes/admin-payment-plan.php:26
+#: includes/admin-payment-plan.php:27
 msgid "Active"
 msgstr ""
 
 #: includes/admin-payment-plan.php:27
+#: includes/admin-payment-plan.php:28
 msgid "Inactive"
 msgstr ""
 
 #: includes/admin-payment-plan.php:32
+#: includes/admin-payment-plan.php:33
 msgid "Initial Amount"
 msgstr ""
 
 #: includes/admin-payment-plan.php:37
+#: includes/admin-payment-plan.php:38
 msgid "Recurring Subscription"
 msgstr ""
 
 #: includes/admin-payment-plan.php:41
+#: includes/admin-payment-plan.php:42
 msgid "Check if this level has a recurring subscription payment."
 msgstr ""
 
 #: includes/admin-payment-plan.php:46
+#: includes/admin-payment-plan.php:47
 msgid "Billing Amount"
 msgstr ""
 
 #: includes/admin-payment-plan.php:60
+#: includes/admin-payment-plan.php:61
 msgid "per"
 msgstr ""
 
 #: includes/admin-payment-plan.php:65
 #: includes/admin-payment-plan.php:172
+#: includes/admin-payment-plan.php:66
+#: includes/admin-payment-plan.php:173
 msgid "Day(s)"
 msgstr ""
 
 #: includes/admin-payment-plan.php:66
 #: includes/admin-payment-plan.php:173
+#: includes/admin-payment-plan.php:67
+#: includes/admin-payment-plan.php:174
 msgid "Week(s)"
 msgstr ""
 
 #: includes/admin-payment-plan.php:67
 #: includes/admin-payment-plan.php:174
+#: includes/admin-payment-plan.php:68
+#: includes/admin-payment-plan.php:175
 msgid "Month(s)"
 msgstr ""
 
 #: includes/admin-payment-plan.php:68
 #: includes/admin-payment-plan.php:175
+#: includes/admin-payment-plan.php:69
+#: includes/admin-payment-plan.php:176
 msgid "Year(s)"
 msgstr ""
 
 #: includes/admin-payment-plan.php:76
+#: includes/admin-payment-plan.php:77
 msgid "The amount to be billed one cycle after the initial payment."
 msgstr ""
 
 #: includes/admin-payment-plan.php:82
+#: includes/admin-payment-plan.php:83
 msgid "Braintree integration currently only supports billing periods of \"Month\" or \"Year\"."
 msgstr ""
 
 #: includes/admin-payment-plan.php:88
+#: includes/admin-payment-plan.php:89
 msgid "Stripe integration does not allow billing periods longer than 1 year."
 msgstr ""
 
 #: includes/admin-payment-plan.php:95
+#: includes/admin-payment-plan.php:96
 msgid "Billing Cycle Limit"
 msgstr ""
 
 #: includes/admin-payment-plan.php:100
+#: includes/admin-payment-plan.php:101
 msgid "The <strong>total</strong> number of recurring billing cycles for this level, including the trial period (if applicable) but not including the initial payment. Set to zero if membership is indefinite."
 msgstr ""
 
 #: includes/admin-payment-plan.php:106
+#: includes/admin-payment-plan.php:107
 msgid "Stripe integration currently does not support billing limits. You can still set an expiration date below."
 msgstr ""
 
 #: includes/admin-payment-plan.php:113
+#: includes/admin-payment-plan.php:114
 msgid "Custom Trial"
 msgstr ""
 
 #: includes/admin-payment-plan.php:115
+#: includes/admin-payment-plan.php:116
 msgid "Check to add a custom trial period."
 msgstr ""
 
 #: includes/admin-payment-plan.php:121
+#: includes/admin-payment-plan.php:122
 msgid "2Checkout integration does not support custom trials. You can do one period trials by setting an initial payment different from the billing amount."
 msgstr ""
 
 #: includes/admin-payment-plan.php:126
+#: includes/admin-payment-plan.php:127
 msgid "Trial Billing Amount"
 msgstr ""
 
 #: includes/admin-payment-plan.php:139
+#: includes/admin-payment-plan.php:140
 msgid "for the first"
 msgstr ""
 
 #: includes/admin-payment-plan.php:141
+#: includes/admin-payment-plan.php:142
 msgid "subscription payments"
 msgstr ""
 
 #: includes/admin-payment-plan.php:147
+#: includes/admin-payment-plan.php:148
 msgid "Stripe integration currently does not support trial amounts greater than $0."
 msgstr ""
 
 #: includes/admin-payment-plan.php:153
+#: includes/admin-payment-plan.php:154
 msgid "Braintree integration currently does not support trial amounts greater than $0."
 msgstr ""
 
 #: includes/admin-payment-plan.php:159
+#: includes/admin-payment-plan.php:160
 msgid "Payflow integration currently does not support trial amounts greater than $0."
 msgstr ""
 
 #: includes/admin-payment-plan.php:164
+#: includes/admin-payment-plan.php:165
 msgid "Membership Expiration"
 msgstr ""
 
 #: includes/admin-payment-plan.php:165
+#: includes/admin-payment-plan.php:166
 msgid "Check this to set when membership access expires."
 msgstr ""
 
 #: includes/admin-payment-plan.php:168
+#: includes/admin-payment-plan.php:169
 msgid "Expires In:"
 msgstr ""
 
 #: includes/admin-payment-plan.php:177
+#: includes/admin-payment-plan.php:178
 msgid "Set the duration of membership access. Note that the any future payments (recurring subscription, if any) will be cancelled when the membership expires."
 msgstr ""
 
 #. translators: %s - link to blog post
 #: includes/admin-payment-plan.php:180
 #: includes/admin-payment-plan.php:183
+#: includes/admin-payment-plan.php:184
 #, php-format
 msgid "WARNING: This level is set with both a recurring billing amount and an expiration date. You only need to set one of these unless you really want this membership to expire after a certain number of payments. For more information, %s."
 msgstr ""
@@ -205,6 +248,7 @@ msgstr ""
 #. translators: %s - link to blog post
 #: includes/admin-payment-plan.php:180
 #: includes/admin-payment-plan.php:183
+#: includes/admin-payment-plan.php:184
 msgid "see our post here"
 msgstr ""
 
@@ -214,6 +258,7 @@ msgstr ""
 #: pmpro-payment-plans.php:50
 #: pmpro-payment-plans.php:52
 #: pmpro-payment-plans.php:63
+#: pmpro-payment-plans.php:73
 msgid "New Payment Plan"
 msgstr ""
 
@@ -224,6 +269,8 @@ msgstr ""
 #: pmpro-payment-plans.php:142
 #: pmpro-payment-plans.php:153
 #: pmpro-payment-plans.php:158
+#: pmpro-payment-plans.php:163
+#: pmpro-payment-plans.php:168
 msgid "Payment Plans"
 msgstr ""
 
@@ -241,6 +288,7 @@ msgstr ""
 #: pmpro-payment-plans.php:148
 #: pmpro-payment-plans.php:150
 #: pmpro-payment-plans.php:167
+#: pmpro-payment-plans.php:177
 msgid "Add Payment Plan"
 msgstr ""
 
@@ -252,6 +300,7 @@ msgstr ""
 #: pmpro-payment-plans.php:440
 #: pmpro-payment-plans.php:452
 #: pmpro-payment-plans.php:469
+#: pmpro-payment-plans.php:481
 msgid "Select a Payment Plan"
 msgstr ""
 
@@ -267,6 +316,11 @@ msgstr ""
 #: includes/admin.php:98
 #: includes/admin.php:146
 #: includes/admin.php:177
+#: includes/admin.php:18
+#: includes/admin.php:65
+#: includes/admin.php:102
+#: includes/admin.php:150
+#: includes/admin.php:181
 msgid "Payment Plan"
 msgstr ""
 
@@ -275,6 +329,7 @@ msgstr ""
 #: pmpro-payment-plans.php:152
 #: pmpro-payment-plans.php:154
 #: pmpro-payment-plans.php:171
+#: pmpro-payment-plans.php:181
 msgid "Please save your level first before creating a payment plan"
 msgstr ""
 
@@ -284,42 +339,52 @@ msgstr ""
 #: pmpro-payment-plans.php:400
 #: pmpro-payment-plans.php:399
 #: pmpro-payment-plans.php:416
+#: pmpro-payment-plans.php:428
 msgid "Please select a valid payment plan."
 msgstr ""
 
 #: includes/admin.php:152
+#: includes/admin.php:156
 msgid "Plan Name"
 msgstr ""
 
 #: includes/admin.php:157
+#: includes/admin.php:161
 msgid "Description"
 msgstr ""
 
 #: pmpro-payment-plans.php:156
+#: pmpro-payment-plans.php:166
 msgid "Create multiple payment plans for this level, giving your members multiple options to pay for a membership."
 msgstr ""
 
 #: pmpro-payment-plans.php:158
+#: pmpro-payment-plans.php:168
 msgid "Payment Plans Add On Documentation"
 msgstr ""
 
 #: pmpro-payment-plans.php:159
+#: pmpro-payment-plans.php:169
 #, php-format
 msgid "Learn more about %s."
 msgstr ""
 
 #: pmpro-payment-plans.php:865
+#: pmpro-payment-plans.php:925
 msgid "View Documentation"
 msgstr ""
 
 #: pmpro-payment-plans.php:865
+#: pmpro-payment-plans.php:925
 msgid "Docs"
 msgstr ""
 
 #: pmpro-payment-plans.php:866
+#: pmpro-payment-plans.php:926
 msgid "Visit Customer Support Forum"
 msgstr ""
 
 #: pmpro-payment-plans.php:866
+#: pmpro-payment-plans.php:926
 msgid "Support"
 msgstr ""
