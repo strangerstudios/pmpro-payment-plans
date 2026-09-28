@@ -783,8 +783,10 @@ function pmpropp_payfast_before_send_to_payfast( $user_id, $morder ) {
 
 	// Don't save passwords or other sensitive checkout fields.
 	$checkout_vars = $_REQUEST;
-	foreach ( pmpro_get_sensitive_checkout_request_vars() as $key ) {
-		unset( $checkout_vars[ $key ] );
+	if ( function_exists( 'pmpro_get_sensitive_checkout_request_vars' ) ) {
+		foreach ( pmpro_get_sensitive_checkout_request_vars() as $key ) {
+			unset( $checkout_vars[ $key ] );
+		}
 	}
 
 	update_pmpro_membership_order_meta( $morder->id, 'checkout_vars', $checkout_vars );
