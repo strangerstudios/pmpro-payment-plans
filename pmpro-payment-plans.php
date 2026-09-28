@@ -43,6 +43,11 @@ register_activation_hook( __FILE__, 'pmpropp_activate' );
  */
 function pmpropp_load_admin_scripts() {
 
+	// Only load plan data for users who can edit levels.
+	if ( ! current_user_can( 'pmpro_membershiplevels' ) ) {
+		return;
+	}
+
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only screen check to decide which admin scripts to enqueue.
 	if ( ! empty( $_REQUEST['page'] ) && $_REQUEST['page'] == 'pmpro-membershiplevels' && ! empty( $_REQUEST['edit'] ) ) {
 
