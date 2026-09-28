@@ -5,7 +5,7 @@
  */
 
 // exit if uninstall/delete not called
-if ( !defined( 'ABSPATH' ) && !defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
     exit();
 }
 
@@ -28,7 +28,7 @@ function pmpropp_uninstall() {
             $sql = "DELETE FROM `$table_name` WHERE `meta_key` = 'payment_plan'";
             
             // run the query
-            $wpdb->query($sql);
+            $wpdb->query($sql); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Static query; the table name is built from $wpdb->prefix and a hardcoded list of PMPro meta tables.
 
         }       
     }
