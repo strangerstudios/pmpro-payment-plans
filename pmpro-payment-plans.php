@@ -781,10 +781,46 @@ function pmpropp_payfast_before_send_to_payfast( $user_id, $morder ) {
 		return;
 	}
 
-	update_pmpro_membership_order_meta( $morder->id, 'checkout_vars', $_REQUEST );
+	// Don't save passwords or other sensitive checkout fields.
+	$checkout_vars = $_REQUEST;
+	foreach ( pmpro_get_sensitive_checkout_request_vars() as $key ) {
+		unset( $checkout_vars[ $key ] );
+	}
+
+	update_pmpro_membership_order_meta( $morder->id, 'checkout_vars', $checkout_vars );
 
 }
 add_action( 'pmpro_before_send_to_payfast', 'pmpropp_payfast_before_send_to_payfast', 1, 2 );
+
+/**
+ * Remove sensitive checkout fields from checkout variables saved by older versions.
+ *
+ * @since TBD
+ */
+function pmpropp_clean_sensitive_checkout_vars() {
+	global $wpdb;
+
+	// Only run once, and only when PMPro is active.
+	if ( get_option( 'pmpropp_db_version' ) || ! function_exists( 'pmpro_get_sensitive_checkout_request_vars' ) ) {
+		return;
+	}
+
+	$order_ids = $wpdb->get_col( "SELECT pmpro_membership_order_id FROM $wpdb->pmpro_membership_ordermeta WHERE meta_key = 'checkout_vars'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Static one-time query; the table name comes from $wpdb.
+	foreach ( $order_ids as $order_id ) {
+		$checkout_vars = get_pmpro_membership_order_meta( $order_id, 'checkout_vars', true );
+		if ( ! is_array( $checkout_vars ) ) {
+			continue;
+		}
+
+		foreach ( pmpro_get_sensitive_checkout_request_vars() as $key ) {
+			unset( $checkout_vars[ $key ] );
+		}
+		update_pmpro_membership_order_meta( $order_id, 'checkout_vars', $checkout_vars );
+	}
+
+	update_option( 'pmpropp_db_version', 1 );
+}
+add_action( 'admin_init', 'pmpropp_clean_sensitive_checkout_vars' );
 
 /**
  * We need to merge the chekout variables sooner rather than later.
