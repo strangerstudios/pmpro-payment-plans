@@ -193,7 +193,9 @@ function pmpropp_membership_level_save( $level_id ) {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Runs on pmpro_save_membership_level; PMPro core verifies the pmpro_membershiplevels_nonce and capability in adminpages/membershiplevels.php before saving.
 	$payment_plans = pmpropp_pair_plan_fields( $_REQUEST );
 
+	// If all plans were removed, delete the saved plans.
 	if ( empty( $payment_plans ) ) {
+		delete_pmpro_membership_level_meta( $level_id, 'payment_plan' );
 		return;
 	}
 
