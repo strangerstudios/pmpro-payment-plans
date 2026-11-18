@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Paid Memberships Pro - Payment Plans Add On plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro - Payment Plans Add On 0.6.1\n"
+"Project-Id-Version: Paid Memberships Pro - Payment Plans Add On 0.6.2\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-28T19:02:36+00:00\n"
+"POT-Creation-Date: 2026-11-18T19:16:06+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pmpro-payment-plans\n"
@@ -301,6 +301,7 @@ msgstr ""
 #: pmpro-payment-plans.php:452
 #: pmpro-payment-plans.php:469
 #: pmpro-payment-plans.php:481
+#: pmpro-payment-plans.php:487
 msgid "Select a Payment Plan"
 msgstr ""
 
@@ -340,6 +341,7 @@ msgstr ""
 #: pmpro-payment-plans.php:399
 #: pmpro-payment-plans.php:416
 #: pmpro-payment-plans.php:428
+#: pmpro-payment-plans.php:434
 msgid "Please select a valid payment plan."
 msgstr ""
 
@@ -371,20 +373,24 @@ msgstr ""
 
 #: pmpro-payment-plans.php:865
 #: pmpro-payment-plans.php:925
+#: pmpro-payment-plans.php:931
 msgid "View Documentation"
 msgstr ""
 
 #: pmpro-payment-plans.php:865
 #: pmpro-payment-plans.php:925
+#: pmpro-payment-plans.php:931
 msgid "Docs"
 msgstr ""
 
 #: pmpro-payment-plans.php:866
 #: pmpro-payment-plans.php:926
+#: pmpro-payment-plans.php:932
 msgid "Visit Customer Support Forum"
 msgstr ""
 
 #: pmpro-payment-plans.php:866
 #: pmpro-payment-plans.php:926
+#: pmpro-payment-plans.php:932
 msgid "Support"
 msgstr ""
