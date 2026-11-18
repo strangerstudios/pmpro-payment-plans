@@ -5,6 +5,9 @@ jQuery(document).ready(function () {
         initializeAccordion();
     }
 
+    // Let the save know the plans UI loaded, so removing every plan deletes the saved plans.
+    jQuery(".pmpro_payment_plan_level_container").append('<input type="hidden" name="pmpropp_plans_ui_loaded" value="1" />');
+
     // Load each checkbox on page load, for pre-saved data. 
     jQuery.each(pmpropp_plans.plan_data, function (key, val) {
 
