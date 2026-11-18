@@ -194,8 +194,12 @@ function pmpropp_membership_level_save( $level_id ) {
 	$payment_plans = pmpropp_pair_plan_fields( $_REQUEST );
 
 	// If all plans were removed, delete the saved plans.
+	// Only do this if the payment plans UI loaded, so a JS failure or a programmatic save doesn't wipe saved plans.
 	if ( empty( $payment_plans ) ) {
-		delete_pmpro_membership_level_meta( $level_id, 'payment_plan' );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- See above.
+		if ( ! empty( $_REQUEST['pmpropp_plans_ui_loaded'] ) ) {
+			delete_pmpro_membership_level_meta( $level_id, 'payment_plan' );
+		}
 		return;
 	}
 
