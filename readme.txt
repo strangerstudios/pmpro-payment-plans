@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: paid memberships pro, pmpro, payment plan, payments
 Requires at least: 5.4
 Tested up to: 7.1
-Stable tag: 0.6.2
+Stable tag: 0.6.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -36,6 +36,10 @@ Users can select a payment plan during the checkout process.
 View full documentation at: https://www.paidmembershipspro.com/add-ons/pmpro-payment-plans/
 
 == Changelog ==
+= 0.6.3 - 2026-11-19 =
+* SECURITY: The level confirmation message is no longer included in the payment plan data that is printed on the checkout page for the plan selector script. #94 (@dparker1005)
+* BUG FIX: Fixed the level description losing its formatting at checkout when a payment plan is chosen. #93 (@kimcoleman)
+
 = 0.6.2 - 2026-11-18 =
 * BUG FIX: Fixed an issue where removing the last payment plan from a level would not save. #92 (@dparker1005)
 
