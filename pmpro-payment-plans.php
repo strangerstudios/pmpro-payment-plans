@@ -267,8 +267,8 @@ function pmpropp_pair_plan_fields( $request ) {
 			$level                    = new stdClass();
 			$level->id                = 'L-' . intval( $request['saveid'] ) . '-P-' . $i;
 			$level->name              = sanitize_text_field( $pmpropp_plan_name[$i] );
-			$level->description       = sanitize_text_field( $request['description'] );
-			$level->confirmation      = sanitize_text_field( $request['confirmation'] );
+			$level->description       = wp_kses_post( wp_unslash( $request['description'] ) );
+			$level->confirmation      = wp_kses_post( wp_unslash( $request['confirmation'] ) );
 			$level->billing_amount    = floatval( $pmpropp_billing_amount[ $i ] );
 			$level->trial_amount      = floatval( $pmpropp_trial_amount[ $i ] );
 			$level->initial_payment   = floatval( $pmpropp_initial_amount[ $i ] );
@@ -529,8 +529,6 @@ function pmpropp_override_checkout_level( $level ) {
 		$level->type         = 'payment_plan';
 		$level->payment_plan = $chosen_plan;
 
-		$level->description       = $plan->description;
-		$level->confirmation      = $plan->confirmation;
 		$level->initial_payment   = $plan->initial_payment;
 		$level->billing_amount    = $plan->billing_amount;
 		$level->cycle_number      = $plan->cycle_number;
@@ -769,8 +767,6 @@ function pmpropp_levels_for_user_with_plans( $levels, $user_id ) {
 				if( ! empty( $plan ) ) {
 					
 					$level->name 			  = $plan->name;					
-					$level->description       = $plan->description;
-					$level->confirmation      = $plan->confirmation;
 					$level->initial_payment   = $plan->initial_payment;
 					$level->billing_amount    = $plan->billing_amount;
 					$level->cycle_number      = $plan->cycle_number;
