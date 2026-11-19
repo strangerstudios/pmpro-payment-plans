@@ -123,11 +123,19 @@ function pmpropp_load_frontend_scripts() {
 
 			wp_enqueue_script( 'pmpro-payment-plans-frontend-js', plugins_url( 'js/frontend.js', __FILE__ ), array( 'jquery' ), PMPROPP_VERSION, array( 'in_footer' => true ) );
 
+			// The checkout JS only needs each plan's id, default flag and HTML. Don't print the level confirmation message into the page.
+			$plans = array();
+			foreach ( pmpropp_return_payment_plans( $level_id ) as $plan ) {
+				$plan = clone $plan;
+				unset( $plan->confirmation );
+				$plans[] = $plan;
+			}
+
 			wp_localize_script(
 				'pmpro-payment-plans-frontend-js',
 				'payment_plans',
 				array(
-					'plans'        => pmpropp_return_payment_plans( $level_id ),
+					'plans'        => $plans,
 					'ajaxurl'      => admin_url( 'admin-ajax.php' ),
 					'parent_level' => $level_id,
 				)
