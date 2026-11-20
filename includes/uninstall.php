@@ -18,6 +18,7 @@ function pmpropp_uninstall() {
         $tables = array(
             'pmpro_membership_ordermeta',
             'pmpro_membership_levelmeta',
+            'pmpro_subscriptionmeta',
         );
 
         foreach($tables as $table){
