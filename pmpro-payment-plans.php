@@ -430,6 +430,18 @@ function pmpropp_registration_checks( $okay ) {
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Checkout submission; PMPro core verifies pmpro_checkout_nonce in preheaders/checkout.php.
 	if( empty( $_REQUEST['pmpropp_chosen_plan'] ) ) {
+		// If the level pricing option is hidden and plans are shown, a plan must be chosen.
+		$level = pmpro_getLevelAtCheckout();
+		if ( ! empty( $level->id )
+			&& ! isset( $level->code_id )
+			&& ! ( ! empty( $_REQUEST['ap'] ) && pmpro_hasMembershipLevel( $level->id ) ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only check for Add On Packages, matching pmpropp_render_payment_plans_checkout().
+			&& ! apply_filters( 'pmpropp_include_level_pricing_option_at_checkout', true, intval( $level->id ) )
+			&& ! empty( pmpropp_return_payment_plans( intval( $level->id ) ) ) ) {
+			$pmpro_msg  = __( 'Please select a payment plan.', 'pmpro-payment-plans' );
+			$pmpro_msgt = 'pmpro_error';
+			$okay       = false;
+		}
+
 		return $okay;
 	}
 
