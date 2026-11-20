@@ -5,7 +5,7 @@
 		<table class='form-table'>
 			<tr>
 				<th><label for='pmpropp_plan_name'><?php esc_html_e( 'Payment Plan Name', 'pmpro-payment-plans' ); ?>:</label></th>
-				<td><input type='text' id='pmpropp_plan_name' name='pmpropp_plan_name[]' value='!!plan_name!!' /></td>
+				<td><input type='text' id='pmpropp_plan_name' name='pmpropp_plan_name[]' value='!!plan_name!!' /><input type='hidden' name='pmpropp_plan_id[]' value='!!plan_id!!' /></td>
 			</tr>
 			<tr>
 				<th><label for='pmpropp_display_order'><?php esc_html_e( 'Display Order', 'pmpro-payment-plans' ); ?>:</label></th>
