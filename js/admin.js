@@ -103,6 +103,8 @@ jQuery(document).ready(function () {
             jQuery('.pmpropp_expirations_' + menu_order).show();
         }
 
+        pmpropp_toggle_expiration_warning(jQuery(this).parent());
+
     });
 
     /**
@@ -120,6 +122,7 @@ jQuery(document).ready(function () {
             checked = 0;
         }
         pmpropp_update_hidden_field('#' + jQuery(this).attr('id'), checked); //Try to update the hidden field value.
+        pmpropp_toggle_expiration_warning(jQuery(this).closest('.s_panel'));
     });
 
     jQuery("body").on("click", ".pmpropp_plan_expiration", function () {
@@ -134,6 +137,7 @@ jQuery(document).ready(function () {
             checked = 0;
         }
         pmpropp_update_hidden_field('#' + jQuery(this).attr('id'), checked); //Try to update the hidden field value.
+        pmpropp_toggle_expiration_warning(jQuery(this).closest('.s_panel'));
     });
 
     jQuery("body").on("click", ".pmpropp_custom_trial", function () {
@@ -161,6 +165,14 @@ jQuery(document).ready(function () {
  */
 function pmpropp_update_hidden_field(element, value) {
     jQuery(element).parent().children('input[type=hidden]').val(value);
+}
+
+/**
+ * Show the recurring billing and expiration warning in a plan panel if both are checked.
+ */
+function pmpropp_toggle_expiration_warning(panel) {
+    var show = panel.find('.pmpropp_recurring').prop('checked') && panel.find('.pmpropp_plan_expiration').prop('checked');
+    panel.find('#pmpropp_plan_expiration_warning').toggle(!!show);
 }
 
 /**
