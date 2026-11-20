@@ -80,7 +80,11 @@ jQuery(document).ready(function () {
 
         var id = jQuery(this).parent().attr('id');
         var menu_order = jQuery(this).parent().attr('menu_order');
-        jQuery('#' + id + ' #pmpropp_display_order').val(menu_order);
+
+        // Default the display order to the plan's position. Don't overwrite a saved value. Level pricing uses 0, so start at 1.
+        if (jQuery('#' + id + ' #pmpropp_display_order').val() === '') {
+            jQuery('#' + id + ' #pmpropp_display_order').val(parseInt(menu_order, 10) + 1);
+        }
 
         jQuery('#' + id + ' .pmpropp_recurring').attr('menu_order', menu_order);
         jQuery('#' + id + ' .pmpropp_plan_expiration').attr('menu_order', menu_order);
@@ -183,6 +187,8 @@ function initializeAccordion() {
             jQuery('.s_panel').each(function (key, val) {
                 jQuery(this).attr('menu_order', counter)
                 jQuery(this).attr('id', 'pmpropp_plan_' + counter);
+                // Dragging sets the display order to the new position. Level pricing uses 0, so start at 1.
+                jQuery(this).find('#pmpropp_display_order').val(counter + 1);
                 counter++;
             });
         }
