@@ -249,6 +249,21 @@ function pmpropp_pair_plan_fields( $request ) {
 		
 		$size = count( $pmpropp_plan_name );
 
+		// Keep each saved plan's ID so links to a plan still work after plans are reordered or deleted.
+		// New plans get the next unused number, including numbers used by deleted plans.
+		$pmpropp_plan_id = isset( $request['pmpropp_plan_id'] ) ? (array) $request['pmpropp_plan_id'] : array();
+		$plan_id_prefix  = 'L-' . intval( $request['saveid'] ) . '-P-';
+		$saved_plans     = get_pmpro_membership_level_meta( intval( $request['saveid'] ), 'payment_plan', true );
+		$known_plan_ids  = array_merge( $pmpropp_plan_id, is_array( $saved_plans ) ? wp_list_pluck( $saved_plans, 'id' ) : array() );
+		$next_plan_index = 0;
+		foreach ( $known_plan_ids as $known_plan_id ) {
+			$known_plan_index = substr( (string) $known_plan_id, strlen( $plan_id_prefix ) );
+			if ( 0 === strpos( (string) $known_plan_id, $plan_id_prefix ) && ctype_digit( $known_plan_index ) ) {
+				$next_plan_index = max( $next_plan_index, intval( $known_plan_index ) + 1 );
+			}
+		}
+		$used_plan_ids = array();
+
 		for ( $i = 0; $i < $size; $i++ ) {
 
 			// Clear out all recurring information if checkbox isn't selected or billing amount is empty.
@@ -272,8 +287,15 @@ function pmpropp_pair_plan_fields( $request ) {
 				$pmpropp_expiration_period[$i] = '';
 			}			
 
+			$plan_id = isset( $pmpropp_plan_id[ $i ] ) ? sanitize_text_field( wp_unslash( $pmpropp_plan_id[ $i ] ) ) : '';
+			if ( 0 !== strpos( $plan_id, $plan_id_prefix ) || ! ctype_digit( substr( $plan_id, strlen( $plan_id_prefix ) ) ) || in_array( $plan_id, $used_plan_ids, true ) ) {
+				$plan_id = $plan_id_prefix . $next_plan_index;
+				$next_plan_index++;
+			}
+			$used_plan_ids[] = $plan_id;
+
 			$level                    = new stdClass();
-			$level->id                = 'L-' . intval( $request['saveid'] ) . '-P-' . $i;
+			$level->id                = $plan_id;
 			$level->name              = sanitize_text_field( $pmpropp_plan_name[$i] );
 			$level->description       = wp_kses_post( wp_unslash( $request['description'] ) );
 			$level->confirmation      = wp_kses_post( wp_unslash( $request['confirmation'] ) );
