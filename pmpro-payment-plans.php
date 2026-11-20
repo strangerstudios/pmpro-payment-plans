@@ -763,15 +763,23 @@ function pmpropp_levels_for_user_with_plans( $levels, $user_id ) {
 
 	if ( is_page( $allowed_pmpro_pages ) ) {
 
-		$order = new MemberOrder();
-		$order->getLastMemberOrder();
-
 		foreach( $levels as $level ) {
 
-			if( $order->membership_id == $level->ID ) {
-				//Lets see if this level was a plan
-				$plan = get_pmpro_membership_order_meta( intval( $order->id ), 'payment_plan', true );
-				
+			// Get the member's last order for this level.
+			$order = new MemberOrder();
+			$order->getLastMemberOrder( $user_id, 'success', $level->ID );
+
+			if( ! empty( $order->id ) ) {
+				//Lets see if this level was a plan. Renewal orders don't store the plan, so check the subscription first.
+				$plan         = null;
+				$subscription = is_callable( array( $order, 'get_subscription' ) ) ? $order->get_subscription() : null;
+				if ( ! empty( $subscription ) ) {
+					$plan = get_pmpro_subscription_meta( $subscription->get_id(), 'payment_plan', true );
+				}
+				if ( empty( $plan ) ) {
+					$plan = get_pmpro_membership_order_meta( intval( $order->id ), 'payment_plan', true );
+				}
+
 				if( ! empty( $plan ) ) {
 					
 					$level->name 			  = $plan->name;					
